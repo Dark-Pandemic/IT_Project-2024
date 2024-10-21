@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 06, 2024 at 01:43 AM
+-- Generation Time: Oct 21, 2024 at 05:29 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -24,6 +24,45 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `achievement`
+--
+
+CREATE TABLE `achievement` (
+  `userID` int(11) NOT NULL,
+  `badge_name` char(255) NOT NULL,
+  `points_earned` int(255) NOT NULL,
+  `date_earned` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `challenge`
+--
+
+CREATE TABLE `challenge` (
+  `userID` int(11) NOT NULL,
+  `challenge_title` char(100) NOT NULL,
+  `chall_points` int(255) NOT NULL,
+  `isActive` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `journal`
+--
+
+CREATE TABLE `journal` (
+  `userID` int(11) NOT NULL,
+  `file_name` char(100) NOT NULL,
+  `file_content` blob NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `userloginreg`
 --
 
@@ -32,19 +71,21 @@ CREATE TABLE `userloginreg` (
   `username` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `timecreated` timestamp NOT NULL DEFAULT current_timestamp()
+  `timecreated` timestamp NOT NULL DEFAULT current_timestamp(),
+  `points` int(255) NOT NULL,
+  `level` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `userloginreg`
 --
 
-INSERT INTO `userloginreg` (`ID`, `username`, `email`, `password`, `timecreated`) VALUES
-(1, 'shannon123', 'shannon@gmail.com', '@Shan12', '2024-10-05 23:16:03'),
-(2, 'halezgov', 'hgov@hotmail.com', 'haley123@', '2024-10-05 23:17:23'),
-(3, 'heyitsjuwi', 'juwi@gmail.com', '!Juwi30', '2024-10-05 23:18:11'),
-(4, 'fardheens123', 'fardeen@gmail.com', 'Fards@12', '2024-10-05 23:20:16'),
-(5, 'diaan53', 'diaan@hotmail.com', '@Ddr123', '2024-10-05 23:22:39');
+INSERT INTO `userloginreg` (`ID`, `username`, `email`, `password`, `timecreated`, `points`, `level`) VALUES
+(1, 'shannon123', 'shannon@gmail.com', '@Shan12', '2024-10-05 23:16:03', 0, 0),
+(2, 'halezgov', 'hgov@hotmail.com', 'haley123@', '2024-10-05 23:17:23', 0, 0),
+(3, 'heyitsjuwi', 'juwi@gmail.com', '!Juwi30', '2024-10-05 23:18:11', 0, 0),
+(4, 'fardheens123', 'fardeen@gmail.com', 'Fards@12', '2024-10-05 23:20:16', 0, 0),
+(5, 'diaan53', 'diaan@hotmail.com', '@Ddr123', '2024-10-05 23:22:39', 0, 0);
 
 --
 -- Indexes for dumped tables
