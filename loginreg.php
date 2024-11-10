@@ -1,15 +1,19 @@
 <?php
-
 $host = "localhost";
 $username = "root";
 $password = "";
 $databasename = "mentalhealthapp";
 
+// Create connection
 $conn = new mysqli($host, $username, $password, $databasename);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+$alertMessage = "";
+$alertClass = "alert-danger";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST["name"];
@@ -19,41 +23,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["password"];
     $confirmPassword = $_POST["confirm-password"];
 
-    // Check if passwords match
+    // Password match check
     if ($password !== $confirmPassword) {
-        echo "<script>alert('Passwords do not match.');</script>";
+        $alertMessage = "Your passwords do not match. Please try again.";
     } else {
-        // Hash the password
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        // Check if username or email already exists
+        $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE username = ? OR email = ?");
+        $stmt->bind_param("ss", $username, $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        $stmt = $conn->prepare("INSERT INTO userloginreg (name, email, contact, username, password) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $name, $email, $contact, $username, $hashedPassword);
-
-
-
-		//////////pop up not working//////////
-////////////trying to get a mssage to say sucesful registration, go to login, or redirect to login///////
-/////////login page to appear first, and the signup link at the botton seems a better fit//////
-
-
-
-        if ($stmt->execute()) {
-            // Show modal for successful registration
-            echo "<script>document.addEventListener('DOMContentLoaded', function() { document.getElementById('successModal').style.display = 'block'; });</script>";
-            exit(); 
+        if ($result->num_rows > 0) {
+            $alertMessage = "The username or email already exists. Please choose a different one.";
         } else {
-            echo "<script>alert('Error: " . $stmt->error . "');</script>";
-        }
+            // Hash the password before storing
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt->close(); 
+            // Insert new user into database
+            $stmt = $conn->prepare("INSERT INTO userloginreg (name, email, contact, username, password) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssss", $name, $email, $contact, $username, $hashedPassword);
+
+            if ($stmt->execute()) {
+                $alertMessage = "Registration successful! Redirecting to login page...";
+                $alertClass = "alert-success";
+                echo "<script>
+                        setTimeout(function() {
+                            window.location.href = 'loginform.php';
+                        }, 1500);
+                      </script>";
+            } else {
+                $alertMessage = "An error occurred. Please try again later.";
+            }
+        }
+        $stmt->close();
     }
 }
 
-$conn->close(); 
+$conn->close();
 ?>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <style>
@@ -104,79 +116,66 @@ $conn->close();
             font-size: 12px;
             margin-top: 10px;
         }
-        /* Modal Styles */
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 1; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgb(0,0,0); 
-            background-color: rgba(0,0,0,0.4); 
-            padding-top: 60px; 
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto; 
+
+        .alert {
+            color: white;
             padding: 20px;
-            border: 1px solid #888;
-            width: 80%; 
             text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            display: none;
+            transition: opacity 0.5s ease;
         }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+        .alert-danger {
+            background-color: #f44336;
         }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+        .alert-success {
+            background-color: #4CAF50;
         }
     </style>
+
+    <script type="text/javascript">
+        window.onload = function() {
+            var alertMessage = "<?php echo $alertMessage; ?>";
+            var alertClass = "<?php echo $alertClass; ?>";
+
+            if (alertMessage !== "") {
+                var alertBox = document.getElementById("alert-message");
+                alertBox.innerHTML = alertMessage;
+                alertBox.className = "alert " + alertClass;
+                alertBox.style.display = "block";
+
+                setTimeout(function() {
+                    alertBox.style.display = "none";
+                }, 10000);
+            }
+        }
+    </script>
 </head>
 <body>
+    <div class="alert" id="alert-message"></div>
+
     <div class="signup-container">
         <h1>Sign Up</h1>
         <form action="" method="POST" name="signupForm" onsubmit="return validateForm();">
-            <input type="text" id="name" name="name" placeholder="Please enter your Full Name" required>
-            <input type="email" id="email" name="email" placeholder="Please enter your Email" required>
-            <input type="tel" id="contact" name="contact" placeholder="Please enter your Contact Number" required>
-            <input type="text" id="username" name="username" placeholder="Please enter your Username" required>
-            <input type="password" id="password" name="password" placeholder="Please enter your Password" required>
-            <input type="password" id="confirm-password" name="confirm-password" placeholder="Please confirm your Password" required>
+            <input type="text" id="name" name="name" placeholder="Enter your Full Name" required>
+            <input type="email" id="email" name="email" placeholder="Enter your Email" required>
+            <input type="tel" id="contact" name="contact" placeholder="Enter your Contact Number" required>
+            <input type="text" id="username" name="username" placeholder="Enter your Username" required>
+            <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your Password" required>
             <br>
-            <input type="checkbox" id="terms" name="terms" required>I accept the <a href="#">terms and conditions</a>
+            <input type="checkbox" id="terms" name="terms" required> I accept the <a href="#">terms and conditions</a>
             <br>
             <input type="submit" value="Sign Up">
         </form>
-        <p class="terms">Already have an account? <a href="loginexample.html">Log in</a></p>
-    </div>
-
-    <!-- Modal HTML -->
-    <div id="successModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="document.getElementById('successModal').style.display='none'">&times;</span>
-            <h2>Registration Successful!</h2>
-            <p>Please log in to continue.</p>
-            <button onclick="window.location.href='loginreg.php'">Go to Login</button>
-        </div>
+        <p class="terms">Already have an account? <a href="loginform.php">Log in</a></p>
     </div>
 
     <script>
-        // Close the modal when the user clicks outside of it
-        window.onclick = function(event) {
-            var modal = document.getElementById('successModal');
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        };
-
         function validateForm() {
             var name = document.forms["signupForm"]["name"].value;
             var email = document.forms["signupForm"]["email"].value;
@@ -187,17 +186,17 @@ $conn->close();
             var terms = document.forms["signupForm"]["terms"].checked;
 
             if (password.length < 5 || password.length > 18) {
-                alert("Password should be between 5 to 18 characters.");
+                alert("Password should be between 5 and 18 characters.");
                 return false;
             }
 
             if (password !== confirmPassword) {
-                alert("Passwords do not match");
+                alert("Passwords do not match.");
                 return false;
             }
 
             if (!terms) {
-                alert("You must accept the terms and conditions");
+                alert("You must accept the terms and conditions.");
                 return false;
             }
 
