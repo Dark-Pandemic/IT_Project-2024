@@ -32,7 +32,7 @@
 
 <li><a href="tasks.html">Tasks</a></li>
 
-<li><a href="#journal">Journal</a></li>
+<li><a href="journal.php">Journal</a></li>
 
 <li><a href="#avatar">Avatar</a></li>
 
