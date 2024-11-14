@@ -115,6 +115,7 @@
         <input type="submit" value="Log In">
     </form>
     <p class="forgot-password"><a href="#" id="forgotPasswordLink">Forgot password?</a></p>
+    <p class="terms">Already have an account? <a href="signupform.php">Sign up here!</a></p>
 </div>
 
 <div id="forgotPasswordModal" class="modal">
