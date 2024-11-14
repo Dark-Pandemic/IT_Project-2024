@@ -130,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <!-- Back to Home button -->
-        <a href="index.php" class="back-home-btn">Back to Home</a>
+        <a href="journal.php" class="back-home-btn">Back to Home</a>
     </div>
 
 </body>
