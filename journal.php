@@ -84,6 +84,7 @@
     </header>
 
     <div class="buttons">
+        <a href="customize.php" class="button">Customize your Journal</a>
         <a href="write_entry.php" class="button">Write a New Entry</a>
         <a href="read_entry.php" class="button">Read Previous Entries</a>
     </div>
