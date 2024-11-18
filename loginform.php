@@ -1,3 +1,133 @@
+<?php
+// Include PHPMailer
+require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\PHPMailer.php';
+require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\SMTP.php';
+require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Database connection
+$conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
+date_default_timezone_set('Africa/Johannesburg');
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+
+$error = ""; // To store error message
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Check credentials in the database
+    $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE username = ? AND password = ?");
+    $stmt->bind_param('ss', $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Login successful, redirect to loading page
+        header("Location: loadingpage.php");
+        exit;
+    } else {
+        // Incorrect credentials
+        $error = "Invalid username or password!";
+    }
+}
+
+
+// Handle forgot password request
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reset_password'])) {
+    $email = $_POST['email'];
+
+    // Check if the email exists in the database
+    $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE email = ?");
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Generate a new token
+        $token = bin2hex(random_bytes(32));
+
+        // Set expiration time 15 minutes from now
+        $expires = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+
+        // Save the token and expiration time in the database
+        $stmt = $conn->prepare("UPDATE userloginreg SET reset_token = ?, reset_expires = ? WHERE email = ?");
+        $stmt->bind_param('sss', $token, $expires, $email);
+        $stmt->execute();
+
+        // Generate reset link
+        $resetLink = "http://localhost/IT_Project-2024/loginresetpassword.php?token=" . $token;
+
+
+        // Send the email using PHPMailer
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'moodifysa@gmail.com'; // Your Gmail
+            $mail->Password = 'ffvl fgwa phqi qekp';  // App Password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            $mail->setFrom('moodifysa@hmail.com', 'moodify');
+            $mail->addAddress($email);
+
+            $mail->isHTML(true);
+            $mail->Subject = 'Password Reset Request';
+            $mail->Body = "Hi, click <a href='$resetLink'>here</a> to reset your password. This link is valid for 15 minutes.";
+
+            $mail->send();
+            $resetMessage = "A reset link has been sent to your email.";
+        } catch (Exception $e) {
+            $resetMessage = "Email could not be sent. Error: {$mail->ErrorInfo}";
+        }
+    } else {
+        $resetMessage = "No account found with that email.";
+    }
+}
+
+// Handle password reset via token
+if (isset($_GET['token'])) {
+    $token = $_GET['token'];
+
+    // Validate the token
+    $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE reset_token = ? AND reset_expires > NOW()");
+    $stmt->bind_param('s', $token);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Token is valid and not expired
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $new_password = $_POST['password'];
+
+            // Update the password and remove the reset token and expiration time
+            $stmt = $conn->prepare("UPDATE userloginreg SET password = ?, reset_token = NULL, reset_expires = NULL WHERE reset_token = ?");
+            $stmt->bind_param('ss', $new_password, $token);
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+                $passwordResetMessage = "Your password has been successfully reset!";
+            } else {
+                $passwordResetMessage = "There was an issue updating your password. Please try again.";
+            }
+        }
+    } else {
+        // Invalid or expired token
+        $passwordResetMessage = "Invalid or expired token.";
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +145,6 @@
             background: #A8B5E0;
         }
 
-
         .login-container {
             background-color: #e7e7e7;
             width: 350px;
@@ -24,9 +153,11 @@
             padding: 20px;
             text-align: center;
         }
+
         .login-container h1 {
             color: black;
         }
+
         input[type="text"], input[type="password"] {
             width: 80%;
             padding: 12px;
@@ -36,6 +167,7 @@
             border-radius: 50px;
             box-sizing: border-box;
         }
+
         input[type="submit"] {
             width: 85%;
             background-color: #00aaff;
@@ -46,9 +178,11 @@
             border-radius: 50px;
             cursor: pointer;
         }
+
         input[type="submit"]:hover {
             background-color: #0088cc;
         }
+
         .alert-overlay {
             position: fixed;
             top: 0;
@@ -61,6 +195,7 @@
             background: rgba(0, 0, 0, 0.5);
             display: none;
         }
+
         .alert-box {
             background-color: #e7ffe7;
             color: #007700;
@@ -70,11 +205,12 @@
             font-size: 18px;
             text-align: center;
         }
+
         .alert-box.alert-error {
             background-color: #ffe7e7;
             color: #ff0000;
         }
-        
+
         .modal {
             display: none;
             position: fixed;
@@ -86,6 +222,7 @@
             justify-content: center;
             align-items: center;
         }
+
         .modal-content {
             background-color: #fefefe;
             padding: 20px;
@@ -93,12 +230,40 @@
             width: 300px;
             text-align: center;
         }
+
         .close {
             color: #aaa;
             float: right;
             font-size: 20px;
             cursor: pointer;
         }
+
+         /* Error alert styles */
+         .error-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .error-box {
+            background-color: #ffcccc;
+            color: #cc0000;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
+
     </style>
 </head>
 <body>
@@ -115,147 +280,61 @@
         <input type="submit" value="Log In">
     </form>
     <p class="forgot-password"><a href="#" id="forgotPasswordLink">Forgot password?</a></p>
-    <p class="terms">Dont have an account? <a href="signupform.php">Sign up here!</a></p>
+    <p class="terms">Don't have an account? <a href="signupform.php">Sign up here!</a></p>
 </div>
 
+<!-- Forgot Password Modal -->
 <div id="forgotPasswordModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <h2>Reset Password</h2>
-        <form id="resetPasswordForm" action="loginform.php" method="POST">
-            <input type="text" name="reset_username" placeholder="Username" required>
-            <input type="email" name="reset_email" placeholder="Email" required>
-            <input type="password" name="new_password" placeholder="New Password" required>
-            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
-            <input type="submit" value="Reset Password">
+        <form action="loginform.php" method="POST">
+            <input type="email" name="email" placeholder="Enter your email" required>
+            <button type="submit" name="reset_password">Send Reset Link</button>
         </form>
+        <?php if (isset($resetMessage)) { echo "<p>$resetMessage</p>"; } ?>
     </div>
 </div>
 
-<div id="alertOverlay" class="alert-overlay">
-    <div id="alertBox" class="alert-box"></div>
-</div>
-
-<?php
-// Database connection settings
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "mentalhealthapp";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Handle login request
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['username']) && isset($_POST['password'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    
-    $sql = "SELECT * FROM userloginreg WHERE username = '$username' AND password = '$password'";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        echo "<script>
-                 // Create a dimming overlay
-            const overlay = document.createElement('div');
-            overlay.style.position = 'fixed';
-            overlay.style.top = 0;
-            overlay.style.left = 0;
-            overlay.style.width = '100%';
-            overlay.style.height = '100%';
-            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // 50% black for dim effect
-            overlay.style.zIndex = '9999'; // Ensure it appears above other content
-
-            // Append the overlay to the body
-            document.body.appendChild(overlay);
-
-            // Redirect after 2 seconds
-            setTimeout(function() {
-                window.location.href = 'loadingpage.php';
-            }, 1000);
-              </script>";
-    } else {
-        echo "<script>
-                document.getElementById('alertBox').textContent = 'Invalid username or password.';
-                document.getElementById('alertBox').classList.add('alert-error');
-                document.getElementById('alertOverlay').style.display = 'flex';
-                setTimeout(function() { document.getElementById('alertOverlay').style.display = 'none'; }, 2000);
-              </script>";
-    }
-}
-
-// Handle password reset request
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['reset_username']) && isset($_POST['reset_email'])) {
-    $reset_username = $_POST['reset_username'];
-    $reset_email = $_POST['reset_email'];
-    $new_password = $_POST['new_password'];
-    $confirm_password = $_POST['confirm_password'];
-
-    if ($new_password !== $confirm_password) {
-        echo "<script>
-                document.getElementById('alertBox').textContent = 'Passwords do not match.';
-                document.getElementById('alertBox').classList.add('alert-error');
-                document.getElementById('alertOverlay').style.display = 'flex';
-                setTimeout(function() { document.getElementById('alertOverlay').style.display = 'none'; }, 2000);
-              </script>";
-    } else {
-        $sql = "SELECT * FROM userloginreg WHERE username = '$reset_username' AND email = '$reset_email'";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            $update_sql = "UPDATE userloginreg SET password = '$new_password' WHERE username = '$reset_username'";
-            if ($conn->query($update_sql) === TRUE) {
-                echo "<script>
-                        document.getElementById('alertBox').textContent = 'Password reset successful! Please log in with your new password.';
-                        document.getElementById('alertBox').classList.remove('alert-error');
-                        document.getElementById('alertOverlay').style.display = 'flex';
-                        setTimeout(function() {
-                            document.getElementById('alertOverlay').style.display = 'none';
-                            document.getElementById('forgotPasswordModal').style.display = 'none';
-                        }, 3000);
-                      </script>";
-            } else {
-                echo "<script>
-                        document.getElementById('alertBox').textContent = 'Error resetting password.';
-                        document.getElementById('alertBox').classList.add('alert-error');
-                        document.getElementById('alertOverlay').style.display = 'flex';
-                        setTimeout(function() { document.getElementById('alertOverlay').style.display = 'none'; }, 2000);
-                      </script>";
-            }
-        } else {
-            echo "<script>
-                    document.getElementById('alertBox').textContent = 'Invalid username or email.';
-                    document.getElementById('alertBox').classList.add('alert-error');
-                    document.getElementById('alertOverlay').style.display = 'flex';
-                    setTimeout(function() { document.getElementById('alertOverlay').style.display = 'none'; }, 2000);
-                  </script>";
-        }
-    }
-}
-
-$conn->close();
-?>
+<?php if (isset($passwordResetMessage)) { echo "<div class='alert-box'>$passwordResetMessage</div>"; } ?>
 
 <script>
     const modal = document.getElementById('forgotPasswordModal');
     const forgotPasswordLink = document.getElementById('forgotPasswordLink');
 
+    // Open modal when "Forgot password?" is clicked
     forgotPasswordLink.onclick = function() {
-        modal.style.display = "flex";
+        modal.style.display = 'flex';
     }
 
+    // Close modal when "x" is clicked
     function closeModal() {
-        modal.style.display = "none";
+        modal.style.display = 'none';
     }
 
+    // Close modal if clicked outside of modal content
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target === modal) {
+            closeModal();
         }
     }
 </script>
+
+<!-- Error Alert Box -->
+<?php if (!empty($error)) : ?>
+    <div class="error-overlay" id="errorOverlay">
+        <div class="error-box">
+            <?php echo $error; ?>
+        </div>
+    </div>
+    <script>
+        // Remove the error overlay after 4 seconds
+        setTimeout(() => {
+            document.getElementById('errorOverlay').style.display = 'none';
+            document.getElementById('password').value = ''; // Clear password field
+        }, 4000);
+    </script>
+<?php endif; ?>
 
 </body>
 </html>
