@@ -1,4 +1,4 @@
-<?php
+<?php 
 // Include PHPMailer
 require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\PHPMailer.php';
 require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\SMTP.php';
@@ -16,81 +16,86 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 $error = ""; // To store error message
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    // Check if the required POST data exists
+    if (isset($_POST['username']) && isset($_POST['password'])) {
+        // Sanitize inputs to prevent SQL injection
+        $username = $conn->real_escape_string($_POST['username']);
+        $password = $conn->real_escape_string($_POST['password']);
 
-    // Check credentials in the database
-    $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE username = ? AND password = ?");
-    $stmt->bind_param('ss', $username, $password);
-    $stmt->execute();
-    $result = $stmt->get_result();
+        // Check credentials in the database
+        $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE username = ? AND password = ?");
+        $stmt->bind_param('ss', $username, $password);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        // Login successful, redirect to loading page
-        header("Location: loadingpage.php");
-        exit;
+        if ($result->num_rows > 0) {
+            // Login successful, redirect to loading page
+            header("Location: loadingpage.php");
+            exit;
+        } else {
+            // Incorrect credentials
+            $error = "Invalid username or password!";
+        }
     } else {
-        // Incorrect credentials
-        $error = "Invalid username or password!";
+        $error = "Please fill in both fields.";
     }
 }
 
-
 // Handle forgot password request
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reset_password'])) {
-    $email = $_POST['email'];
+    if (isset($_POST['email'])) {
+        $email = $_POST['email'];
 
-    // Check if the email exists in the database
-    $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE email = ?");
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        // Generate a new token
-        $token = bin2hex(random_bytes(32));
-
-        // Set expiration time 15 minutes from now
-        $expires = date('Y-m-d H:i:s', strtotime('+15 minutes'));
-
-        // Save the token and expiration time in the database
-        $stmt = $conn->prepare("UPDATE userloginreg SET reset_token = ?, reset_expires = ? WHERE email = ?");
-        $stmt->bind_param('sss', $token, $expires, $email);
+        // Check if the email exists in the database
+        $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE email = ?");
+        $stmt->bind_param('s', $email);
         $stmt->execute();
+        $result = $stmt->get_result();
 
-        // Generate reset link
-        $resetLink = "http://localhost/IT_Project-2024/loginresetpassword.php?token=" . $token;
+        if ($result->num_rows > 0) {
+            // Generate a new token
+            $token = bin2hex(random_bytes(32));
 
+            // Set expiration time 15 minutes from now
+            $expires = date('Y-m-d H:i:s', strtotime('+15 minutes'));
 
-        // Send the email using PHPMailer
-        $mail = new PHPMailer(true);
-        try {
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'moodifysa@gmail.com'; // Your Gmail
-            $mail->Password = 'ffvl fgwa phqi qekp';  // App Password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            // Save the token and expiration time in the database
+            $stmt = $conn->prepare("UPDATE userloginreg SET reset_token = ?, reset_expires = ? WHERE email = ?");
+            $stmt->bind_param('sss', $token, $expires, $email);
+            $stmt->execute();
 
-            $mail->setFrom('moodifysa@hmail.com', 'moodify');
-            $mail->addAddress($email);
+            // Generate reset link
+            $resetLink = "http://localhost/IT_Project-2024/loginresetpassword.php?token=" . $token;
 
-            $mail->isHTML(true);
-            $mail->Subject = 'Password Reset Request';
-            $mail->Body = "Hi, click <a href='$resetLink'>here</a> to reset your password. This link is valid for 15 minutes.";
+            // Send the email using PHPMailer
+            $mail = new PHPMailer(true);
+            try {
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'moodifysa@gmail.com'; // Your Gmail
+                $mail->Password = 'ffvl fgwa phqi qekp';  // App Password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
 
-            $mail->send();
-            $resetMessage = "A reset link has been sent to your email.";
-        } catch (Exception $e) {
-            $resetMessage = "Email could not be sent. Error: {$mail->ErrorInfo}";
+                $mail->setFrom('moodifysa@hmail.com', 'moodify');
+                $mail->addAddress($email);
+
+                $mail->isHTML(true);
+                $mail->Subject = 'Password Reset Request';
+                $mail->Body = "Hi, click <a href='$resetLink'>here</a> to reset your password. This link is valid for 15 minutes.";
+
+                $mail->send();
+                $resetMessage = "A reset link has been sent to your email.";
+            } catch (Exception $e) {
+                $resetMessage = "Email could not be sent. Error: {$mail->ErrorInfo}";
+            }
+        } else {
+            $resetMessage = "No account found with that email.";
         }
-    } else {
-        $resetMessage = "No account found with that email.";
     }
 }
 
@@ -107,17 +112,19 @@ if (isset($_GET['token'])) {
     if ($result->num_rows > 0) {
         // Token is valid and not expired
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $new_password = $_POST['password'];
+            if (isset($_POST['password'])) {
+                $new_password = $_POST['password'];
 
-            // Update the password and remove the reset token and expiration time
-            $stmt = $conn->prepare("UPDATE userloginreg SET password = ?, reset_token = NULL, reset_expires = NULL WHERE reset_token = ?");
-            $stmt->bind_param('ss', $new_password, $token);
-            $stmt->execute();
+                // Update the password and remove the reset token and expiration time
+                $stmt = $conn->prepare("UPDATE userloginreg SET password = ?, reset_token = NULL, reset_expires = NULL WHERE reset_token = ?");
+                $stmt->bind_param('ss', $new_password, $token);
+                $stmt->execute();
 
-            if ($stmt->affected_rows > 0) {
-                $passwordResetMessage = "Your password has been successfully reset!";
-            } else {
-                $passwordResetMessage = "There was an issue updating your password. Please try again.";
+                if ($stmt->affected_rows > 0) {
+                    $passwordResetMessage = "Your password has been successfully reset!";
+                } else {
+                    $passwordResetMessage = "There was an issue updating your password. Please try again.";
+                }
             }
         }
     } else {
@@ -127,6 +134,7 @@ if (isset($_GET['token'])) {
 }
 
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -261,9 +269,6 @@ if (isset($_GET['token'])) {
             font-size: 18px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-
-
-
     </style>
 </head>
 <body>
@@ -305,6 +310,8 @@ if (isset($_GET['token'])) {
     // Open modal when "Forgot password?" is clicked
     forgotPasswordLink.onclick = function() {
         modal.style.display = 'flex';
+        // Hide error overlay when the reset password modal is opened
+        document.getElementById('errorOverlay').style.display = 'none';
     }
 
     // Close modal when "x" is clicked
@@ -321,7 +328,7 @@ if (isset($_GET['token'])) {
 </script>
 
 <!-- Error Alert Box -->
-<?php if (!empty($error)) : ?>
+<?php if (!empty($error) && !isset($_POST['reset_password'])) : ?>
     <div class="error-overlay" id="errorOverlay">
         <div class="error-box">
             <?php echo $error; ?>
@@ -335,6 +342,30 @@ if (isset($_GET['token'])) {
         }, 4000);
     </script>
 <?php endif; ?>
+
+<!-- Success/Error Message Popup -->
+<?php if (isset($resetMessage) || isset($passwordResetMessage)) { ?>
+    <div class="modal" id="messageModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMessageModal()">&times;</span>
+            <div class="alert-box <?php echo isset($passwordResetMessage) ? 'alert-error' : ''; ?>">
+                <?php echo isset($passwordResetMessage) ? $passwordResetMessage : $resetMessage; ?>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<script>
+    // Show and close the message popup
+    function closeMessageModal() {
+        document.getElementById('messageModal').style.display = 'none';
+    }
+
+    // Automatically show the message popup if there's a message
+    <?php if (isset($resetMessage) || isset($passwordResetMessage)) { ?>
+        document.getElementById('messageModal').style.display = 'flex';
+    <?php } ?>
+</script>
 
 </body>
 </html>
