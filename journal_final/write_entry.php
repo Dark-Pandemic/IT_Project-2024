@@ -128,11 +128,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form-container">
         <form action="write_entry.php" method="post">
-            <label for="file_name">File Name:</label>
-            <input type="text" id="file_name" name="file_name" required>
+        <label for="file_name">Title of Your Journal Entry:</label>
+        <input type="text" id="file_name" name="file_name" placeholder="Enter a title for your journal entry" required style="width: 100%; padding: 15px; font-size: 18px; border-radius: 8px; border: 1px solid #ccc; background-color: #f9f9f9; box-sizing: border-box;">
 
-            <label for="file_content">Your Entry:</label>
-            <textarea id="file_content" name="file_content" required></textarea>
+        <label for="file_content">Your Journal Entry:</label>
+            <textarea id="file_content" name="file_content" placeholder="Write your journal entry here..." required></textarea>
 
             <button type="submit">Save Entry</button>
         </form>

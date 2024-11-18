@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Invalid username or password!";
         }
     } else {
-        $error = "Please fill in both fields.";
+        
     }
 }
 
@@ -150,7 +150,7 @@ if (isset($_GET['token'])) {
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: #A8B5E0;
+            background: linear-gradient(60deg, #f0e4b0 0%, #f7f0d1 100%);
         }
 
         .login-container {
@@ -160,7 +160,11 @@ if (isset($_GET['token'])) {
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             text-align: center;
+            position: relative;
+            z-index: 2; /* Higher z-index to make it on top of the wave background */
         }
+
+        
 
         .login-container h1 {
             color: black;
@@ -229,6 +233,7 @@ if (isset($_GET['token'])) {
             background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
+            z-index: 3; /* Ensure modal is above the login form */
         }
 
         .modal-content {
@@ -269,9 +274,72 @@ if (isset($_GET['token'])) {
             font-size: 18px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
+         /* Wave background styles */
+         .waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40vh;
+            z-index: 0; /* Ensures that the waves are behind everything */
+        }
+
+        /* Animation for wave movement (updated animation) */
+        .parallax > use {
+            animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
+        }
+
+        .parallax > use:nth-child(1) {
+            animation-delay: -2s;
+            animation-duration: 7s;
+        }
+
+        .parallax > use:nth-child(2) {
+            animation-delay: -3s;
+            animation-duration: 10s;
+        }
+
+        .parallax > use:nth-child(3) {
+            animation-delay: -4s;
+            animation-duration: 13s;
+        }
+
+        .parallax > use:nth-child(4) {
+            animation-delay: -5s;
+            animation-duration: 20s;
+        }
+
+        /* Keyframes for wave animation */
+        @keyframes move-forever {
+            0% {
+                transform: translate3d(-90px, 0, 0);
+            }
+            100% {
+                transform: translate3d(85px, 0, 0);
+            }
+        }
+
     </style>
 </head>
 <body>
+
+<!-- Background Container with Waves -->
+<div class="background-container">
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+            <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+            <!-- Updated waves with animation -->
+            <use xlink:href="#gentle-wave" x="48" y="2" fill="#72efdd" />
+            <use xlink:href="#gentle-wave" x="48" y="6" fill="#9ceaef" />
+            <use xlink:href="#gentle-wave" x="48" y="5" fill="#68d8d6" />
+            <use xlink:href="#gentle-wave" x="48" y="7" fill="#3dccc7" />
+            <use xlink:href="#gentle-wave" x="48" y="20" fill="#07beb8" />
+        </g>
+    </svg>
+</div>
 
 <div class="login-container">
     <h1>Log In</h1>
@@ -310,8 +378,6 @@ if (isset($_GET['token'])) {
     // Open modal when "Forgot password?" is clicked
     forgotPasswordLink.onclick = function() {
         modal.style.display = 'flex';
-        // Hide error overlay when the reset password modal is opened
-        document.getElementById('errorOverlay').style.display = 'none';
     }
 
     // Close modal when "x" is clicked
@@ -328,7 +394,7 @@ if (isset($_GET['token'])) {
 </script>
 
 <!-- Error Alert Box -->
-<?php if (!empty($error) && !isset($_POST['reset_password'])) : ?>
+<?php if (!empty($error)) : ?>
     <div class="error-overlay" id="errorOverlay">
         <div class="error-box">
             <?php echo $error; ?>
@@ -356,6 +422,16 @@ if (isset($_GET['token'])) {
 <?php } ?>
 
 <script>
+    // Show the forgot password modal
+    document.getElementById('forgotPasswordLink').onclick = function() {
+        document.getElementById('forgotPasswordModal').style.display = 'flex';
+    }
+
+    // Close the modal
+    function closeModal() {
+        document.getElementById('forgotPasswordModal').style.display = 'none';
+    }
+
     // Show and close the message popup
     function closeMessageModal() {
         document.getElementById('messageModal').style.display = 'none';
