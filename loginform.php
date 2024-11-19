@@ -1,4 +1,6 @@
-<?php 
+<?php  
+session_start();
+
 // Include PHPMailer
 require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\PHPMailer.php';
 require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\SMTP.php';
@@ -32,17 +34,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            // Login successful, redirect to loading page
+            // Login successful
+
+            // Set session variables
+            $_SESSION['username'] = $username;
+
+            // If "Remember me" is checked, create a cookie
+            if (isset($_POST['remember'])) {
+                // Set cookies for 1 week
+                setcookie('username', $username, time() + (86400 * 7), "/"); // 86400 = 1 day
+                setcookie('password', $password, time() + (86400 * 7), "/"); 
+            }
+
+            // Debugging: Check if session is set
+            // echo "Session set for " . $_SESSION['username'];
+
+            // Redirect to loading page
             header("Location: loadingpage.php");
-            exit;
+            exit; // Ensure script ends here
         } else {
             // Incorrect credentials
             $error = "Invalid username or password!";
         }
-    } else {
-        
+    } 
+}
+
+// If cookies exist, use them to automatically log in
+if (isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
+    $username = $_COOKIE['username'];
+    $password = $_COOKIE['password'];
+
+    // Validate cookies against the database
+    $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE username = ? AND password = ?");
+    $stmt->bind_param('ss', $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Cookie credentials are valid, start session and redirect
+        $_SESSION['username'] = $username;
+
+        // Debugging: Check if session is set
+        // echo "Session set for " . $_SESSION['username'];
+
+        header("Location: loadingpage.php");
+        exit; // Ensure script ends here
     }
 }
+
 
 // Handle forgot password request
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reset_password'])) {

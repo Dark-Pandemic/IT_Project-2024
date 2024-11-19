@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+
+
+$username = $_SESSION['username']; // Fetch username from session
+?>
+
+
 <!-- loadingpage.php -->
 <!DOCTYPE html>
 <html lang="en">

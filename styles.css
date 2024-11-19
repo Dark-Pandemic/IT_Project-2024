@@ -4,28 +4,42 @@ body {
   font-family: 'Arial', sans-serif;
   background-color: #e0f7fa; /* Light blue background */
 }
-header {
-  background-color: #f3879e; /* Header background color */
+
+
+
+
+/* Only apply these styles if the page has the 'index-page' class */
+.index-page header {
+  background: linear-gradient(to right, #309dc4, #559db3, #2481a7, #b1d6df); /* Cool gradient background */
   padding: 15px 0;
   text-align: center; /* Center the menu */
   position: relative;
   z-index: 1000; /* Ensure it stays above other content */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Soft shadow to create depth */
+  border-bottom: none; /* Remove the black border */
+  transition: background 0.8s ease, transform 0.3s ease; /* Smooth transition for background and scaling */
 }
 
-/* Dropdown Menu */
-.navbar {
+/* Hover effect for header */
+.index-page header:hover {
+  background: linear-gradient(to right, #2481a7, #309dc4, #559db3, #d4ecf2); /* Slightly different gradient on hover */
+  transform: scale(1.05); /* Slightly scale up the header */
+}
+
+/* Dropdown Menu - Only for index page */
+.index-page .navbar {
   display: flex;
   justify-content: center; /* Center the dropdown */
 }
 
-.quote {
+.index-page .quote {
   font-style: italic;
   color: #555; /* Grey color for text */
   margin-top: 10px; /* Space above the quote */
   font-size: 18px; /* Font size */
 }
 
-.menu-toggle {
+.index-page .menu-toggle {
   background-color: transparent;
   border: none;
   color: #333; /* Darker color for contrast */
@@ -34,45 +48,64 @@ header {
   margin-right: 20px;
 }
 
-.fancy-menu {
+.index-page .fancy-menu {
   display: none; /* Hidden by default */
   position: absolute; /* Position it below the header */
   top: 100%; /* Below the header */
   left: 50%;
   transform: translateX(-50%); /* Center the dropdown */
-  background-color: #e9bec7; /* Same color as header */
-  border-radius: 5px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff; /* White background */
+  border-radius: 8px; /* Rounded corners for a smooth look */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Softer shadow for depth */
   z-index: 999; /* Make sure it overlaps other content */
+  padding: 10px 0; /* Padding for a more spacious dropdown */
+  width: max-content; /* Make sure the dropdown width adjusts based on content */
+  min-width: 180px; /* Set a minimum width to ensure uniformity */
 }
 
-.fancy-menu.show {
+.index-page .fancy-menu.show {
   display: block; /* Show when active */
 }
 
-.fancy-menu ul {
+.index-page .fancy-menu ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-.fancy-menu ul li {
+.index-page .fancy-menu ul li {
   position: relative;
 }
 
-.fancy-menu ul li a {
-  color: #333; /* Darker text color */
+.index-page .fancy-menu ul li a {
+  color: #005f73; /* Dark blue text */
   text-decoration: none;
-  padding: 10px 20px;
+  padding: 12px 20px; /* Slightly bigger padding for a more clickable feel */
   display: block;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 5px; /* Rounded corners for each item */
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+  white-space: nowrap; /* Prevent text from breaking and causing overflow */
 }
 
-.fancy-menu ul li a:hover {
-  color: #FFD700; /* Hover color */
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
+.index-page .fancy-menu ul li a:hover {
+  color: #ffffff; /* White text color on hover */
+  background-color: #0077b6; /* Blue background on hover */
+  transform: translateX(5px); /* Subtle slide effect on hover */
+  border-radius: 10px; /* More pronounced rounding on hover */
 }
+
+.index-page .fancy-menu ul li a:active {
+  background-color: #0096c7; /* Slightly darker blue when clicked */
+  transform: translateX(2px); /* Slight movement when clicked */
+}
+
+.index-page .fancy-menu ul li a:focus {
+  outline: none; /* Remove default outline for focus */
+}
+
+
+
+
 
 .welcome-section {
   background-image: url('images/ob.jpeg');
