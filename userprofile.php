@@ -1,12 +1,16 @@
 <?php
-session_start();
+/*session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: loginform.php");
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
+//logout button, add logout session dertails
+
+$user_id = $_SESSION['user_id'];*/
+
+
 $conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
 
 if ($conn->connect_error) {
@@ -27,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     }
 }
 
-$sql = "SELECT username, email FROM userloginreg WHERE id='$user_id'";
+/*$sql = "SELECT username, email FROM userloginreg WHERE id='$user_id'";
 $result = $conn->query($sql);
 $user = $result->fetch_assoc();
 
@@ -35,7 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
     session_destroy();
     header("Location: loginform.php");
     exit();
-}
+}*/
+
+
+
+////add this code to the add here comment below
+       /* <?php if (isset($success_message)) echo "<div class='message success'>$success_message</div>"; ?>
+       <?php if (isset($error_message)) echo "<div class='message error'>$error_message</div>"; ?>*/
+
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
             padding: 20px;
         }
         .container {
-            max-width: 400px;
+            max-width: 500px;
             margin: auto;
             background: #fff;
             padding: 20px;
@@ -68,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
             font-weight: bold;
         }
         input[type="text"], input[type="email"], input[type="password"] {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ddd;
@@ -122,18 +133,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
 
     <div class="container">
         <h2>Profile</h2>
-        <?php if (isset($success_message)) echo "<div class='message success'>$success_message</div>"; ?>
-        <?php if (isset($error_message)) echo "<div class='message error'>$error_message</div>"; ?>
+        
+
+        <!-----------------add here--->
         
         <form method="POST" action="">
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>">
+            <input type="text" id="username" name="username" value="">
 
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
+            <input type="email" id="email" name="email" value="">
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" value = "<?php echo htmlspecialchars($user['password']); ?>" disabled>
+            <input type="password" id="password" name="password" value = "" disabled>
             <a href="changepassword.html">Change Password</a>
             
             <br><br><br>

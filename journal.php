@@ -77,11 +77,14 @@
     </style>
 </head>
 <body>
+    
 
-    <header>
+    <header >
         <h1>Welcome to Your Journal</h1>
         <p>Track your thoughts, emotions, and experiences over time. Journaling helps you reflect and grow. Take a moment to explore.</p>
     </header>
+
+    
 
     <div class="buttons">
         <a href="customize.php" class="button">Customize your Journal</a>

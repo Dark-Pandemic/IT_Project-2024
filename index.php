@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = "Guest"; // Fallback for anonymous access
+}
+?>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -14,7 +26,7 @@
 
 </head>
 
-<body>
+<body class="index-page">
 
 <!-- Top Dropdown Menu -->
 
@@ -28,7 +40,7 @@
 
 <ul>
 
-<li><a href="#profile">Profile</a></li>
+<li><a href="userprofile.php">Profile</a></li>
 
 <li><a href="tasks.html">Tasks</a></li>
 
@@ -36,9 +48,9 @@
 
 <li><a href="#avatar">Avatar</a></li>
 
-<li><a href="#badges">Badges</a></li>
+<li><a href="badges.html">Badges</a></li>
 
-<li><a href="#emergency">Emergency Contact</a></li>
+<li><a href="contacts/contacts_index.php">Emergency Contact</a></li>
 
 </ul>
 
@@ -50,7 +62,10 @@
 
 <div class="welcome-section">
 
-<h1>Welcome to Moodify, <span class="username">user</span></h1>
+<h1>Welcome to Moodify, <?php echo htmlspecialchars($username); ?>!</h1>
+
+
+
 
 <div id="quote" class="quote"></div>
 
@@ -93,14 +108,26 @@
 
 <script>
 
-// JavaScript to toggle dropdown
+// JavaScript to toggle dropdown menu visibility when the button is clicked
+document.querySelector('.menu-toggle').addEventListener('click', function(event) {
+    const menu = document.querySelector('.fancy-menu');
+    
+    // Toggle the 'show' class to display or hide the menu
+    menu.classList.toggle('show');
+    
+    // Prevent click propagation to avoid triggering the document click listener
+    event.stopPropagation();
+});
 
-document.querySelector('.menu-toggle').addEventListener('click', function() {
-
-const menu = document.querySelector('.fancy-menu');
-
-menu.classList.toggle('show');
-
+// Close the menu if the user clicks outside of it
+document.addEventListener('click', function(event) {
+    const menu = document.querySelector('.index-page .fancy-menu');
+    const menuButton = document.querySelector('.index-page .menu-toggle');
+    
+    // Check if the click is outside the menu and the menu button
+    if (!menu.contains(event.target) && event.target !== menuButton) {
+        menu.classList.remove('show'); // Hide the menu
+    }
 });
 
 // Animate progress bar on page load

@@ -189,12 +189,45 @@
 
     <!-- Inline JavaScript -->
     <script>
-        const badges = [
-            { id: 1, title: 'Novice', unlocked: true, criteria: 'Login 1 day', dateUnlocked: '2024-01-01', image: 'https://via.placeholder.com/60?text=Novice', progress: 100 },
-            { id: 2, title: 'Intermediate', unlocked: false, criteria: 'Login 7 days', dateUnlocked: null, image: 'https://via.placeholder.com/60?text=Intermediate', progress: 3 },
-            { id: 3, title: 'Expert', unlocked: false, criteria: 'Reach Level 10', dateUnlocked: null, image: 'https://via.placeholder.com/60?text=Expert', progress: 5 },
-            { id: 4, title: 'Master', unlocked: false, criteria: 'Complete 10 tasks', dateUnlocked: null, image: 'https://via.placeholder.com/60?text=Master', progress: 2 },
-        ];
+       let badges = [
+  { 
+    id: 1, 
+    title: 'Novice', 
+    unlocked: true, 
+    criteria: 'Login 1 day', 
+    dateUnlocked: '2024-01-01', 
+    image: "C:\xampp\htdocs\IT_Project-2024-main\IT_Project-2024\badges\level1.png", 
+    progress: 100 
+  },
+  { 
+    id: 2, 
+    title: 'Intermediate', 
+    unlocked: false, 
+    criteria: 'Login 7 days', 
+    dateUnlocked: null, 
+    image: "C:\xampp\htdocs\IT_Project-2024-main\IT_Project-2024\badges\level2.png", 
+    progress: 3 
+  },
+  { 
+    id: 3, 
+    title: 'Expert', 
+    unlocked: false, 
+    criteria: 'Reach Level 10', 
+    dateUnlocked: null, 
+    image: "C:\xampp\htdocs\IT_Project-2024-main\IT_Project-2024\badges\level3.png", 
+    progress: 5 
+  },
+  { 
+    id: 4, 
+    title: 'Master', 
+    unlocked: false, 
+    criteria: 'Complete 10 tasks', 
+    dateUnlocked: null, 
+    image: "C:\xampp\htdocs\IT_Project-2024-main\IT_Project-2024\badges\level4.png", 
+    progress: 2 
+  }
+];
+
 
         const badgeContainer = document.getElementById('badgeContainer');
         const trophyWall = document.getElementById('selectedBadges');
@@ -267,6 +300,117 @@
 
         // Initial render
         renderBadges();
+
+        class BadgeManager {
+    constructor() {
+        this.badges = [];
+        this.init();
+    }
+
+    async init() {
+        await this.loadBadges();
+        this.startProgressUpdates();
+    }
+
+    async loadBadges() {
+        try {
+            const response = await fetch('badge_api.php?action=get_progress');
+            const data = await response.json();
+            this.badges = data;
+            this.renderBadges();
+        } catch (error) {
+            console.error('Error loading badges:', error);
+        }
+    }
+
+    renderBadges(filter = 'all') {
+        const container = document.getElementById('badgeContainer');
+        container.innerHTML = '';
+
+        this.badges.forEach(badge => {
+            if (this.shouldShowBadge(badge, filter)) {
+                const badgeElement = this.createBadgeElement(badge);
+                container.appendChild(badgeElement);
+            }
+        });
+    }
+
+    createBadgeElement(badge) {
+        const div = document.createElement('div');
+        div.className = `badge ${badge.is_unlocked ? '' : 'locked'}`;
+        
+        div.innerHTML = `
+            <img src="${badge.image}" alt="${badge.title}">
+            <div class="badge-title">${badge.title}</div>
+            <div class="tooltip" id="tooltip-${badge.id}">
+                <div>Criteria: ${badge.criteria}</div>
+                <div>Progress: ${Math.round(badge.progress)}%</div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: ${Math.min(badge.progress, 100)}%"></div>
+                </div>
+                ${badge.unlock_date ? `<div>Unlocked: ${new Date(badge.unlock_date).toLocaleDateString()}</div>` : ''}
+            </div>
+        `;
+
+        div.onmouseover = () => this.showTooltip(badge.id);
+        div.onmouseout = () => this.hideTooltip(badge.id);
+        div.onclick = () => this.handleBadgeClick(badge);
+
+        return div;
+    }
+
+    shouldShowBadge(badge, filter) {
+        switch (filter) {
+            case 'unlocked':
+                return badge.is_unlocked;
+            case 'locked':
+                return !badge.is_unlocked;
+            default:
+                return true;
+        }
+    }
+
+    showTooltip(badgeId) {
+        const tooltip = document.getElementById(`tooltip-${badgeId}`);
+        if (tooltip) tooltip.style.display = 'block';
+    }
+
+    hideTooltip(badgeId) {
+        const tooltip = document.getElementById(`tooltip-${badgeId}`);
+        if (tooltip) tooltip.style.display = 'none';
+    }
+
+    handleBadgeClick(badge) {
+        if (badge.is_unlocked) {
+            this.addToTrophyWall(badge);
+        } else {
+            alert(`Badge locked! ${badge.criteria}`);
+        }
+    }
+
+    addToTrophyWall(badge) {
+        const trophyWall = document.getElementById('selectedBadges');
+        const selectedBadge = document.createElement('div');
+        selectedBadge.className = 'selected-badge';
+        selectedBadge.innerText = badge.title;
+        trophyWall.appendChild(selectedBadge);
+    }
+
+    startProgressUpdates() {
+        setInterval(() => this.loadBadges(), 30000); // Update every 30 seconds
+    }
+}
+
+// Initialize badge manager when document is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.badgeManager = new BadgeManager();
+});
+
+// Update filter function
+function filterBadges() {
+    const filterValue = document.getElementById('filter').value;
+    window.badgeManager.renderBadges(filterValue);
+}
     </script>
 
 </body>
