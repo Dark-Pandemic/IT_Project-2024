@@ -32,9 +32,20 @@ if (isset($_SESSION['username'])) {
 
 <header id="header">
 
+
+
 <nav class="navbar">
 
 <button class="menu-toggle">☰</button>
+
+<a href="userprofile.php" class="logged-in-user">
+    
+    <div class="user-info">
+        <p><?php echo htmlspecialchars($_SESSION['username']); ?></p> <!-- Username with label -->
+    </div>
+    &nbsp;
+    <img src="profile-icon.png" alt="Profile Icon" class="profile-icon"> <!-- Profile Icon -->
+</a>
 
 <nav class="fancy-menu">
 
@@ -42,7 +53,7 @@ if (isset($_SESSION['username'])) {
 
 <li><a href="userprofile.php">Profile</a></li>
 
-<li><a href="tasks.html">Tasks</a></li>
+<li><a href="tasks/tasks_1.php">Tasks</a></li>
 
 <li><a href="journal.php">Journal</a></li>
 
