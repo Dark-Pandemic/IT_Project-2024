@@ -1,5 +1,17 @@
 <?php
-session_start(); // Start the session
+
+
+session_start();
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = "Guest"; // Fallback for anonymous access
+}
+
+
 include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

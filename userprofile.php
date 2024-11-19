@@ -1,14 +1,14 @@
 <?php
-/*session_start();
+session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: loginform.php");
-    exit();
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = "Guest"; // Fallback for anonymous access
 }
 
-//logout button, add logout session dertails
-
-$user_id = $_SESSION['user_id'];*/
 
 
 $conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
