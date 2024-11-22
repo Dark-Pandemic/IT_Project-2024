@@ -1,4 +1,18 @@
 <?php
+
+
+session_start();
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = "Guest"; // Fallback for anonymous access
+}
+
+
+
 include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -79,6 +93,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #f9f9f9; /* Light background color for the textarea */
             color: #333;
         }
+			
+		textarea.plain {
+			background-image: none; /* No background pattern */
+			background-color: white; /* Plain white background */
+		}
+		textarea.lined {
+			background-image: repeating-linear-gradient(to bottom, #ccc 0, #ccc 1px, transparent 1px, transparent 32px);
+		}
+
+    
+		textarea.dotted {
+			background-image: radial-gradient(circle, #ccc 1px, transparent 1px);
+			background-size: 22px 22px;
+		}
+
         button {
             background-color: #a7c7e7; /* Pastel blue */
             color: white;
@@ -110,6 +139,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #e1c1a0; /* Slightly darker beige */
             transform: translateY(-4px);
         }
+		
+		.back{
+			text-decoration: none;
+			display: inline-block;
+			padding: 8px 16px;
+		}
+
+		.back:hover {
+			background-color: #ddd;
+			color: black;
+		}
+
+		.previous {
+			background-color: grey;
+			color: black;
+		}
+
+		.round {
+		border-radius: 50%;
+		}
     </style>
 </head>
 <body>
@@ -117,21 +166,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <header>
         <h1>Write a New Journal Entry</h1>
     </header>
+	
+	<br>
+	<a href="journal.php" class="previous round" id = "back">&#8249;</a>
 
     <div class="form-container">
         <form action="write_entry.php" method="POST">
+		
+			<label for="paper_type">Select Paper Type:</label>
+			<select id="paper_type" name="paper_type">
+				<option value="plain">Plain</option>
+				<option value="lined">Lined</option>
+				<option value="dotted">Dotted</option>
+			</select>
+			
             <label for="file_name">Title of Your Journal Entry:</label>
             <input type="text" id="file_name" name="file_name" placeholder="Enter a title for your journal entry" required style="width: 100%; padding: 15px; font-size: 18px; border-radius: 8px; border: 1px solid #ccc; background-color: #f9f9f9; box-sizing: border-box;">
-
+			
             <label for="file_content">Your Journal Entry:</label>
             <textarea id="file_content" name="file_content" placeholder="Write your journal entry here..." required></textarea>
 
             <button type="submit">Save Entry</button>
         </form>
-
-        <!-- Back to Home button -->
+		
         <a href="journal.php" class="back-home-btn">Back to Home</a>
     </div>
+	
+	<script>
+    document.getElementById('paper_type').addEventListener('change', function () {
+      const textarea = document.getElementById('file_content');
+      textarea.className = ''; // Clear existing classes
+      textarea.classList.add(this.value); // Add the selected class based on the dropdown value
+    });
+	
+	const paperTypeSelect = document.getElementById('paper_type');
+
+        // Save data to localStorage on change
+        paperTypeSelect.addEventListener('change', () => {
+            localStorage.setItem('journal_paper_type', paperTypeSelect.value);
+        });
+
+        // Load data from localStorage on page load
+        window.addEventListener('load', () => {
+            const savedPaperType = localStorage.getItem('journal_paper_type');
+
+            
+            if (savedPaperType) {
+                paperTypeSelect.value = savedPaperType;
+                textarea.className = ''; // Clear existing classes
+                textarea.classList.add(savedPaperType); // Apply the saved paper type
+            }
+        });
+  </script>
 
 </body>
 </html>
