@@ -1,52 +1,97 @@
 <?php
 session_start();
 
-if (isset($_SESSION['username'])) {
-    $username = $_SESSION['username']; // Use session if available
-} elseif (isset($_COOKIE['username'])) {
-    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
-} else {
-    $username = "Guest"; // Fallback for anonymous access
-}
+if (!isset($_SESSION['ID'])) {
+    http_response_code(401);
+    echo 'User not logged in';
+    exit;
 
+
+// Database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "mentalhealthapp";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if the user is logged in
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
+// Get user ID from session and task ID from POST request
+$user_id = $_SESSION['ID'];
+$task_id = isset($_POST['task_id']) ? (int)$_POST['task_id'] : 0;
 
-    // Validate the input
-    if (isset($_POST['task_id']) && is_numeric($_POST['task_id'])) {
-        $task_id = (int)$_POST['task_id'];
-
-        // Update the is_complete column for the given task ID and user ID
-        $stmt = $conn->prepare("UPDATE tasks SET is_complete = 1 WHERE ID = ? AND user_id = ?");
-        $stmt->bind_param("ii", $task_id, $user_id);
-
-        if ($stmt->execute()) {
-            echo "Task updated successfully";
-        } else {
-            echo "Error updating task: " . $stmt->error;
-        }
-
-        $stmt->close();
-    } else {
-        echo "Invalid task ID";
-    }
-} else {
-    echo "User not logged in";
+if ($task_id <= 0) {
+    http_response_code(400);
+    echo 'Invalid task ID';
+    exit;
 }
 
+// Update the task as complete
+$sql = "UPDATE tasks SET is_complete = 1 WHERE task_id = ? AND ID = ?";
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    echo 'Error preparing task update statement: ' . $conn->error;
+    exit;
+}
+
+$stmt->bind_param('ii', $task_id, $user_id);
+
+if (!$stmt->execute()) {
+    echo 'Error updating task: ' . $stmt->error;
+    $stmt->close();
+    $conn->close();
+    exit;
+}
+
+// Fetch XP for the task
+$stmt->close();
+$sql = "SELECT xp FROM tasks WHERE task_id = ?";
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    echo 'Error preparing XP fetch statement: ' . $conn->error;
+    $conn->close();
+    exit;
+}
+
+$stmt->bind_param('i', $task_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$task = $result->fetch_assoc();
+
+if (!$task) {
+    echo 'Task not found or XP not available';
+    $stmt->close();
+    $conn->close();
+    exit;
+}
+
+$xp = (int)$task['xp'];
+
+// Update the user's XP
+$stmt->close();
+$sql = "UPDATE users SET xp = xp + ? WHERE ID = ?";
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    echo 'Error preparing user XP update statement: ' . $conn->error;
+    $conn->close();
+    exit;
+}
+
+$stmt->bind_param('ii', $xp, $user_id);
+if (!$stmt->execute()) {
+    echo 'Error updating user XP: ' . $stmt->error;
+} else {
+    echo 'Task updated successfully and XP added';
+}
+
+}
+
+$stmt->close();
 $conn->close();
 ?>
