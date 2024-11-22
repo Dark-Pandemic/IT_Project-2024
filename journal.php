@@ -1,3 +1,20 @@
+<?php
+
+session_start();
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = "Guest"; // Fallback for anonymous access
+}
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,13 +98,14 @@
 
     <header >
         <h1>Welcome to Your Journal</h1>
+        
         <p>Track your thoughts, emotions, and experiences over time. Journaling helps you reflect and grow. Take a moment to explore.</p>
     </header>
 
     
 
     <div class="buttons">
-        <a href="customize.php" class="button">Customize your Journal</a>
+        <a href="journal_final/customization.php" class="button">Customize your Journal</a>
         <a href="write_entry.php" class="button">Write a New Entry</a>
         <a href="read_entry.php" class="button">Read Previous Entries</a>
     </div>

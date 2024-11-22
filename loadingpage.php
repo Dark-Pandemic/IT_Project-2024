@@ -2,7 +2,6 @@
 session_start();
 
 
-
 $username = $_SESSION['username']; // Fetch username from session
 ?>
 

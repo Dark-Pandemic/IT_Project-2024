@@ -1,10 +1,3 @@
-<?php
-session_start();
-
-// Example code when the user logs in:
-$_SESSION['user_id'] = $user['ID']; 
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +8,7 @@ $_SESSION['user_id'] = $user['ID'];
         /* General body and background */
         body {
             font-family: 'Verdana', sans-serif;
-            background: linear-gradient(to bottom, #fceabb, #f8b195); /* Beachy pastel gradient */
+            background: linear-gradient(to bottom, #fceabb, #f8b195);
             color: #4d4d4d;
             padding: 20px;
             margin: 0;
@@ -23,25 +16,25 @@ $_SESSION['user_id'] = $user['ID'];
         }
 
         header {
-    background: url('header_2.jpg') no-repeat center/cover; 
-    width: 100%;
-    height: 300px; /* Adjust height to match the chosen aspect ratio */
-    border-radius: 15px;
-    margin-bottom: 0; /* Reduce margin-bottom */
-    position: relative; /* Ensures the header can be overlapped */
+            background: url('header_2.jpg') no-repeat center/cover;
+            width: 100%;
+            height: 300px;
+            border-radius: 15px;
+            margin-bottom: 0;
+            position: relative;
         }
 
-    .form-container {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    max-width: 700px;
-    margin: auto;
-    margin-top: -50px; /* Adjust this value to control the amount of overlap */
-    position: relative;
-    z-index: 1; /* Ensures it appears above the header */
-    transition: transform 0.3s;
+        .form-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: auto;
+            margin-top: -50px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s;
         }
 
         h2 {
@@ -50,7 +43,6 @@ $_SESSION['user_id'] = $user['ID'];
             margin-bottom: 20px;
         }
 
-        /* Center the level display */
         .level-display {
             background: #ffddd2;
             color: #4d4d4d;
@@ -67,7 +59,7 @@ $_SESSION['user_id'] = $user['ID'];
             border-radius: 10px;
             height: 20px;
             width: 100%;
-            margin-top: 15px; /* Increased space above the progress bar */
+            margin: 30px 0;
             position: relative;
         }
 
@@ -100,20 +92,35 @@ $_SESSION['user_id'] = $user['ID'];
             background: #ffcab1;
         }
 
-        /* Task item styling with hover effect */
+        /* Enhanced Task Styling */
         .task-list {
             margin-top: 20px;
         }
 
         .task-item {
             background: #fff5e6;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
-            margin: 10px 0;
+            margin: 15px 0;
             position: relative;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
+            transition: all 0.3s ease;
+        }
+
+        .task-item::after {
+            content: "▼";
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .task-item.expanded::after {
+            transform: translateY(-50%) rotate(180deg);
         }
 
         .task-item:hover {
@@ -125,11 +132,26 @@ $_SESSION['user_id'] = $user['ID'];
             background: #d4edda;
         }
 
+        .task-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-right: 30px;
+        }
+
+        .task-xp {
+            color: #e29578;
+            font-weight: bold;
+        }
+
         .task-description {
-            color: #4d4d4d;
-            margin-top: 10px;
+            color: #666;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
             font-size: 14px;
             display: none;
+            border-left: 3px solid #e29578;
         }
 
         /* Button styling */
@@ -142,7 +164,7 @@ $_SESSION['user_id'] = $user['ID'];
             cursor: pointer;
             font-size: 16px;
             width: 100%;
-            margin-top: 15px; /* Added more space */
+            margin-top: 25px;
             transition: background-color 0.3s, transform 0.2s;
         }
 
@@ -173,6 +195,29 @@ $_SESSION['user_id'] = $user['ID'];
             font-size: 18px;
         }
 
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            pointer-events: none;
+            opacity: 0;
+            animation: confettiFall 3s ease-out forwards;
+            z-index: 9999;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
         footer {
             text-align: center;
             margin-top: 30px;
@@ -181,9 +226,7 @@ $_SESSION['user_id'] = $user['ID'];
     </style>
 </head>
 <body>
-
-    <header>
-    </header>
+    <header></header>
 
     <div class="form-container">
         <h2>Select a Task</h2>
@@ -193,14 +236,12 @@ $_SESSION['user_id'] = $user['ID'];
             <div class="xp-progress-bar" id="xpProgressBar" style="width: 0%;"></div>
         </div>
         
-        <!-- Tab Navigation -->
         <div>
             <div class="tab active-tab" onclick="showTasks('daily')">Daily Tasks</div>
             <div class="tab" onclick="showTasks('weekly')">Weekly Tasks</div>
             <div class="tab" onclick="showTasks('monthly')">Monthly Tasks</div>
         </div>
 
-        <!-- Task List Container -->
         <div class="task-list" id="taskList"></div>
     </div>
 
@@ -226,8 +267,32 @@ $_SESSION['user_id'] = $user['ID'];
             return baseXPToNextLevel * Math.pow(level, 2);
         }
 
+        function createConfetti() {
+            const colors = ['#e29578', '#ffddd2', '#83c5be', '#006d77', '#edf6f9'];
+            const confettiCount = 100;
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+
         function showTasks(taskType) {
             fetchTasksFromDB(taskType);
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active-tab');
+            });
+            event.target.classList.add('active-tab');
         }
 
         async function fetchTasksFromDB(taskType) {
@@ -239,7 +304,7 @@ $_SESSION['user_id'] = $user['ID'];
                 const tasks = await response.json();
 
                 const taskList = document.getElementById('taskList');
-                taskList.innerHTML = ''; // Clear existing tasks
+                taskList.innerHTML = '';
 
                 if (tasks.length === 0) {
                     taskList.innerHTML = `<p>No ${taskType} tasks found.</p>`;
@@ -253,15 +318,18 @@ $_SESSION['user_id'] = $user['ID'];
                     taskItem.setAttribute('data-xp', task.xp);
 
                     taskItem.innerHTML = `
-                        <p>${task.name} (${task.xp} XP)</p>
+                        <div class="task-title">${task.name} <span class="task-xp">(${task.xp} XP)</span></div>
                         <div class="task-description">${task.description}</div>
                         <div class="progress-bar" style="width: 0%;"></div>
                         <button onclick="completeTask(this, ${task.id})">Complete Task</button>
                     `;
 
-                    taskItem.addEventListener('click', function() {
-                        const description = this.querySelector('.task-description');
-                        description.style.display = description.style.display === 'none' ? 'block' : 'none';
+                    taskItem.addEventListener('click', function(e) {
+                        if (e.target.tagName !== 'BUTTON') {
+                            this.classList.toggle('expanded');
+                            const description = this.querySelector('.task-description');
+                            description.style.display = description.style.display === 'none' ? 'block' : 'none';
+                        }
                     });
 
                     taskList.appendChild(taskItem);
@@ -273,44 +341,44 @@ $_SESSION['user_id'] = $user['ID'];
         }
 
         function completeTask(button, taskId) {
-    const taskItem = button.parentElement;
-    const xpEarned = parseInt(taskItem.getAttribute('data-xp'));
-    const progressBar = taskItem.querySelector('.progress-bar');
-    progressBar.style.width = '100%';
-    taskItem.classList.add('completed');
-    button.innerText = 'Completed';
-    button.disabled = true;
+            const taskItem = button.parentElement;
+            const xpEarned = parseInt(taskItem.getAttribute('data-xp'));
+            const progressBar = taskItem.querySelector('.progress-bar');
+            progressBar.style.width = '100%';
+            taskItem.classList.add('completed');
+            button.innerText = 'Completed';
+            button.disabled = true;
 
-    // Send POST request to update task status in the database
-    fetch('update_tasks.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `task_id=${taskId}`
-    })
-    .then(response => response.text())
-    .then(data => {
-        if (data !== 'Task updated successfully') {
-            console.error('Error updating task:', data);
-            showToast('Error updating task. Please try again.');
+            fetch('update_tasks.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `task_id=${taskId}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data !== 'Task updated successfully') {
+                    console.error('Error updating task:', data);
+                    showToast('Error updating task. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Error updating task. Please try again.');
+            });
+
+            currentXP += xpEarned;
+            if (currentXP >= calculateXPToNextLevel(currentLevel)) {
+                currentLevel++;
+                currentXP = 0;
+                playLevelUpSound();
+                showToast('Level Up! You are now level ' + currentLevel);
+                createConfetti();
+            }
+
+            updateLevelDisplay();
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showToast('Error updating task. Please try again.');
-    });
-
-    currentXP += xpEarned;
-    if (currentXP >= calculateXPToNextLevel(currentLevel)) {
-        currentLevel++;
-        currentXP = 0;
-        playLevelUpSound();
-        showToast('Level Up! You are now level ' + currentLevel);
-    }
-
-    updateLevelDisplay();
-}
 
         function updateLevelDisplay() {
             currentLevelElement.innerText = currentLevel;

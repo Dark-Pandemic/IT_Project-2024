@@ -70,7 +70,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
+   /* if ($result->num_rows > 0) {
         // Cookie credentials are valid, start session and redirect
         $_SESSION['username'] = $username;
 
@@ -79,7 +79,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['password'])) {
 
         header("Location: loadingpage.php");
         exit; // Ensure script ends here
-    }
+    }*/
 }
 
 
