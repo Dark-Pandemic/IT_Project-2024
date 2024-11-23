@@ -2,8 +2,15 @@
 session_start();
 
 if (!isset($_SESSION['ID'])) {
-    http_response_code(401);
-    echo 'User not logged in';
+    echo json_encode(['error' => 'User not logged in']);
+    exit;
+}
+
+$user_id = $_SESSION['ID'];
+$task_id = isset($_POST['task_id']) ? (int)$_POST['task_id'] : 0;
+
+if ($task_id <= 0) {
+    echo json_encode(['error' => 'Invalid task ID']);
     exit;
 }
 
@@ -18,58 +25,47 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$user_id = $_SESSION['ID'];
-$task_id = isset($_POST['task_id']) ? (int)$_POST['task_id'] : 0;
-
-if ($task_id <= 0) {
-    http_response_code(400);
-    echo 'Invalid task ID';
-    exit;
-}
-
 $conn->begin_transaction();
 
 try {
-    // Ensure task is not already completed
-    $stmt = $conn->prepare("SELECT is_complete, xp_points FROM tasks WHERE task_id = ? AND user_id = ?");
-    $stmt->bind_param('ii', $task_id, $user_id);
+    // Fetch the task's XP points
+    $stmt = $conn->prepare("SELECT xp_points FROM tasks WHERE ID = ? AND ID = ?");
+    $stmt->bind_param("ii", $task_id, $user_id);
     $stmt->execute();
-    $task = $stmt->get_result()->fetch_assoc();
-
+    $result = $stmt->get_result();
+    $task = $result->fetch_assoc();
+    
     if (!$task) {
-        throw new Exception('Task not found.');
+        throw new Exception('Task not found');
     }
-
-    if ($task['is_complete']) {
-        throw new Exception('Task is already completed.');
-    }
-
+    
     $xp = $task['xp_points'];
-    $stmt->close();
 
     // Update the task as complete
-    $stmt = $conn->prepare("UPDATE tasks SET is_complete = 1 WHERE task_id = ? AND user_id = ?");
-    $stmt->bind_param('ii', $task_id, $user_id);
+    $stmt = $conn->prepare("UPDATE tasks SET is_complete = 1 WHERE ID = ? AND ID = ?");
+    $stmt->bind_param("ii", $task_id, $user_id);
     if (!$stmt->execute()) {
-        throw new Exception('Failed to update task.');
+        throw new Exception('Failed to update task');
     }
-    $stmt->close();
 
-    // Update user XP
-    $stmt = $conn->prepare("UPDATE userloginreg SET points = points + ? WHERE user_id = ?");
-    $stmt->bind_param('ii', $xp, $user_id);
+    // Update user's XP
+    $stmt = $conn->prepare("UPDATE userloginreg SET points = points + ? WHERE ID = ?");
+    $stmt->bind_param("ii", $xp, $user_id);
     if (!$stmt->execute()) {
-        throw new Exception('Failed to update user XP.');
+        throw new Exception('Failed to update user XP');
     }
 
     $conn->commit();
-    echo 'Task updated successfully and XP added.';
+    echo json_encode(['status' => 'Task updated successfully']);
 } catch (Exception $e) {
     $conn->rollback();
-    http_response_code(500);
-    echo 'Error: ' . $e->getMessage();
+    echo json_encode(['error' => $e->getMessage()]);
 } finally {
+    $stmt->close();
     $conn->close();
 }
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 ?>

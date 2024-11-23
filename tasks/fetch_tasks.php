@@ -1,5 +1,5 @@
 <?php
-
+/*
 session_start();
 
 if (isset($_SESSION['username'])) {
@@ -9,7 +9,15 @@ if (isset($_SESSION['username'])) {
 } else {
     $username = "Guest"; // Fallback for anonymous access
 }
+*/
 
+session_start();
+
+if (!isset($_SESSION['ID'])) {
+    header("Location: login.php");
+    exit();
+}
+$user_id = $_SESSION['ID'];
 $servername = "localhost";
 $username = "root";
 $password = "";

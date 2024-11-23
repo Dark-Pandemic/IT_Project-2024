@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['ID'])) {
+    echo json_encode(['error' => 'User not logged in']);
+    exit;
+}
+
+$user_id = $_SESSION['ID'];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

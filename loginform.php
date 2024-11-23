@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Set session variables
             $_SESSION['username'] = $username;
+            $_SESSION['ID'] = $user_id;
 
             // If "Remember me" is checked, create a cookie
             if (isset($_POST['remember'])) {
