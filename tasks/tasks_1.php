@@ -341,66 +341,44 @@
         }
 
         function completeTask(button, taskId) {
-    // Find the parent task element
-    const taskItem = button.parentElement;
-    const xpEarned = parseInt(taskItem.getAttribute('data-xp'));
-    const progressBar = taskItem.querySelector('.progress-bar');
+            const taskItem = button.parentElement;
+            const xpEarned = parseInt(taskItem.getAttribute('data-xp'));
+            const progressBar = taskItem.querySelector('.progress-bar');
+            progressBar.style.width = '100%';
+            taskItem.classList.add('completed');
+            button.innerText = 'Completed';
+            button.disabled = true;
 
-    // Debugging: Log the task ID and XP
-    console.log(`Completing Task ID: ${taskId}, XP Earned: ${xpEarned}`);
-
-    // Mark UI as completed optimistically
-    progressBar.style.width = '100%';
-    taskItem.classList.add('completed');
-    button.innerText = 'Completed';
-    button.disabled = true;
-
-    // Send request to the server to update the task
-    fetch('update_tasks_status.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `task_id=${taskId}`
-    })
-        .then(response => {
-            if (!response.ok) {
-                // If server returns an error, throw it
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log(`Server Response: ${data}`);
-            if (data.includes('Error')) {
-                // Handle errors from server response
-                showToast('Error updating task. Please try again.');
-                // Revert UI changes on failure
-                taskItem.classList.remove('completed');
-                button.innerText = 'Complete Task';
-                button.disabled = false;
-            } else {
-                // Success: Update XP and check level-up
-                currentXP += xpEarned;
-                if (currentXP >= calculateXPToNextLevel(currentLevel)) {
-                    currentLevel++;
-                    currentXP = 0;
-                    playLevelUpSound();
-                    showToast('Level Up! You are now level ' + currentLevel);
-                    createConfetti();
+            fetch('update_tasks_status.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `task_id=${taskId}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data !== 'Task updated successfully') {
+                    console.error('Error updating task:', data);
+                    showToast('Error updating task. Please try again.');
                 }
-                updateLevelDisplay();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Error updating task. Please try again.');
+            });
+
+            currentXP += xpEarned;
+            if (currentXP >= calculateXPToNextLevel(currentLevel)) {
+                currentLevel++;
+                currentXP = 0;
+                playLevelUpSound();
+                showToast('Level Up! You are now level ' + currentLevel);
+                createConfetti();
             }
-        })
-        .catch(error => {
-            console.error('Error updating task:', error);
-            showToast('Error updating task. Please try again.');
-            // Revert UI changes on network failure
-            taskItem.classList.remove('completed');
-            button.innerText = 'Complete Task';
-            button.disabled = false;
-        });
-}
+
+            updateLevelDisplay();
+        }
 
         function updateLevelDisplay() {
             currentLevelElement.innerText = currentLevel;
