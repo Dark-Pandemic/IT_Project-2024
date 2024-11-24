@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['ID'])) {
+if (!isset($_SESSION['username'])) {
     echo json_encode(['error' => 'User not logged in']);
     exit;
 }

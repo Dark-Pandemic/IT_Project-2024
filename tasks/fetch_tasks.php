@@ -13,7 +13,7 @@ if (isset($_SESSION['username'])) {
 
 session_start();
 
-if (!isset($_SESSION['ID'])) {
+if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
@@ -35,6 +35,7 @@ if (isset($_GET['taskType'])) {
     $taskType = $_GET['taskType'];
 
     // Prepare statement to prevent SQL injection
+    //$stmt = $conn->prepare("SELECT * FROM tasks WHERE task_type = ? ORDER BY id DESC LIMIT 4");
     $stmt = $conn->prepare("SELECT * FROM tasks WHERE task_type = ? ORDER BY id DESC LIMIT 4");
     $stmt->bind_param("s", $taskType);
     $stmt->execute();
