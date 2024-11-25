@@ -101,7 +101,7 @@ if (isset($_SESSION['username'])) {
     </header>
 
     <div class="buttons">
-        <a href="customization.html" class="button">Customise your Journal</a>
+        <a href="customization.php" class="button">Customise your Journal</a>
         <a href="write_entry.php" class="button">Write a New Entry</a>
         <a href="read_entry.php" class="button">Read Previous Entries</a>
     </div>
