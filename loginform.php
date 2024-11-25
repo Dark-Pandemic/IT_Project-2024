@@ -6,6 +6,13 @@ require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\PHPMail
 require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\SMTP.php';
 require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\Exception.php';
 
+
+/*Haley's paths for testing
+require 'C:\xampp\htdocs\IT_Project-2024-main\PHPMailer-master\src\PHPMailer.php';
+require 'C:\xampp\htdocs\IT_Project-2024-main\PHPMailer-master\src\SMTP.php';
+require 'C:\xampp\htdocs\IT_Project-2024-main\PHPMailer-master\src\Exception.php';
+*/
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -38,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Set session variables
             $_SESSION['username'] = $username;
+            $_SESSION['ID'] = $user_id;
 
             // If "Remember me" is checked, create a cookie
             if (isset($_POST['remember'])) {

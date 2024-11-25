@@ -1,5 +1,5 @@
 <?php
-
+/*
 session_start();
 
 if (isset($_SESSION['username'])) {
@@ -9,7 +9,15 @@ if (isset($_SESSION['username'])) {
 } else {
     $username = "Guest"; // Fallback for anonymous access
 }
+*/
 
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+$user_id = $_SESSION['ID'];
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -27,6 +35,7 @@ if (isset($_GET['taskType'])) {
     $taskType = $_GET['taskType'];
 
     // Prepare statement to prevent SQL injection
+    //$stmt = $conn->prepare("SELECT * FROM tasks WHERE task_type = ? ORDER BY id DESC LIMIT 4");
     $stmt = $conn->prepare("SELECT * FROM tasks WHERE task_type = ? ORDER BY id DESC LIMIT 4");
     $stmt->bind_param("s", $taskType);
     $stmt->execute();
