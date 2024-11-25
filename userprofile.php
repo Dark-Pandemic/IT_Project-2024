@@ -41,6 +41,7 @@ if ($stmt) {
 } else {
     $profile_pic = $default_pic; // Fallback to default
 }
+  
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
