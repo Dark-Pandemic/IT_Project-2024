@@ -343,7 +343,7 @@ if (isset($_SESSION['username'])) {
         <div class="journal-pages"></div>
 		<br><br><br>
 		
-        <a href="journal.html" class = "write">Write Entry</a>
+        <a href="write_entry.php" class = "write">Write Entry</a>
     </div>
 </td>
 
@@ -352,7 +352,6 @@ if (isset($_SESSION['username'])) {
     <script>
     // Define available cover images
     const imageUrls = [
-<<<<<<< HEAD:customization.php
         'images/beach.jpg',
         'images/blackandgrey.jpg',
         'images/brown.jpg',
@@ -363,18 +362,6 @@ if (isset($_SESSION['username'])) {
         'images/strawberry.jpg',
         'images/space.jpg',
         'images/shells.jpg',
-=======
-        'beach.jpg',
-        'blackandgrey.jpg',
-        'brown.jpg',
-        'butterfly.jpg',
-        'groovy.jpg',
-        'plants.jpg',
-        'purpleabtract.jpg',   
-        'strawberry.jpg',
-        'space.jpg',
-        'shells.jpg',
->>>>>>> c129ddcc4df23620e654b7c808777b29d1cef886:journal_final/customization.php
     ];
 
     // Selectors for journal and image container
