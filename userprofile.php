@@ -1,13 +1,16 @@
 <?php
 session_start();
 
-if (isset($_SESSION['username'])) {
-    $username = $_SESSION['username']; // Use session if available
-} elseif (isset($_COOKIE['username'])) {
-    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
-} else {
-    $username = "Guest"; // Fallback for anonymous access
+$username = $_SESSION['username'];
+$user_id = $_SESSION['ID']; // Assuming user_id is stored in the session
+
+// Ensure session variables are set
+if (!isset($_SESSION['username']) || !isset($_SESSION['ID'])) {
+    die("Error: User is not logged in.");
 }
+
+//$username = $_SESSION['username'];
+//$user_id = $_SESSION['ID']; // Assuming user_id is stored in the session
 
 $conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
 
@@ -15,58 +18,56 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-//* Get user ID from session
-/*$user_id = isset($_SESSION['ID']) ? $_SESSION['ID'] : null;
-
-if (!$user_id) {
-    die("User not logged in or session expired.");
-}
-*/
+// Initialize user array with default values to avoid null errors
+$user = ['username' => '', 'email' => '', 'profile_pic' => 'uploads/default-profile.png'];
 
 // Fetch user details
 $sql = "SELECT username, email, profile_pic FROM userloginreg WHERE ID = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
 
-/*
-if (!$user) {
-    die("No user found for the provided ID.");
+if ($stmt) {
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    if (!$user) {
+        $user = ['username' => '', 'email' => '', 'profile_pic' => 'uploads/default-profile.png'];
+        $error_message = "No user data found for ID: " . htmlspecialchars($user_id);
+        error_log("No user data found for ID: " . $user_id);
+    }
+} else {
+    $error_message = "Database query failed: " . $conn->error;
+    error_log("SQL Error: " . $conn->error);
 }
-    */
+  
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['update_details'])) {
         // Update username and email
-        $new_username = $conn->real_escape_string($_POST['username']);
-        $new_email = $conn->real_escape_string($_POST['email']);
+        $username = $conn->real_escape_string($_POST['username']);
+        $email = $conn->real_escape_string($_POST['email']);
 
-        // Check if username or email already exists
-        $check_user_stmt = $conn->prepare("SELECT ID FROM userloginreg WHERE username = ? OR email = ?");
-        $check_user_stmt->bind_param("ss", $new_username, $new_email);
-        $check_user_stmt->execute();
-        $check_user_result = $check_user_stmt->get_result();
+        $update_query = $conn->prepare("UPDATE userloginreg SET username = ?, email = ? WHERE ID = ?");
+        $update_query->bind_param("ssi", $username, $email, $user_id);
 
-        if ($check_user_result->num_rows > 0) {
-            $error_message = "Username or email already exists.";
-        } else {
-            $update_query = $conn->prepare("UPDATE userloginreg SET username = ?, email = ? WHERE ID = ?");
-            $update_query->bind_param("ssi", $new_username, $new_email, $user_id);
-
-            if ($update_query->execute()) {
+        if ($update_query->execute()) {
+            if ($update_query->affected_rows > 0) {
                 $success_message = "Details updated successfully.";
-                $_SESSION['username'] = $new_username; // Update session if username changes
             } else {
-                $error_message = "Error updating details: " . $conn->error;
+                $error_message = "No changes were made to the details.";
             }
+        } else {
+            $error_message = "Error updating details: " . $conn->error;
+            error_log("Update details error: " . $conn->error);
         }
     } elseif (isset($_POST['update_photo']) && isset($_FILES['profile_pic'])) {
+        // Handle profile picture upload
+        $target_dir = "uploads/";
+        $image_name = basename($_FILES["profile_pic"]["name"]);
+        $target_file = $target_dir . uniqid() . "_" . $image_name;
         $upload_ok = 1;
-        $target_dir = "uploads/"; // Ensure this directory exists and has proper permissions
-        $target_file = $target_dir . basename($_FILES["profile_pic"]["name"]);
         $image_file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
         // Check if file is an image
@@ -83,22 +84,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($upload_ok == 1) {
-            // Move the uploaded file to the target directory
             if (move_uploaded_file($_FILES["profile_pic"]["tmp_name"], $target_file)) {
-                // Store the path to the image in the database
-                $image_path = $target_file;
+                // Save the image path in the database
                 $update_query = $conn->prepare("UPDATE userloginreg SET profile_pic = ? WHERE ID = ?");
-                $update_query->bind_param("si", $image_path, $user_id);
+                $update_query->bind_param("si", $target_file, $user_id);
 
                 if ($update_query->execute()) {
-                    $success_message = "Profile picture updated successfully.";
+                    if ($update_query->affected_rows > 0) {
+                        $success_message = "Profile picture updated successfully.";
+                    } else {
+                        $error_message = "No changes were made to the profile picture.";
+                    }
                 } else {
                     $error_message = "Error updating profile picture: " . $conn->error;
-                    // Delete the uploaded file if database update fails
-                    unlink($target_file);
+                    error_log("Update profile picture error: " . $conn->error);
                 }
             } else {
-                $error_message = "Sorry, there was an error uploading your file.";
+                $error_message = "Error uploading file.";
+                error_log("File upload error for file: " . $_FILES["profile_pic"]["name"]);
             }
         }
     }
@@ -112,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <style>
-       body {
+         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
             padding: 20px;
@@ -177,18 +180,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
         <h2>Profile</h2>
         <div class="profile-photo">
+            <!-- Display the profile picture -->
             <?php
-            if (!empty($user['profile_pic']) && file_exists($user['profile_pic'])) {
-                echo '<img src="' . htmlspecialchars($user['profile_pic']) . '" alt="Profile Picture" />';
-            } else {
-                echo '<img src="uploads/default-profile.png" alt="Default Profile Picture" />';
-            }
+                if (!empty($user['profile_pic']) && file_exists($user['profile_pic'])) {
+                    echo '<img src="' . htmlspecialchars($user['profile_pic']) . '" alt="Profile Picture" />';
+                } else {
+                    echo '<img src="uploads/default-profile.png" alt="Profile Picture" />';
+                }
             ?>
         </div>
-        
+
         <!-- Success/Error Messages -->
-        <?php if ($success_message) echo "<div class='message success'>$success_message</div>"; ?>
-        <?php if ($error_message) echo "<div class='message error'>$error_message</div>"; ?>
+        <?php if (isset($success_message)) echo "<div class='message success'>$success_message</div>"; ?>
+        <?php if (isset($error_message)) echo "<div class='message error'>$error_message</div>"; ?>
 
         <!-- Update Details Form -->
         <form method="POST" action="">
