@@ -352,16 +352,16 @@ if (isset($_SESSION['username'])) {
     <script>
     // Define available cover images
     const imageUrls = [
-        'images/beach.jpg',
-        'images/blackandgrey.jpg',
-        'images/brown.jpg',
-        'images/butterfly.jpg',
-        'images/groovy.jpg',
-        'images/plants.jpg',
-        'images/purpleabstract.jpg',
-        'images/strawberry.jpg',
-        'images/space.jpg',
-        'images/shells.jpg',
+        'beach.jpg',
+        'blackandgrey.jpg',
+        'brown.jpg',
+        'butterfly.jpg',
+        'groovy.jpg',
+        'plants.jpg',
+        'purpleabstract.jpg',
+        'strawberry.jpg',
+        'space.jpg',
+        'shells.jpg',
     ];
 
     // Selectors for journal and image container
