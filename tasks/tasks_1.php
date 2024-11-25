@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    echo json_encode(['error' => 'User not logged in']);
+    exit;
+}
+
+$user_id = $_SESSION['ID'];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -349,7 +360,7 @@
             button.innerText = 'Completed';
             button.disabled = true;
 
-            fetch('update_tasks.php', {
+            fetch('update_tasks_status.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -403,3 +414,4 @@
     </script>
 </body>
 </html>
+?>

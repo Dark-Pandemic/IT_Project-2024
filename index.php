@@ -44,7 +44,10 @@ if (isset($_SESSION['username'])) {
         <p><?php echo htmlspecialchars($_SESSION['username']); ?></p> <!-- Username with label -->
     </div>
     &nbsp;
-    <img src="profile-icon.png" alt="Profile Icon" class="profile-icon"> <!-- Profile Icon -->
+    <img src="" alt="Profile Icon" class="profile-icon"> <!-- Profile Icon -->
+    <!--retrive rofile ics from images-->
+
+
 </a>
 
 <nav class="fancy-menu">
@@ -55,11 +58,11 @@ if (isset($_SESSION['username'])) {
 
 <li><a href="tasks/tasks_1.php">Tasks</a></li>
 
-<li><a href="journal.php">Journal</a></li>
+<li><a href="journal_final/journal.php">Journal</a></li>
 
-<li><a href="#avatar">Avatar</a></li>
+<li><a href="subscriptions/doctor.html">Subscriptions</a></li>
 
-<li><a href="badges.html">Badges</a></li>
+<li><a href="badges/badges.html">Badges</a></li>
 
 <li><a href="contacts/contacts_index.php">Emergency Contact</a></li>
 

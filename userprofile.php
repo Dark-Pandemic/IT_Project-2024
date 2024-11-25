@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+
+
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username']; // Use session if available
 } elseif (isset($_COOKIE['username'])) {
@@ -9,44 +11,75 @@ if (isset($_SESSION['username'])) {
     $username = "Guest"; // Fallback for anonymous access
 }
 
-
-
 $conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
-    $username = $conn->real_escape_string($_POST['username']);
-    $email = $conn->real_escape_string($_POST['email']);
-    
-    $update_query = $conn->prepare("UPDATE userloginreg SET username = ?, email = ? WHERE id = ?");
-    $update_query->bind_param("ssi", $username, $email, $user_id);
 
-    if ($update_query->execute()) {
-        $success_message = "Profile updated";
-    } else {
-        $error_message = "Error updating profile: " . $conn->error;
-    }
-}
 
-/*$sql = "SELECT username, email FROM userloginreg WHERE id='$user_id'";
-$result = $conn->query($sql);
+// Fetch user details
+$sql = "SELECT username, email, profile_pic FROM userloginreg WHERE ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
-    session_destroy();
-    header("Location: loginform.php");
-    exit();
+/*if (!$user) {
+    die("No user found for the provided ID.");
 }*/
 
+// Handle form submissions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['update_details'])) {
+        // Update username and email
+        $username = $conn->real_escape_string($_POST['username']);
+        $email = $conn->real_escape_string($_POST['email']);
 
+        $update_query = $conn->prepare("UPDATE userloginreg SET username = ?, email = ? WHERE ID = ?");
+        $update_query->bind_param("ssi", $username, $email, $user_id);
 
-////add this code to the add here comment below
-       /* <?php if (isset($success_message)) echo "<div class='message success'>$success_message</div>"; ?>
-       <?php if (isset($error_message)) echo "<div class='message error'>$error_message</div>"; ?>*/
+        if ($update_query->execute()) {
+            $success_message = "Details updated successfully.";
+        } else {
+            $error_message = "Error updating details: " . $conn->error;
+        }
+    } elseif (isset($_POST['update_photo']) && isset($_FILES['profile_pic'])) {
+        // Handle profile picture upload
+        $target_dir = "uploads/";
+        $target_file = $target_dir . basename($_FILES["profile_pic"]["name"]);
+        $upload_ok = 1;
+        $image_file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
+        // Check if file is an image
+        $check = getimagesize($_FILES["profile_pic"]["tmp_name"]);
+        if ($check === false) {
+            $error_message = "File is not an image.";
+            $upload_ok = 0;
+        }
+
+        // Allow only certain file formats
+        if (!in_array($image_file_type, ['jpg', 'png', 'jpeg', 'gif'])) {
+            $error_message = "Only JPG, JPEG, PNG & GIF files are allowed.";
+            $upload_ok = 0;
+        }
+
+        if ($upload_ok && move_uploaded_file($_FILES["profile_pic"]["tmp_name"], $target_file)) {
+            $update_photo_query = $conn->prepare("UPDATE userloginreg SET profile_pic = ? WHERE ID = ?");
+            $update_photo_query->bind_param("si", $target_file, $user_id);
+
+            if ($update_photo_query->execute()) {
+                $success_message = "Profile picture updated successfully.";
+            } else {
+                $error_message = "Error updating profile picture: " . $conn->error;
+            }
+        } else {
+            $error_message = "Error uploading file.";
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -78,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
             margin: 10px 0 5px;
             font-weight: bold;
         }
-        input[type="text"], input[type="email"], input[type="password"] {
+        input[type="text"], input[type="email"], input[type="password"], input[type="file"] {
             width: 95%;
             padding: 10px;
             margin-bottom: 15px;
@@ -96,20 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
         button:hover {
             background-color: #218838;
         }
-        .logout {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #00aaff;
-            padding: 10px 15px;
-            color: white;
-            border-radius: 30px;
-            border: none;
-            cursor: pointer;
-        }
-        .logout:hover {
-            background-color: #0088cc;
-        }
         .message {
             text-align: center;
             margin: 10px 0;
@@ -120,37 +139,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
         .error {
             color: red;
         }
-        a {
-            font-size: 13px;
-            text-decoration: none;
+        .profile-photo img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: 10px auto;
         }
     </style>
 </head>
 <body>
-    <form method="POST" action="">
-        <button type="submit" name="logout" class="logout">Logout</button>
-    </form>
-
     <div class="container">
         <h2>Profile</h2>
+        <div class="profile-photo">
+            <img src="<?php echo !empty($user['profile_pic']) ? htmlspecialchars($user['profile_pic']) : 'default-profile.png'; ?>" alt="Profile Picture">
+        </div>
         
+        <!-- Success/Error Messages -->
+        <?php if (isset($success_message)) echo "<div class='message success'>$success_message</div>"; ?>
+        <?php if (isset($error_message)) echo "<div class='message error'>$error_message</div>"; ?>
 
-        <!-----------------add here--->
-        
+        <!-- Update Details Form -->
         <form method="POST" action="">
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" value="">
+            <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
 
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="">
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" value = "" disabled>
-            <a href="changepassword.html">Change Password</a>
-            
-            <br><br><br>
+            <button type="submit" name="update_details">Update Details</button>
+        </form>
 
-            <button type="submit" name="update">Update</button>
+        <!-- Update Profile Picture Form -->
+        <form method="POST" enctype="multipart/form-data" action="">
+            <label for="profile_pic">Profile Picture</label>
+            <input type="file" id="profile_pic" name="profile_pic" accept="image/*" required>
+
+            <button type="submit" name="update_photo">Update Profile Picture</button>
         </form>
     </div>
 </body>
