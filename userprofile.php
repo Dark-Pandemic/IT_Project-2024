@@ -1,19 +1,17 @@
 <?php
 session_start();
 
-// Check if the user is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: loginform.php");
-    exit();
-}
-
-$username = $_SESSION['username'];
-$user_id = $_SESSION['ID'];
-
 $conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+}
+
+// Get user ID from session
+$user_id = isset($_SESSION['ID']) ? $_SESSION['ID'] : null;
+
+if (!$user_id) {
+    die("User not logged in or session expired.");
 }
 
 // Fetch user details
@@ -24,8 +22,9 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-$success_message = "";
-$error_message = "";
+if (!$user) {
+    die("No user found for the provided ID.");
+}
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
