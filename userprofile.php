@@ -1,18 +1,23 @@
 <?php
 session_start();
 
+
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = "Guest"; // Fallback for anonymous access
+}
+
 $conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get user ID from session
-$user_id = isset($_SESSION['ID']) ? $_SESSION['ID'] : null;
 
-if (!$user_id) {
-    die("User not logged in or session expired.");
-}
 
 // Fetch user details
 $sql = "SELECT username, email, profile_pic FROM userloginreg WHERE ID = ?";
@@ -22,9 +27,9 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-if (!$user) {
+/*if (!$user) {
     die("No user found for the provided ID.");
-}
+}*/
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

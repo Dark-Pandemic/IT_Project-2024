@@ -44,7 +44,7 @@ if (isset($_SESSION['username'])) {
         <p><?php echo htmlspecialchars($_SESSION['username']); ?></p> <!-- Username with label -->
     </div>
     &nbsp;
-    <img src="images\me.jpg" alt="Profile Icon" class="profile-icon"> <!-- Profile Icon -->
+    <img src="" alt="Profile Icon" class="profile-icon"> <!-- Profile Icon -->
     <!--retrive rofile ics from images-->
 
 
