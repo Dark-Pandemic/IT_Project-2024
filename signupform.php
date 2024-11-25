@@ -78,6 +78,9 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href ="phone-number-validation-master\build\css\demo.css" rel="stylesheet">
+    <link href ="phone-number-validation-master\build\css\intlTelInput.css" rel="stylesheet">
+
     <title>Sign Up</title>
     <style>
         body {
@@ -123,9 +126,20 @@ $conn->close();
         input[type="submit"]:hover {
             background-color: #0088cc;
         }
+
+        input[type="checkbox"] {
+            width: 16px; /* Set a smaller width */
+            height: 16px; /* Set a smaller height */
+            cursor: pointer; /* Optional: Changes the cursor to a pointer */
+            vertical-align: middle; /* Ensures it aligns nicely with text */
+            margin-right: 5px; /* Add some spacing between checkbox and text */
+}
         .terms {
             font-size: 12px;
-            margin-top: 10px;
+            margin-top: 15px;
+            text-align: center; /* Centers text inside the container */
+            display: inline-block; /* Ensures proper block alignment if needed */
+    
         }
 
         .alert {
@@ -178,6 +192,17 @@ $conn->close();
         #strength-label {
             font-size: 10px;
             margin-top: 5px;
+        }
+
+        .phone-container {
+           
+            align-items: center; /* Ensures vertical alignment */
+            gap: 10px; /* Adds space between the dropdown and text field */
+        }
+
+        #contact {
+            flex: 1; /* Ensures the text field takes up available space */
+            min-width: 290px; /* Prevents the text field from shrinking too much */
         }
     </style>
 
@@ -284,7 +309,14 @@ $conn->close();
         <form action="" method="POST" name="signupForm" onsubmit="return validateForm();">
             <input type="text" id="name" name="name" placeholder="Enter your Full Name" required>
             <input type="email" id="email" name="email" placeholder="Enter your Email" required>
-            <input type="tel" id="contact" name="contact" placeholder="Enter your Contact Number" required>
+
+
+            <div class="phone-container">
+                <input type="tel" id="contact" name="contact" placeholder="Enter your Contact Number" required>
+            </div>
+            
+
+
             <input type="text" id="username" name="username" placeholder="Enter your Username" required>
             <input type="password" id="password" name="password" placeholder="Enter your Password" required oninput="updateStrengthBar(this.value)">
 
@@ -309,6 +341,47 @@ $conn->close();
             <input type="submit" value="Sign Up">
             <p class="terms">Already have an account? <a href="loginform.php">Log in here!</a></p>
         </form>
+
+        
+        <script src="phone-number-validation-master\build\js\intlTelInput.js"></script>
+
+        <script>
+
+           // Initialize intl-tel-input
+            var input = document.querySelector("#contact");
+            var iti = window.intlTelInput(input, {
+                initialCountry: "us", // Default country
+                utilsScript: "phone-number-validation-master/build/js/utils.js", // Path to utils.js
+            });
+
+            // Add the selected country code to the input field
+            input.addEventListener("countrychange", function () {
+                var countryCode = iti.getSelectedCountryData().dialCode;
+
+                // Add the country code if not already added
+                if (!input.value.startsWith(`+${countryCode}`)) {
+                    input.value = `+${countryCode} `;
+                }
+
+                // Place the cursor at the end
+                input.setSelectionRange(input.value.length, input.value.length);
+            });
+
+            // Prevent 0 from being entered directly after the country code
+            input.addEventListener("input", function () {
+                var countryCode = iti.getSelectedCountryData().dialCode;
+
+                // Check if the input starts with the country code followed by a space and 0
+                var pattern = new RegExp(`^\\+${countryCode} 0`);
+
+                if (pattern.test(input.value)) {
+                    // Remove the 0 after the country code
+                    input.value = input.value.replace(` 0`, ` `);
+                }
+            });
+
+        </script>
+
     </div>
 </body>
 </html>

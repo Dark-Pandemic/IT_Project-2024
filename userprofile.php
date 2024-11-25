@@ -1,16 +1,14 @@
 <?php
 session_start();
 
-$username = $_SESSION['username'];
-$user_id = $_SESSION['ID']; // Assuming user_id is stored in the session
-
-// Ensure session variables are set
-if (!isset($_SESSION['username']) || !isset($_SESSION['ID'])) {
-    die("Error: User is not logged in.");
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = "Guest"; // Fallback for anonymous access
 }
 
-//$username = $_SESSION['username'];
-//$user_id = $_SESSION['ID']; // Assuming user_id is stored in the session
 
 $conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
 
