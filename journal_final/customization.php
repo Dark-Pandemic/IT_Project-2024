@@ -358,7 +358,7 @@ if (isset($_SESSION['username'])) {
         'butterfly.jpg',
         'groovy.jpg',
         'plants.jpg',
-        'purpleabstract.jpg',
+        'purpleabtract.jpg',
         'strawberry.jpg',
         'space.jpg',
         'shells.jpg',
