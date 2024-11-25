@@ -16,6 +16,13 @@ if (isset($_SESSION['username'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customizable Journal</title>
+	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Bokor&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Sour+Gummy&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Sevillana&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -81,7 +88,7 @@ if (isset($_SESSION['username'])) {
             top: 13px;
             right: 0;
             width: 3px;
-            height: 457px;
+            height: 680px;
             background: linear-gradient(white, #f7f7f7);
             border: 1px solid #ddd;
             border-radius: 0 28px 28px 0;
@@ -172,6 +179,19 @@ if (isset($_SESSION['username'])) {
         .dark-mode #button {
             background-color: #0e0e55;
         }
+		
+		.dark-mode .write {
+            background-color: #0e0e55;
+        }
+		
+		.dark-mode .previous {
+            background-color: white;
+        }
+		
+		.dark-mode .previous:hover {
+            background-color: grey;
+        }
+		
 
         .dark-mode .journal-pages {
             background: linear-gradient(#333, #444);
@@ -222,9 +242,51 @@ if (isset($_SESSION['username'])) {
         input:checked + .slider:before {
             transform: translateX(26px);
         }
+		
+		a{
+			width: 35%;
+            background-color: #00aaff;
+            color: white;
+            padding: 15px 20px;
+            margin: 30px 0;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+			text-decoration: none;
+			transition: background-color 0.3s;
+		}
+		
+		a:hover {
+            background-color: #0088cc;
+        }
+		
+		.back{
+			text-decoration: none;
+			display: inline-block;
+			padding: 8px 16px;
+		}
+
+		.back:hover {
+			background-color: #ddd;
+			color: black;
+		}
+
+		.previous {
+			background-color: grey;
+			color: black;
+		}
+
+		.round {
+		border-radius: 50%;
+		}
+
+		
+		
     </style>
 </head>
 <body class="light-mode">
+	<br>
+	<a href="journal.php" class="previous round" id = "back">&#8249;</a>
     <h1 style="text-align: center;">Your Journal</h1>
     <table>
         <tr>
@@ -238,14 +300,21 @@ if (isset($_SESSION['username'])) {
                     <input type="text" id="quote-text" placeholder="Enter your quote">
                     
                     <label for="font-type">Font Type:</label>
-                    <select id="font-type">
+                    <select id="font-type" onchange="changeFont(this)">
                         <option value="Arial">Arial</option>
                         <option value="Courier New">Courier New</option>
                         <option value="Verdana">Verdana</option>
-                    </select>
+						<option value="Dancing Script" style="font-family: 'Dancing Script', cursive;">Dancing Script</option>
+						<option value="Great Vibes" style="font-family: 'Great Vibes', cursive;">Great Vibes</option>
+						<option value="Satisfy" style="font-family: 'Satisfy', cursive;">Satisfy</option>
+						<option value="Montserrat" style="font-family: 'Montserrat', cursive;">Montserrat</option>
+						<option value="Bokor" style="font-family: 'Bokor', cursive;">Bokor</option>
+						<option value="Sour Gummy" style="font-family: 'Sour Gummy', cursive;">Sour Gummy</option>
+						<option value="Sevillana" style="font-family: 'Sevillana', cursive;">Sevillana</option>
+					</select>
 
                     <label for="font-size">Font Size:</label>
-                    <input type="number" id="font-size" value="16" min="8" max="36" step="2">
+                    <input type="number" id="font-size" value="16" min="8" max="48" step="2">
                     
                     <label for="font-color">Font Color:</label>
                     <input type="color" id="font-color" value="#333333">
@@ -256,28 +325,32 @@ if (isset($_SESSION['username'])) {
                     <center><button onclick="customize()" id="button">Customize</button></center>
                     
                     <center>
+					<span>Light/Dark Mode</span><br>
                         <label class="switch">
                             <input type="checkbox" id="theme-toggle" onclick="toggleTheme()">
                             <span class="slider"></span>
                         </label>
-                        <span>Light/Dark Mode</span>
                     </center>
                 </div>
             </td>
 
-            <td style="width: 30%;">
-                <div class="journal-container">
-                    <div class="journal" id="journal" style="background-image: url('https://via.placeholder.com/300x400.png?text=Default+Cover');">
-                        <div class="title" id="title">Your Journal Title</div>
-                        <div class="quote" id="quote"></div>
-                    </div>
-                    <div class="journal-pages"></div>
-                </div>
-            </td>
-        </tr>
-    </table>
+           <td style="width: 30%;">
+    <div class="journal-container">
+        <div class="journal" id="journal" style="background-image: url('https://via.placeholder.com/300x400.png?text=Default+Cover');">
+            <div class="title" id="title">Your Journal Title</div>
+            <div class="quote" id="quote"></div>
+        </div>
+        <div class="journal-pages"></div>
+		<br><br><br>
+		
+        <a href="journal.html" class = "write">Write Entry</a>
+    </div>
+</td>
+
+	
 
     <script>
+    // Define available cover images
     const imageUrls = [
         'images/beach.jpg',
         'images/blackandgrey.jpg',
@@ -285,26 +358,39 @@ if (isset($_SESSION['username'])) {
         'images/butterfly.jpg',
         'images/groovy.jpg',
         'images/plants.jpg',
-        'images/purpleabtract.jpg',   
+        'images/purpleabstract.jpg',
         'images/strawberry.jpg',
         'images/space.jpg',
         'images/shells.jpg',
     ];
 
+    // Selectors for journal and image container
     const journal = document.getElementById('journal');
     const imageSelection = document.getElementById('image-selection');
 
+    // Load saved settings from localStorage on page load
     window.onload = () => {
         const savedData = JSON.parse(localStorage.getItem('journalSettings')) || {};
+
         document.getElementById('title').innerText = savedData.title || 'Your Journal Title';
         document.getElementById('quote').innerText = savedData.quote || '';
-        if (savedData.fontType) document.getElementById('font-type').value = savedData.fontType;
-        if (savedData.fontSize) document.getElementById('font-size').value = savedData.fontSize;
-        if (savedData.fontColor) document.getElementById('font-color').value = savedData.fontColor;
-        if (savedData.theme === 'dark') toggleTheme(true);
+        document.getElementById('font-type').value = savedData.fontType || 'Arial';
+        document.getElementById('font-size').value = savedData.fontSize || 16;
+        document.getElementById('font-color').value = savedData.fontColor || '#333333';
+
+        // Set journal background if saved
+        if (savedData.coverImage) {
+            journal.style.backgroundImage = `url('${savedData.coverImage}')`;
+        }
+
+        // Apply dark theme if saved
+        if (savedData.theme === 'dark') {
+            toggleTheme(true);
+        }
     };
 
-    imageUrls.forEach(url => {
+    // Add images to the selection grid dynamically
+    imageUrls.forEach((url) => {
         const img = document.createElement('img');
         img.src = url;
         img.alt = 'Journal Cover';
@@ -312,53 +398,64 @@ if (isset($_SESSION['username'])) {
         imageSelection.appendChild(img);
     });
 
-    function changeBackground(url) {
-        journal.style.backgroundImage = `url(${url})`;
-        localStorage.setItem('journalSettings', JSON.stringify({ ...getSettings(), backgroundImage: url }));
+    // Function to change the journal's cover image
+    function changeBackground(imageUrl) {
+        journal.style.backgroundImage = `url('${imageUrl}')`;
+        saveSettings({ coverImage: imageUrl });
     }
 
+    // Function to save settings in localStorage
+    function saveSettings(newSettings) {
+        const savedData = JSON.parse(localStorage.getItem('journalSettings')) || {};
+        const updatedData = { ...savedData, ...newSettings };
+        localStorage.setItem('journalSettings', JSON.stringify(updatedData));
+    }
+
+    // Toggle theme between light and dark
+    function toggleTheme(forceDark = false) {
+        const body = document.body;
+        const isDark = body.classList.contains('dark-mode');
+
+        if (forceDark || !isDark) {
+            body.classList.add('dark-mode');
+            saveSettings({ theme: 'dark' });
+        } else {
+            body.classList.remove('dark-mode');
+            saveSettings({ theme: 'light' });
+        }
+    }
+
+    // Function to customize font, size, and color
     function customize() {
-        const titleText = document.getElementById('title-text').value;
-        const quoteText = document.getElementById('quote-text').value;
+        const title = document.getElementById('title-text').value;
+        const quote = document.getElementById('quote-text').value;
         const fontType = document.getElementById('font-type').value;
         const fontSize = document.getElementById('font-size').value;
         const fontColor = document.getElementById('font-color').value;
 
-        document.getElementById('title').innerText = titleText;
-        document.getElementById('quote').innerText = quoteText;
-        document.getElementById('title').style.fontFamily = fontType;
-        document.getElementById('quote').style.fontFamily = fontType;
-        document.getElementById('title').style.fontSize = fontSize + 'px';
-        document.getElementById('quote').style.fontSize = fontSize + 'px';
-        document.getElementById('title').style.color = fontColor;
-        document.getElementById('quote').style.color = fontColor;
+        const journalTitle = document.getElementById('title');
+        const journalQuote = document.getElementById('quote');
 
-        localStorage.setItem('journalSettings', JSON.stringify({
-            ...getSettings(),
-            title: titleText,
-            quote: quoteText,
+        // Update the journal with customization inputs
+        journalTitle.innerText = title;
+        journalQuote.innerText = quote;
+        journalTitle.style.fontFamily = fontType;
+        journalQuote.style.fontFamily = fontType;
+        journalTitle.style.fontSize = `${fontSize}px`;
+        journalQuote.style.fontSize = `${fontSize - 2}px`;
+        journalTitle.style.color = fontColor;
+        journalQuote.style.color = fontColor;
+
+        // Save settings to localStorage
+        saveSettings({
+            title,
+            quote,
             fontType,
             fontSize,
-            fontColor
-        }));
+            fontColor,
+        });
     }
 
-    function getSettings() {
-        return JSON.parse(localStorage.getItem('journalSettings')) || {};
-    }
-
-    function toggleTheme(isDark = null) {
-        const body = document.body;
-        if (isDark === null) {
-            body.classList.toggle('dark-mode');
-        } else {
-            body.classList.toggle('dark-mode', isDark);
-        }
-        localStorage.setItem('journalSettings', JSON.stringify({
-            ...getSettings(),
-            theme: body.classList.contains('dark-mode') ? 'dark' : 'light'
-        }));
-    }
     </script>
 </body>
 </html>
