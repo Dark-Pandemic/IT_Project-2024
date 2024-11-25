@@ -279,16 +279,16 @@ if (isset($_SESSION['username'])) {
 
     <script>
     const imageUrls = [
-        'images/beach.jpg',
-        'images/blackandgrey.jpg',
-        'images/brown.jpg',
-        'images/butterfly.jpg',
-        'images/groovy.jpg',
-        'images/plants.jpg',
-        'images/purpleabtract.jpg',   
-        'images/strawberry.jpg',
-        'images/space.jpg',
-        'images/shells.jpg',
+        'beach.jpg',
+        'blackandgrey.jpg',
+        'brown.jpg',
+        'butterfly.jpg',
+        'groovy.jpg',
+        'plants.jpg',
+        'purpleabtract.jpg',   
+        'strawberry.jpg',
+        'space.jpg',
+        'shells.jpg',
     ];
 
     const journal = document.getElementById('journal');

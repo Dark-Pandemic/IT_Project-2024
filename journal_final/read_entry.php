@@ -17,15 +17,6 @@ if (isset($_SESSION['username'])) {
 include 'db.php';
 
 
-include 'db.php';
-/*
-if (!isset($_SESSION['user_id'])) {
-    // Redirect if the user is not logged in
-    header("Location: login.php");
-    exit();
-}
-*/
-$user_id = $_SESSION['user_id']; // Get the user ID from the session
 
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 
