@@ -14,8 +14,6 @@ if (isset($_SESSION['username'])) {
 }
 */
 
-<<<<<<< HEAD
-=======
 if (isset($_SESSION['ID'])) {
     $user_id = $_SESSION['ID']; // Use session if available
   } elseif (isset($_COOKIE['ID'])) {
