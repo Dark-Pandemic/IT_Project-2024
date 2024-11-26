@@ -5,32 +5,237 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Emergency Contacts - Mental Health Awareness</title>
-    <link rel="stylesheet" href="stylesContacts.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-	
+	<style>
+		
+		/* Basic Styles */
+        body {
+            font-family: Poppins, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+        
+        h2 {
+            font-size: 2rem;
+        }
+        
+        .contact-card {
+            background-color: white;
+            color: #0e5066;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-card h3 {
+            color: #333;
+        }
+        
+        .contact-card p {
+            font-size: 1.2rem;
+            margin: 5px 0;
+        }
+        
+        .custom-contact {
+            background-color: white;
+            color: #0e5066;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        form button {
+            background-color: #00aaff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        
+        form button:hover {
+            background-color: #0088cc;
+        }
+        
+       
+                footer {
+                    background-color: #6CB4EE;
+                    color: white;
+                    text-align: center;
+                    padding: 20px ;
+                    width: 100%;
+                }
+                
+                .footer-content {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }
+        
+                .social-media {
+                    margin-bottom: 5px;
+                }
+        
+                .social-link {
+                    margin: 0 8px;
+                    color: white;
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+                }
+        
+                .social-link:hover {
+                    color: grey;
+                }
+        
+                .contact-info p {
+                    margin: 3px 0;
+                }
+        
+                .contact-info a {
+                    color: #333;
+                    text-decoration: none;
+                }
+        
+                .contact-info a:hover {
+                    text-decoration: underline;
+                }
+				 header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            padding: 10px;
+        }
+
+        .menu-toggle {
+            color: black;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 7px;
+        }
+
+        .fancy-menu {
+            display: none;
+            background-color: #6CB4EE;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 220px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 15px 0 0 15px;
+            padding-top: 20px;
+            transition: transform 0.3s ease;
+            transform: translateX(-220px);
+        }
+
+        .fancy-menu.show {
+            display: block;
+            transform: translateX(0);
+        }
+
+        .content {
+            transition: margin-left 0.3s ease;
+        }
+
+        .menu-open .content {
+            margin-left: 220px;
+        }
+
+        .fancy-menu h1 {
+            margin: 0;
+            padding: 10px;
+            color: white;
+            font-size: 1.5em;
+            text-align: center;
+            border-bottom: 1px solid #555;
+            padding-bottom: 10px;
+        }
+
+        .fancy-menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .fancy-menu li {
+            padding: 10px 20px;
+        }
+
+        .fancy-menu a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .fancy-menu a:hover {
+            color: grey;
+            transform: translateX(5px);
+        }
+
+        .close-menu {
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 20px;
+            position: absolute;
+            top: 7px;
+            right: 180px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-menu:hover {
+            color: grey;
+        }
+
+                
+	</style>
 		
 </head>
 <body>
-
-	<header>
-    <nav class="navbar">
-        <button class="menu-toggle">☰</button>
-        <div class="fancy-menu">
-            <h1>Dashboard</h1>
-            <ul>
-				<li><a href="index.php">Home</a></li>
-                <li><a href="userprofile.php">Profile</a></li>
-                <li><a href="tasks/tasks_1.php">Tasks</a></li>
-                <li><a href="journal_final/journal.php">Journal</a></li>
-                <li><a href="subscriptions/doctor.html">Subscription</a></li>
-                <li><a href="badges/badges.html">Badges</a></li>
-                <li><a href="contacts/contacts_index.php">Emergency Contacts</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
-
-
+<header>
+        <nav class="navbar">
+            <button class="menu-toggle">☰</button>
+            <div class="fancy-menu">
+                <h1>Dashboard</h1>
+                <button class="close-menu">✖</button>
+                <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="userprofile.php">Profile</a></li>
+                    <li><a href="tasks/tasks_1.php">Tasks</a></li>
+                    <li><a href="journal_final/journal.php">Journal</a></li>
+                    <li><a href="subscriptions/doctor.html">Subscription</a></li>
+                    <li><a href="badges/badges.html">Badges</a></li>
+                    <li><a href="contacts/contacts_index.php">Emergency Contacts</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+<div class = "content">
+	
     <section class="contacts">
         <h2 style = "text-align: center; color: #0e5066; background-color: white;">Emergency Contact Numbers</h2>
         <div class="contact-card">
@@ -93,6 +298,7 @@
         <h3>Your Saved Contacts:</h3>
         <div id="savedContactsList"></div> <!-- Placeholder for dynamic contact display -->
     </section>
+	</div>
 
     <footer>
 		<div class="footer-content">
@@ -109,14 +315,22 @@
 
     <script>
 	// Get the button and the menu
-    const menuToggle = document.querySelector('.menu-toggle');
-    const fancyMenu = document.querySelector('.fancy-menu');
-	
-   // Toggle the menu display when the button is clicked
-	menuToggle.addEventListener('click', () => {
-		const isVisible = fancyMenu.style.display === "block";
-		fancyMenu.style.display = isVisible ? "none" : "block";
-	});
+        const menuToggle = document.querySelector('.menu-toggle');
+        const fancyMenu = document.querySelector('.fancy-menu');
+        const closeMenuButton = document.querySelector('.close-menu');
+        const body = document.querySelector('body');
+
+        // Toggle the menu display when the button is clicked
+        menuToggle.onclick = function() {
+            fancyMenu.classList.toggle('show');
+            body.classList.toggle('menu-open');
+        };
+
+        // Close the menu when the close button is clicked
+        closeMenuButton.onclick = function() {
+            fancyMenu.classList.remove('show');
+            body.classList.remove('menu-open');
+        };
 
 
         // Get references to the form and list
