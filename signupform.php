@@ -16,10 +16,10 @@ $alertMessage = "";
 $alertClass = "alert-danger";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST["name"];
-    $email = $_POST["email"];
+    $name = ucwords(strtolower(trim($_POST["name"])));
+    $email = strtolower(trim($_POST["email"]));
     $contact = $_POST["contact"];
-    $username = $_POST["username"];
+    $username = strtolower(trim($_POST["username"])); 
     $password = $_POST["password"];
     $confirmPassword = $_POST["confirm-password"];
     $recaptchaResponse = $_POST['g-recaptcha-response'];
