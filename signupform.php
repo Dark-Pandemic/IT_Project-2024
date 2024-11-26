@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($result->num_rows > 0) {
                 $alertMessage = "The username or email already exists. Please choose a different one.";
-            } else {
+            }  else {
                 // Hash the password before storing
                 //$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
@@ -133,7 +133,7 @@ $conn->close();
             cursor: pointer; /* Optional: Changes the cursor to a pointer */
             vertical-align: middle; /* Ensures it aligns nicely with text */
             margin-right: 5px; /* Add some spacing between checkbox and text */
-}
+        }
         .terms {
             font-size: 12px;
             margin-top: 15px;
@@ -154,9 +154,16 @@ $conn->close();
             display: none;
             transition: opacity 0.5s ease;
         }
+
         .alert-danger {
+            color: white;
             background-color: #f44336;
+            padding: 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 16px;
         }
+
         .alert-success {
             background-color: #4CAF50;
         }
@@ -223,6 +230,20 @@ $conn->close();
                     alertBox.style.display = "none";
                 }, 10000);
             }
+
+
+            var emailField = document.getElementById("email");
+            emailField.addEventListener("input", validateEmail);
+
+            // Call the validateName function as the user types in the name field
+            var nameField = document.getElementById("name");
+            nameField.addEventListener("input", validateName);
+
+            var contactField = document.getElementById("contact");
+            contactField.addEventListener("input", validateContact); // Add contact validation
+
+
+
         }
 
         function updateStrengthBar(password) {
@@ -277,28 +298,142 @@ $conn->close();
             }
         }
 
-        function validateForm() {
-            var password = document.forms["signupForm"]["password"].value;
-            var confirmPassword = document.forms["signupForm"]["confirm-password"].value;
-            var terms = document.forms["signupForm"]["terms"].checked;
+       
 
-            if (password.length < 8) {
-                alert("Password must be at least 8 characters.");
-                return false;
+
+
+        // Real-time email validation function
+        
+        function validateEmail() {
+            var emailField = document.getElementById("email");
+            var email = emailField.value;
+            var alertBox = document.getElementById("email-error");
+            
+            // Regular expression for validating email format with only one dot after the domain name
+            var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            
+            // Check if email contains @ and no numbers after it
+            if (email === "") {
+                alertBox.style.display = "none";  // Hide error if empty
+            } else if (!regex.test(email) || /\d/.test(email.split('@')[1]) || (email.split('@')[1].match(/\./g) || []).length > 1) {
+                alertBox.style.display = "block";  // Show error if invalid
+                alertBox.innerHTML = "Invalid email format. Ensure it contains an '@', no numbers after it, and only one dot after the domain.";
+            } else {
+                alertBox.style.display = "none";  // Hide error if valid
             }
-
-            if (password !== confirmPassword) {
-                alert("Passwords do not match.");
-                return false;
-            }
-
-            if (!terms) {
-                alert("You must accept the terms and conditions.");
-                return false;
-            }
-
-            return true;
         }
+
+
+
+        function validateContact() {
+    var contactField = document.getElementById("contact");
+    var contact = contactField.value;
+    var alertBox = document.getElementById("contact-error");
+    
+    // Check if it starts with '+' and contains only numbers
+    var regex = /^[+]?[0-9]*$/;
+    
+    // Check length of contact number
+    var isValidLength = contact.length >= 8 && contact.length <= 15;
+    
+    if (contact === "") {
+        alertBox.style.display = "none";  // Hide error if empty
+    } else if (!regex.test(contact) || !isValidLength || !iti.isValidNumber()) {
+        alertBox.style.display = "block";  // Show error if invalid
+        alertBox.innerHTML = "Please enter a valid phone number (only numbers and + are allowed).";
+    } else {
+        alertBox.style.display = "none";  // Hide error if valid
+    }
+}
+
+
+       
+        
+
+        // Validate name to ensure it only contains letters and spaces
+        function validateName() {
+            var nameField = document.getElementById("name");
+            var name = nameField.value;
+            var alertBox = document.getElementById("name-error");
+            
+            // Regular expression for only letters and spaces
+            var regex = /^[A-Za-z\s]+$/;
+
+            if (name === "") {
+                alertBox.style.display = "none";  // Hide error if empty
+            } else if (!regex.test(name)) {
+                alertBox.style.display = "block";  // Show error if invalid
+                alertBox.innerHTML = "Name must only contain letters and spaces.";
+            } else {
+                alertBox.style.display = "none";  // Hide error if valid
+            }
+        }
+
+
+
+
+
+        // Validate the form on submission
+
+        function validateForm() {
+        var password = document.forms["signupForm"]["password"].value;
+        var confirmPassword = document.forms["signupForm"]["confirm-password"].value;
+        var email = document.forms["signupForm"]["email"].value;
+        var name = document.forms["signupForm"]["name"].value;
+        var terms = document.forms["signupForm"]["terms"].checked;
+
+        // Re-validate name on form submission
+        if (!validateNameOnSubmit(name)) {
+            alert("Please enter a valid name (only letters and spaces).");
+            return false;
+        }
+
+        // Re-validate email on form submission
+        if (!validateEmailFormat(email)) {
+            alert("Please enter a valid email address.");
+            return false;
+        }
+
+        if (password.length < 8) {
+            alert("Password must be at least 8 characters.");
+            return false;
+        }
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return false;
+        }
+
+        if (!terms) {
+            alert("You must accept the terms and conditions.");
+            return false;
+        }
+
+        // Check if phone number is valid
+        if (!iti.isValidNumber()) {
+            alert("Please enter a valid phone number.");
+            return false; // Prevent form submission
+        }
+
+        return true;
+    }
+
+        // Separate name validation function for form submission
+        function validateNameOnSubmit(name) {
+            var regex = /^[A-Za-z\s]+$/;
+            return regex.test(name);
+        }
+
+        // Separate email validation function for form submission
+        function validateEmailFormat(email) {
+            var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return regex.test(email) && !/\d/.test(email.split('@')[1]) && (email.split('@')[1].match(/\./g) || []).length === 1;
+        }
+
+
+        
+
+
     </script>
 </head>
 <body>
@@ -307,13 +442,19 @@ $conn->close();
     <div class="signup-container">
         <h1>Sign Up</h1>
         <form action="" method="POST" name="signupForm" onsubmit="return validateForm();">
+
             <input type="text" id="name" name="name" placeholder="Enter your Full Name" required>
+            <div id="name-error" class="alert alert-danger" style="display:none;"></div>
+
             <input type="email" id="email" name="email" placeholder="Enter your Email" required>
+            <div id="email-error" class="alert alert-danger" style="display:none;"></div>
 
 
             <div class="phone-container">
                 <input type="tel" id="contact" name="contact" placeholder="Enter your Contact Number" required>
+                <div id="contact-error" class="alert alert-danger" style="display:none;"></div>
             </div>
+
             
 
 
@@ -354,29 +495,34 @@ $conn->close();
                 utilsScript: "phone-number-validation-master/build/js/utils.js", // Path to utils.js
             });
 
+
             // Add the selected country code to the input field
             input.addEventListener("countrychange", function () {
                 var countryCode = iti.getSelectedCountryData().dialCode;
 
                 // Add the country code if not already added
                 if (!input.value.startsWith(`+${countryCode}`)) {
-                    input.value = `+${countryCode} `;
+                    input.value = `+${countryCode}`;
                 }
 
                 // Place the cursor at the end
                 input.setSelectionRange(input.value.length, input.value.length);
             });
 
-            // Prevent 0 from being entered directly after the country code
+            // Block entering more characters once the length limit is reached
             input.addEventListener("input", function () {
                 var countryCode = iti.getSelectedCountryData().dialCode;
+                var maxLength = iti.getSelectedCountryData().maxLength; // Maximum length for the current country
+                var fullLength = maxLength + countryCode.length; // Total max length including the country code
 
-                // Check if the input starts with the country code followed by a space and 0
-                var pattern = new RegExp(`^\\+${countryCode} 0`);
+                // Check if the input length has exceeded the allowed length (including country code)
+                if (input.value.length > fullLength) {
+                    input.value = input.value.substring(0, fullLength); // Trim excess characters
+                }
 
-                if (pattern.test(input.value)) {
-                    // Remove the 0 after the country code
-                    input.value = input.value.replace(` 0`, ` `);
+                // Prevent '0' from being entered directly after the country code
+                if (input.value.startsWith(`+${countryCode}0`)) {
+                    input.value = input.value.replace(`0`, ''); // Remove the 0 after the country code
                 }
             });
 
