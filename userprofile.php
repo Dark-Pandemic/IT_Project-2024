@@ -1,10 +1,6 @@
 <?php
 session_start();
-
-<<<<<<< HEAD
-=======
 /*
->>>>>>> 4e534af87a81bef88ada894b24378731525ae8de
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username']; // Use session if available
 } elseif (isset($_COOKIE['username'])) {
@@ -22,7 +18,6 @@ if (isset($_SESSION['ID'])) {
     $user_id = 0; // Fallback for anonymous access
   }
   
->>>>>>> 4e534af87a81bef88ada894b24378731525ae8de
 
 // Database connection
 $conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
