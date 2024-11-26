@@ -10,6 +10,7 @@ body {
 
 /* Only apply these styles if the page has the 'index-page' class */
 .index-page header {
+  position: : static;
   background: linear-gradient(to right, #309dc4, #559db3, #2481a7, #b1d6df); /* Cool gradient background */
   padding: 15px 0;
   text-align: center; /* Center the menu */
