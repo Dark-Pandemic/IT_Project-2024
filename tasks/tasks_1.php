@@ -1,13 +1,18 @@
 <?php
+
 session_start();
 
 if (!isset($_SESSION['username'])) {
-    echo json_encode(['error' => 'User not logged in']);
-    exit;
+    if (isset($_COOKIE['username'])) {
+        $_SESSION['username'] = $_COOKIE['username'];
+        $_SESSION['ID'] = $_COOKIE['ID']; // Assuming ID is stored in the cookie
+    } else {
+        echo json_encode(['error' => 'User not logged in']);
+        exit;
+    }
 }
 
 $user_id = $_SESSION['ID'];
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -352,44 +357,46 @@ $user_id = $_SESSION['ID'];
         }
 
         function completeTask(button, taskId) {
-            const taskItem = button.parentElement;
-            const xpEarned = parseInt(taskItem.getAttribute('data-xp'));
-            const progressBar = taskItem.querySelector('.progress-bar');
-            progressBar.style.width = '100%';
-            taskItem.classList.add('completed');
-            button.innerText = 'Completed';
-            button.disabled = true;
+        const taskItem = button.parentElement;
+        const xpEarned = parseInt(taskItem.getAttribute('data-xp'));
+        const progressBar = taskItem.querySelector('.progress-bar');
+        progressBar.style.width = '100%';
+        taskItem.classList.add('completed');
+        button.innerText = 'Completed';
+        button.disabled = true;
 
-            fetch('update_tasks_status.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `task_id=${taskId}`
-            })
-            .then(response => response.text())
-            .then(data => {
-                if (data !== 'Task updated successfully') {
-                    console.error('Error updating task:', data);
-                    showToast('Error updating task. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showToast('Error updating task. Please try again.');
-            });
-
-            currentXP += xpEarned;
-            if (currentXP >= calculateXPToNextLevel(currentLevel)) {
-                currentLevel++;
-                currentXP = 0;
-                playLevelUpSound();
-                showToast('Level Up! You are now level ' + currentLevel);
-                createConfetti();
+        fetch('update_tasks_status.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `task_id=${taskId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response from server:', data);
+            if (data.status !== 'success') {
+                console.error('Error updating task:', data.message);
+                showToast(data.message || 'Error updating task. Please try again.');
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Error updating task. Please try again.');
+        });
 
-            updateLevelDisplay();
+        // Update XP and level
+        currentXP += xpEarned;
+        if (currentXP >= calculateXPToNextLevel(currentLevel)) {
+            currentLevel++;
+            currentXP = 0;
+            playLevelUpSound();
+            showToast('Level Up! You are now level ' + currentLevel);
+            createConfetti();
         }
+
+        updateLevelDisplay();
+    }
 
         function updateLevelDisplay() {
             currentLevelElement.innerText = currentLevel;
@@ -414,4 +421,3 @@ $user_id = $_SESSION['ID'];
     </script>
 </body>
 </html>
-?>

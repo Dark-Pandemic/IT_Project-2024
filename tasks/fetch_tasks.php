@@ -36,7 +36,7 @@ if (isset($_GET['taskType'])) {
 
     // Prepare statement to prevent SQL injection
     //$stmt = $conn->prepare("SELECT * FROM tasks WHERE task_type = ? ORDER BY id DESC LIMIT 4");
-    $stmt = $conn->prepare("SELECT * FROM tasks WHERE task_type = ? ORDER BY id DESC LIMIT 4");
+    $stmt = $conn->prepare("SELECT * FROM tasks WHERE task_type = ? ORDER BY task_id DESC LIMIT 4");
     $stmt->bind_param("s", $taskType);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -44,7 +44,7 @@ if (isset($_GET['taskType'])) {
     $tasks = [];
     while ($row = $result->fetch_assoc()) {
         $tasks[] = [
-            'id' => $row['ID'],
+            //'id' => $row['ID'],
             'name' => $row['task_name'],
             'description' => $row['task_description'],
             'xp' => $row['xp_points']
