@@ -13,25 +13,28 @@ if (isset($_SESSION['username'])) {
 
 
 
+
 include 'db.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $userId = 1;  // Set this dynamically for logged-in users.
-    $file_name = $_POST['file_name'];
-    $file_content = $_POST['file_content'];
 
-    $sql = "INSERT INTO journal (userId, file_name, file_content) VALUES (:userId, :file_name, :file_content)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':userId', $userId);
-    $stmt->bindParam(':file_name', $file_name);
-    $stmt->bindParam(':file_content', $file_content);
-    
-    if ($stmt->execute()) {
-        echo "<p class='success'>Entry saved successfully!</p>";
-    } else {
-        echo "<p class='error'>Error saving entry. Please try again.</p>";
-    }
+
+$filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
+
+switch ($filter) {
+    case '7days':
+        $sql = "SELECT * FROM journal WHERE created_at >= NOW() - INTERVAL 7 DAY ORDER BY created_at DESC";
+        break;
+    case 'month':
+        $sql = "SELECT * FROM journal WHERE created_at >= NOW() - INTERVAL 1 MONTH ORDER BY created_at DESC";
+        break;
+    default:
+        $sql = "SELECT * FROM journal ORDER BY created_at DESC";
+        break;
 }
+
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$entries = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -39,109 +42,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Write a New Journal Entry</title>
+    <title>Previous Entries</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-image: url('background1.jpg'); /* Background image */
-            background-size: cover; /* Make the background cover the entire page */
-            background-position: center center; /* Center the background */
-            background-attachment: fixed; /* Keep the background fixed while scrolling */
-            color: #333;
+            background-color: #f7f7f7;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
             margin: 0;
             padding: 0;
+            color: #333;
         }
-        .heading {
-            text-align: center;
-            padding: 30px 20px; /* Reduced padding for smaller header */
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        .container {
             width: 80%;
             margin: 50px auto;
-        }
-        
-		.entry{
-            color: #a7c7e7; /* Pastel blue */
-            font-size: 40px; /* Smaller header font size */
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 0;
-        }
-        .form-container {
-            width: 80%;
-            margin: 0 auto;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.8); /* Light background for form area */
             padding: 30px;
-            border-radius: 10px;
-        }
-        label {
-            font-size: 18px;
-            margin-top: 20px;
-            display: block;
-        }
-        textarea {
-            width: 100%;
-            height: 300px; /* Make it taller for a more journal-like experience */
-            padding: 15px;
-            font-size: 18px;
-            border: 1px solid #ccc;
+            background-color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            resize: none; /* Disable resizing */
-            box-sizing: border-box; /* Make sure padding is included in width/height */
-            background-color: #f9f9f9; /* Light background color for the textarea */
+            background: linear-gradient(135deg, #f4e1d2, #a7c7e7);
+        }
+        h1 {
+            color: #4e7ea1;
+            text-align: center;
+            font-size: 36px;
+        }
+        .entry {
+            background-color: #f3f4f6;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        .entry h2 {
+            color: #4e7ea1;
+            font-size: 28px;
+        }
+        .entry p {
+            font-size: 18px;
             color: #333;
+            line-height: 1.5;
         }
-			
-		textarea.plain {
-			background-image: none; /* No background pattern */
-			background-color: white; /* Plain white background */
-		}
-		textarea.lined {
-			background-image: repeating-linear-gradient(to bottom, #ccc 0, #ccc 1px, transparent 1px, transparent 32px);
-		}
-
-    
-		textarea.dotted {
-			background-image: radial-gradient(circle, #ccc 1px, transparent 1px);
-			background-size: 22px 22px;
-		}
-
-        button {
-            background-color: #a7c7e7; /* Pastel blue */
-            color: white;
-            padding: 15px 30px;
-            font-size: 18px;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-top: 20px;
-            transition: transform 0.2s ease, background-color 0.3s;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        .entry small {
+            color: #777;
+            font-size: 14px;
         }
-        button:hover {
-            background-color: #85aad6; /* Slightly darker pastel blue */
-            transform: translateY(-4px);
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
-        .back-home-btn {
-            background-color: #f4e1d2; /* Beige */
-            color: #333;
-            padding: 15px 30px;
-            font-size: 18px;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-top: 20px;
+        .filter-button, .back-button, .print-button {
             display: inline-block;
-            transition: transform 0.2s ease, background-color 0.3s;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: #f4e1d2;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 20px;
         }
-        .back-home-btn:hover {
-            background-color: #e1c1a0; /* Slightly darker beige */
-            transform: translateY(-4px);
+        .filter-button:hover, .back-button:hover, .print-button:hover {
+            background-color: #d3b59c;
         }
-		
-		
 		/* Menu styles */
         header {
             position: fixed;
@@ -239,11 +205,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .close-menu:hover {
             color: grey;
         }
-		
+
     </style>
+    <script>
+		
+        function printEntry(entryId) {
+            const entry = document.getElementById('entry-' + entryId);
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+
+            // Create a clone of the entry content excluding the button
+            const entryContent = entry.cloneNode(true);
+            
+            // Remove the print button from the cloned content
+            const printButton = entryContent.querySelector('.print-button');
+            if (printButton) {
+                printButton.remove();
+            }
+
+            // Open the print window and write the content to it
+            printWindow.document.write('<html><head><title>Print Entry</title></head><body>');
+            printWindow.document.write(entryContent.innerHTML); // Only content, without the button
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
 </head>
 <body>
-
 	<header>
         <nav class="navbar">
             <button class="menu-toggle">☰</button>
@@ -262,39 +250,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </nav>
     </header>
-</header>
-
+	
 	<div class = "content">
+    <div class="container">
+        <h1>Your Journal Entries</h1>
+        <div class="button-container">
+            <a href="?filter=7days" class="filter-button">Last 7 Days</a>
+            <a href="?filter=month" class="filter-button">Last Month</a>
+            <a href="?filter=all" class="filter-button">All Entries</a>
+        </div>
 
-    <div class = "heading">
-        <h1 class = "entry">Write a New Journal Entry</h1>
-    </div>
-	
-	
+        <?php if (empty($entries)) { ?>
+            <p>No entries found.</p>
+        <?php } else { ?>
+            <?php foreach ($entries as $entry) { ?>
+                <div class="entry" id="entry-<?php echo $entry['userID']; ?>">
+                    <h2><?php echo htmlspecialchars($entry['file_name']); ?></h2>
+                    <p><?php echo nl2br(htmlspecialchars($entry['file_content'])); ?></p>
+                    <p><small>Created on: <?php echo $entry['created_at']; ?></small></p>
+                    <!-- Updated print button -->
+                    <button class="print-button" onclick="printEntry(<?php echo $entry['userID']; ?>)">Print This Entry</button>
+                </div>
+            <?php } ?>
+        <?php } ?>
 
-    <div class="form-container">
-        <form action="write_entry.php" method="POST">
-		
-			<label for="paper_type">Select Paper Type:</label>
-			<select id="paper_type" name="paper_type">
-				<option value="plain">Plain</option>
-				<option value="lined">Lined</option>
-				<option value="dotted">Dotted</option>
-			</select>
-			
-            <label for="file_name">Title of Your Journal Entry:</label>
-            <input type="text" id="file_name" name="file_name" placeholder="Enter a title for your journal entry" required style="width: 100%; padding: 15px; font-size: 18px; border-radius: 8px; border: 1px solid #ccc; background-color: #f9f9f9; box-sizing: border-box;">
-			
-            <label for="file_content">Your Journal Entry:</label>
-            <textarea id="file_content" name="file_content" placeholder="Write your journal entry here..." required></textarea>
-
-            <button type="submit">Save Entry</button>
-        </form>
-		
-        <a href="journal.php" class="back-home-btn">Back to Home</a>
+        <a href="journal.php" class="back-button">Back to Home</a>
     </div>
 	</div>
-	
 	
 	<script>
 	// Get the button and the menu
@@ -314,41 +296,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             fancyMenu.classList.remove('show');
             body.classList.remove('menu-open');
         };
-
-    // Optional: Close the menu if the user clicks outside of it
-    window.onclick = function(event) {
-        if (!event.target.matches('.menu-toggle')) {
-            if (fancyMenu.style.display === "block") {
-                fancyMenu.style.display = "none";
-            }
-        }
-    };
-	
-    document.getElementById('paper_type').addEventListener('change', function () {
-      const textarea = document.getElementById('file_content');
-      textarea.className = ''; // Clear existing classes
-      textarea.classList.add(this.value); // Add the selected class based on the dropdown value
-    });
-	
-	const paperTypeSelect = document.getElementById('paper_type');
-
-        // Save data to localStorage on change
-        paperTypeSelect.addEventListener('change', () => {
-            localStorage.setItem('journal_paper_type', paperTypeSelect.value);
-        });
-
-        // Load data from localStorage on page load
-        window.addEventListener('load', () => {
-            const savedPaperType = localStorage.getItem('journal_paper_type');
-
-            
-            if (savedPaperType) {
-                paperTypeSelect.value = savedPaperType;
-                textarea.className = ''; // Clear existing classes
-                textarea.classList.add(savedPaperType); // Apply the saved paper type
-            }
-        });
-  </script>
+		</script>
 
 </body>
 </html>
