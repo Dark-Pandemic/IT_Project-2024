@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
          // Convert the entered username to lowercase
          $username = strtolower($username);
-
+///////////////////
         // Check credentials in the database
         $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE BINARY username = ? AND BINARY password = ?");
         $stmt->bind_param('ss', $username, $password);
