@@ -6,15 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Emergency Contacts - Mental Health Awareness</title>
     <link rel="stylesheet" href="stylesContacts.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+	
+		
 </head>
 <body>
-    <header>
-        <h1>Emergency Contact Numbers</h1>
-        <p>Your well-being matters. Here are some emergency numbers you can use in case of any mental health, safety, or medical crisis.</p>
-    </header>
+
+	<header>
+    <nav class="navbar">
+        <button class="menu-toggle">☰</button>
+        <div class="fancy-menu">
+            <h1>Dashboard</h1>
+            <ul>
+				<li><a href="index.php">Home</a></li>
+                <li><a href="userprofile.php">Profile</a></li>
+                <li><a href="tasks/tasks_1.php">Tasks</a></li>
+                <li><a href="journal_final/journal.php">Journal</a></li>
+                <li><a href="subscriptions/doctor.html">Subscription</a></li>
+                <li><a href="badges/badges.html">Badges</a></li>
+                <li><a href="contacts/contacts_index.php">Emergency Contacts</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
 
     <section class="contacts">
-        <h2>Emergency Contact Numbers</h2>
+        <h2 style = "text-align: center; color: #0e5066; background-color: white;">Emergency Contact Numbers</h2>
         <div class="contact-card">
             <h3>Police</h3>
             <p><a href="tel:10111">10111</a></p>
@@ -63,11 +81,12 @@
         <p>If you have personal contacts or a therapist you would like to store for emergencies, you can add them here.</p>
         <form id="contactForm">
             <label for="contactName">Contact Name:</label>
-            <input type="text" id="contactName" name="contactName" required>
+            <input type="text" id="contactName" name="contactName" placeholder = "Enter your Full Name" required>
 
             <label for="contactNumber">Contact Number:</label>
             <input type="tel" id="contactNumber" name="contactNumber" required pattern="[0-9+ ]+" placeholder="Enter a valid phone number">
 
+			<br><br>
             <button type="submit">Save Contact</button>
         </form>
 
@@ -76,10 +95,30 @@
     </section>
 
     <footer>
-        <p>&copy; 2024 Mental Health Awareness Moodify</p>
+		<div class="footer-content">
+        <div class="social-media">
+            <p>Follow us on:</p>
+            <a href="#" class="social-link">Twitter</a>
+            <a href="#" class="social-link">Instagram</a>
+        </div>
+        <div class="contact-info">
+            <p>Email us at: <a href="mailto:moodifysa@gmail.com" style="color: white">moodifysa@gmail.com</a></p>
+            <p>Phone: +1-234-567-890</p>
+        </div>
     </footer>
 
     <script>
+	// Get the button and the menu
+    const menuToggle = document.querySelector('.menu-toggle');
+    const fancyMenu = document.querySelector('.fancy-menu');
+	
+   // Toggle the menu display when the button is clicked
+	menuToggle.addEventListener('click', () => {
+		const isVisible = fancyMenu.style.display === "block";
+		fancyMenu.style.display = isVisible ? "none" : "block";
+	});
+
+
         // Get references to the form and list
         const contactForm = document.getElementById('contactForm');
         const savedContactsList = document.getElementById('savedContactsList');

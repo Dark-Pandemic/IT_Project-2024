@@ -23,9 +23,10 @@ if (isset($_SESSION['username'])) {
 	<link href="https://fonts.googleapis.com/css2?family=Bokor&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Sour+Gummy&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Sevillana&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Poppins, sans-serif;
             background-color: #f0f4f8;
             margin: 0;
             padding: 20px;
@@ -243,7 +244,7 @@ if (isset($_SESSION['username'])) {
             transform: translateX(26px);
         }
 		
-		a{
+		.write{
 			width: 35%;
             background-color: #00aaff;
             color: white;
@@ -256,37 +257,132 @@ if (isset($_SESSION['username'])) {
 			transition: background-color 0.3s;
 		}
 		
-		a:hover {
+		.write:hover {
             background-color: #0088cc;
         }
 		
-		.back{
-			text-decoration: none;
-			display: inline-block;
-			padding: 8px 16px;
-		}
+		/* Menu styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
 
-		.back:hover {
-			background-color: #ddd;
-			color: black;
-		}
+        .navbar {
+            padding: 10px;
+        }
 
-		.previous {
-			background-color: grey;
-			color: black;
-		}
+        .menu-toggle {
+            color: black;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 7px;
+        }
 
-		.round {
-		border-radius: 50%;
-		}
+        .fancy-menu {
+            display: none;
+            background-color: #6CB4EE;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 220px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 15px 0 0 15px;
+            padding-top: 20px;
+            transition: transform 0.3s ease;
+            transform: translateX(-220px);
+        }
+
+        .fancy-menu.show {
+            display: block;
+            transform: translateX(0);
+        }
+
+        .content {
+            transition: margin-left 0.3s ease;
+        }
+
+        .menu-open .content {
+            margin-left: 220px;
+        }
+
+        .fancy-menu h1 {
+            margin: 0;
+            padding: 10px;
+            color: white;
+            font-size: 1.5em;
+            text-align: center;
+            border-bottom: 1px solid #555;
+            padding-bottom: 10px;
+        }
+
+        .fancy-menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .fancy-menu li {
+            padding: 10px 20px;
+        }
+
+        .fancy-menu a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .fancy-menu a:hover {
+            color: grey;
+            transform: translateX(5px);
+        }
+
+        .close-menu {
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 20px;
+            position: absolute;
+            top: 7px;
+            right: 180px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-menu:hover {
+            color: grey;
+        }
 
 		
 		
     </style>
 </head>
 <body class="light-mode">
-	<br>
-	<a href="journal.php" class="previous round" id = "back">&#8249;</a>
+	<header>
+        <nav class="navbar">
+            <button class="menu-toggle">☰</button>
+            <div class="fancy-menu">
+                <h1>Dashboard</h1>
+                <button class="close-menu">✖</button>
+                <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="userprofile.php">Profile</a></li>
+                    <li><a href="tasks/tasks_1.php">Tasks</a></li>
+                    <li><a href="journal_final/journal.php">Journal</a></li>
+                    <li><a href="subscriptions/doctor.html">Subscription</a></li>
+                    <li><a href="badges/badges.html">Badges</a></li>
+                    <li><a href="contacts/contacts_index.php">Emergency Contacts</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+<div class = "content">
     <h1 style="text-align: center;">Your Journal</h1>
     <table>
         <tr>
@@ -343,25 +439,44 @@ if (isset($_SESSION['username'])) {
         <div class="journal-pages"></div>
 		<br><br><br>
 		
-        <a href="write_entry.php" class = "write">Write Entry</a>
+        <a href="journal.html" class = "write">Write Entry</a>
     </div>
 </td>
+</div>
 
 	
 
     <script>
+	
+	// Get the button and the menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const fancyMenu = document.querySelector('.fancy-menu');
+        const closeMenuButton = document.querySelector('.close-menu');
+        const body = document.querySelector('body');
+
+        // Toggle the menu display when the button is clicked
+        menuToggle.onclick = function() {
+            fancyMenu.classList.toggle('show');
+            body.classList.toggle('menu-open');
+        };
+
+        // Close the menu when the close button is clicked
+        closeMenuButton.onclick = function() {
+            fancyMenu.classList.remove('show');
+            body.classList.remove('menu-open');
+        };
     // Define available cover images
     const imageUrls = [
-        'beach.jpg',
-        'blackandgrey.jpg',
-        'brown.jpg',
-        'butterfly.jpg',
-        'groovy.jpg',
-        'plants.jpg',
-        'purpleabtract.jpg',
-        'strawberry.jpg',
-        'space.jpg',
-        'shells.jpg',
+        'images/beach.jpg',
+        'images/blackandgrey.jpg',
+        'images/brown.jpg',
+        'images/butterfly.jpg',
+        'images/groovy.jpg',
+        'images/plants.jpg',
+        'images/purpleabstract.jpg',
+        'images/strawberry.jpg',
+        'images/space.jpg',
+        'images/shells.jpg',
     ];
 
     // Selectors for journal and image container
