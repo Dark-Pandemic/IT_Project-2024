@@ -34,8 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = $conn->real_escape_string($_POST['username']);
         $password = $conn->real_escape_string($_POST['password']);
 
+         // Convert the entered username to lowercase
+         $username = strtolower($username);
+///////////////////
         // Check credentials in the database
-        $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE username = ? AND password = ?");
+        $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE BINARY username = ? AND BINARY password = ?");
         $stmt->bind_param('ss', $username, $password);
         $stmt->execute();
         $result = $stmt->get_result();
