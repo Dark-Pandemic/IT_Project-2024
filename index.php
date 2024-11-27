@@ -8,6 +8,19 @@ if (isset($_SESSION['username'])) {
 } else {
     $username = "Guest"; // Fallback for anonymous access
 }
+
+
+
+// Check if the user is logged out, then destroy session and redirect
+if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+  session_unset();
+  session_destroy();
+  setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
+  header("Location: loginform.php"); // Redirect to login page
+  exit();
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +37,24 @@ if (isset($_SESSION['username'])) {
 
 <link rel="stylesheet" href="styles.css">
 
+<style>
+
+.logout-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: none;  /* Hidden by default */
+    text-align: center;
+    font-size: 18px;
+}
+
+</style>
+
 </head>
 
 <body class="index-page">
@@ -39,15 +70,11 @@ if (isset($_SESSION['username'])) {
 <button class="menu-toggle">☰</button>
 
 <a href="userprofile.php" class="logged-in-user">
-    
     <div class="user-info">
-        <p><?php echo htmlspecialchars($_SESSION['username']); ?></p> <!-- Username with label -->
+        <p><?php echo htmlspecialchars($username); ?></p> <!-- Display the username -->
     </div>
     &nbsp;
-    <img src="" alt="Profile Icon" class="profile-icon"> <!-- Profile Icon -->
-    <!--retrive rofile ics from images-->
-
-
+    <img src="" alt="Profile Icon" class="profile-icon"> <!-- Placeholder for profile icon -->
 </a>
 
 <nav class="fancy-menu">
@@ -65,6 +92,8 @@ if (isset($_SESSION['username'])) {
 <li><a href="badges/badges.html">Badges</a></li>
 
 <li><a href="contacts/contacts_index.php">Emergency Contact</a></li>
+
+<li><a href="javascript:void(0);" onclick="confirmLogout()">Log Out</a></li> <!-- Log Out link -->
 
 </ul>
 
@@ -121,6 +150,18 @@ if (isset($_SESSION['username'])) {
 </div>
 
 <script>
+
+
+// Function to handle logout confirmation and redirection
+function confirmLogout() {
+    // Add a delay to show the "logging out..." message before redirecting
+    setTimeout(function() {
+        window.location.href = window.location.href.split('?')[0] + '?logout=true';  // Append '?logout=true' to the URL
+    }, 500);  // Small delay to allow the "logging out..." message to be seen
+}
+
+
+
 
 // JavaScript to toggle dropdown menu visibility when the button is clicked
 document.querySelector('.menu-toggle').addEventListener('click', function(event) {
@@ -186,6 +227,8 @@ listItem.classList.remove('completed-task');
 
 });
 
+
+
 document.addEventListener("DOMContentLoaded", function() {
 
 const quotes = [
@@ -233,6 +276,10 @@ quoteElement.textContent = randomQuote; // Display the random quote
     </div>
   </div>
 </footer>
+
+<div id="logoutPopup" class="logout-popup" style="display:none;">
+    <p>Logging out...</p>
+</div>
 
 </body>
 

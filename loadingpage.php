@@ -1,16 +1,8 @@
 <?php
+
 session_start();
 
-if (isset($_SESSION['ID'])) {
-    $user_id = $_SESSION['ID']; // Use session if available
-  } elseif (isset($_COOKIE['ID'])) {
-    $user_id = $_COOKIE['ID']; // Use cookie if session doesn't exist
-  } else {
-    $user_id = 0; // Fallback for anonymous access
-  }
-
-  
-/*
+// Check if the session contains the 'username' or use cookies if session doesn't exist
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username']; // Use session if available
 } elseif (isset($_COOKIE['username'])) {
@@ -19,8 +11,7 @@ if (isset($_SESSION['username'])) {
     $username = "Guest"; // Fallback for anonymous access
 }
 ?>
-*/
-  ?>
+
 
 <!-- loadingpage.php -->
 <!DOCTYPE html>

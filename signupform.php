@@ -47,11 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $alertMessage = "The username or email already exists. Please choose a different one.";
             }  else {
                 // Hash the password before storing
-                //$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
                 // Insert new user into database
                 $stmt = $conn->prepare("INSERT INTO userloginreg (name, email, contact, username, password) VALUES (?, ?, ?, ?, ?)");
-                $stmt->bind_param("sssss", $name, $email, $contact, $username, $password); // $hashedPassword
+                $stmt->bind_param("sssss", $name, $email, $contact, $username, $hashedPassword); // $hashedPassword
 
                 if ($stmt->execute()) {
                     $alertMessage = "Registration successful! Redirecting to login page...";
