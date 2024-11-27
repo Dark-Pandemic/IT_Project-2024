@@ -1,3 +1,29 @@
+<?php
+session_start();
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = "Guest"; // Fallback for anonymous access
+}
+
+
+
+// Check if the user is logged out, then destroy session and redirect
+if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+  session_unset();
+  session_destroy();
+  setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
+  header("Location: loginform.php"); // Redirect to login page
+  exit();
+}
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -184,36 +210,66 @@
         }
 
         /* Side Menu Styles */
-        .side-menu {
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 250px;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            padding: 20px;
-            transition: left 0.3s ease;
-            z-index: 2;
-        }
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Start off-screen */
+    width: 250px;
+    height: 100%;
+    background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
+    color: #fff;
+    padding: 20px;
+    transition: left 0.3s ease; /* Smooth transition when opening/closing */
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align items to the top */
+}
 
-        .side-menu a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.5rem;
-            display: block;
-            margin: 20px 0;
-            margin-left: 20px;
-        }
+/* Menu Item Styles */
+.side-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5rem;
+    display: block;
+    margin: 8px 0; /* Reduced margin to bring items closer */
+    margin-left: 20px;
+    padding: 8px 15px; /* Adjusted padding for a more compact appearance */
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
 
-        .side-menu a:hover {
-            color: #aaa;
-        }
+/* Hover Effect for Menu Items */
+.side-menu a:hover {
+    background-color: white;
+    color: rgba(255, 200, 150, 0.7); /* Peach-colored text on hover */
+    transform: scale(1.05); /* Make items "pop" on hover */
+}
 
-        /* Show the side menu when active */
-        .side-menu.active {
-            left: 0;
-        }
+/* Show the side menu when active */
+.side-menu.active {
+    left: 0; /* Slide in */
+}
+
+/* Log Out Button Styles */
+.logout-btn {
+    background-color: white; /* White background for the button */
+    color: rgba(255, 150, 100, 0.8); /* Darker peach color for the text */
+    font-size: 1.5rem;
+    padding: 12px 20px; /* Adjusted padding for better button size */
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 20px; /* Space above the Log Out button */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover Effect for Log Out Button */
+.logout-btn:hover {
+    background-color: rgba(255, 200, 150, 0.8); /* Darker peach background on hover */
+    transform: scale(1.05); /* Button expands slightly on hover */
+}
+
 
     </style>
 </head>
@@ -224,22 +280,22 @@
 
     <!-- Side Menu -->
     <div class="side-menu" id="side-menu">
-  
-
     <a href="userprofile.php">Profile</a>
-
     <a href="tasks/tasks_1.php">Tasks</a>
-
     <a href="journal_final/journal.php">Journal</a>
-
+    <a href="breathe.php">Zen Zone</a>
     <a href="subscriptions/doctor.html">Subscriptions</a>
-
     <a href="badges/badges.html">Badges</a>
-
     <a href="contacts/contacts_index.php">Emergency Contact</a>
 
 
-    </div>
+    <br><br>
+
+    <!-- Log Out Button -->
+    <button class="logout-btn" onclick="confirmLogout()">Log Out</button>
+
+</div>
+
 
     <div class="container">
         <h1>Relax and Breathe</h1>
@@ -260,118 +316,124 @@
     </div>
 
     <script>
-        const instructions = document.getElementById("instructions");
-        const timerDisplay = document.getElementById("timer");
-        const startButton = document.getElementById("start-button");
-        const stopButton = document.getElementById("stop-button");
-        const progressRing = document.getElementById("progress-ring");
-        const toggleBtn = document.getElementById("toggle-btn");
-        const sideMenu = document.getElementById("side-menu");
+    const instructions = document.getElementById("instructions");
+    const timerDisplay = document.getElementById("timer");
+    const startButton = document.getElementById("start-button");
+    const stopButton = document.getElementById("stop-button");
+    const progressRing = document.getElementById("progress-ring");
+    const toggleBtn = document.getElementById("toggle-btn");
+    const sideMenu = document.getElementById("side-menu");
 
-        let timer = 4;
-        let isInhaling = true;
-        let isHolding = false;
-        let isExhaling = false;
-        let interval;
-        let ringRotation = 0;
+    let timer = 4;
+    let isInhaling = true;
+    let isHolding = false;
+    let isExhaling = false;
+    let interval;
+    let ringRotation = 0;
 
-        // Toggle the side menu visibility
-        toggleBtn.addEventListener("click", () => {
-            sideMenu.classList.toggle("active");
-        });
+    // Toggle the side menu visibility
+    toggleBtn.addEventListener("click", () => {
+        sideMenu.classList.toggle("active");
+    });
 
-        // Function to create a particle effect
-        function createParticle() {
-            const particle = document.createElement("div");
-            particle.classList.add("particle");
-            document.body.appendChild(particle);
-
-            // Randomly position particle and animate it
-            particle.style.left = `${Math.random() * 100}%`;
-            particle.style.top = `${Math.random() * 100}%`;
-
-            // Remove particle after animation ends
-            setTimeout(() => {
-                particle.remove();
-            }, 5000); // Particle duration matches animation duration
+    // Close the menu when clicking anywhere outside of it
+    document.addEventListener("click", (event) => {
+        // Check if the click was outside the side menu and toggle button
+        if (!sideMenu.contains(event.target) && event.target !== toggleBtn) {
+            sideMenu.classList.remove("active");
         }
+    });
 
-        // Create particles continuously
-        setInterval(createParticle, 200); // Adjust the interval to control particle density
+    // Function to create a particle effect
+    function createParticle() {
+        const particle = document.createElement("div");
+        particle.classList.add("particle");
+        document.body.appendChild(particle);
 
-        // Function to update the breathing instructions and timer
-        function updateBreathing() {
-            if (timer === 0) {
-                if (isInhaling) {
-                    isInhaling = false;
-                    isHolding = true;
-                    timer = 3; // Set timer for hold breath
-                    instructions.textContent = "Hold...";
-                } else if (isHolding) {
-                    isHolding = false;
-                    isExhaling = true;
-                    instructions.textContent = "Exhale...";
-                    timer = 5; // Set timer for exhale
-                } else if (isExhaling) {
-                    isExhaling = false;
-                    setTimeout(() => {
-                        isInhaling = true;
-                        instructions.textContent = "Inhale...";
-                        timer = 4;
-                    }, 1000);
-                    return;
-                }
-            }
+        // Randomly position particle and animate it
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
 
-            timerDisplay.textContent = timer;
-            timer--;
-
-            // Update the ring's rotation
-            ringRotation += 360 / (isInhaling ? 4 : isHolding ? 4 : 6);
-            progressRing.style.transform = `rotate(${ringRotation}deg)`;
-        }
-
-        // Start the breathing exercise
-        function startExercise() {
-            clearInterval(interval);
-            timer = 4;
-            isInhaling = true;
-            isHolding = false;
-            isExhaling = false;
-            instructions.textContent = "Inhale...";
-            timerDisplay.textContent = timer;
-            ringRotation = 0;
-            progressRing.style.transform = `rotate(0deg)`;
-
-            interval = setInterval(updateBreathing, 1000);
-        }
-
-        // Stop the breathing exercise and refresh the page
-        function stopExercise() {
-            clearInterval(interval);
-            instructions.textContent = "Press Start";
-            ringRotation = 0;
-            progressRing.style.transform = "rotate(0deg)";
-            timerDisplay.textContent = "--";
-
-            window.location.reload();
-        }
-
-        startButton.addEventListener("click", startExercise);
-        stopButton.addEventListener("click", stopExercise);
-
-
-        document.addEventListener('click', function(event) {
-    const menu = document.querySelector('.index-page .fancy-menu');
-    const menuButton = document.querySelector('.index-page .menu-toggle');
-    
-    // Check if the click is outside the menu and the menu button
-    if (!menu.contains(event.target) && event.target !== menuButton) {
-        menu.classList.remove('show'); // Hide the menu
+        // Remove particle after animation ends
+        setTimeout(() => {
+            particle.remove();
+        }, 5000); // Particle duration matches animation duration
     }
-});
 
-    </script>
+    // Create particles continuously
+    setInterval(createParticle, 200); // Adjust the interval to control particle density
+
+    // Function to update the breathing instructions and timer
+    function updateBreathing() {
+        if (timer === 0) {
+            if (isInhaling) {
+                isInhaling = false;
+                isHolding = true;
+                timer = 3; // Set timer for hold breath
+                instructions.textContent = "Hold...";
+            } else if (isHolding) {
+                isHolding = false;
+                isExhaling = true;
+                instructions.textContent = "Exhale...";
+                timer = 4; // Set timer for exhale
+            } else if (isExhaling) {
+                isExhaling = false;
+                setTimeout(() => {
+                    isInhaling = true;
+                    instructions.textContent = "Inhale...";
+                    timer = 4;
+                }, 1000);
+                return;
+            }
+        }
+
+        timerDisplay.textContent = timer;
+        timer--;
+
+        // Update the ring's rotation
+        ringRotation += 360 / (isInhaling ? 4 : isHolding ? 4 : 6);
+        progressRing.style.transform = `rotate(${ringRotation}deg)`;
+    }
+
+    // Start the breathing exercise
+    function startExercise() {
+        clearInterval(interval);
+        timer = 4;
+        isInhaling = true;
+        isHolding = false;
+        isExhaling = false;
+        instructions.textContent = "Inhale...";
+        timerDisplay.textContent = timer;
+        ringRotation = 0;
+        progressRing.style.transform = `rotate(0deg)`;
+
+        interval = setInterval(updateBreathing, 1000);
+    }
+
+    // Stop the breathing exercise and refresh the page
+    function stopExercise() {
+        clearInterval(interval);
+        instructions.textContent = "Press Start";
+        ringRotation = 0;
+        progressRing.style.transform = "rotate(0deg)";
+        timerDisplay.textContent = "--";
+
+        window.location.reload();
+    }
+
+    startButton.addEventListener("click", startExercise);
+    stopButton.addEventListener("click", stopExercise);
+
+    function confirmLogout() {
+    const confirmation = confirm("Are you sure you want to log out?");
+    if (confirmation) {
+        // Redirect to the log-out page or perform your logout logic here
+        window.location.href = "loginform.php"; // Change this to your logout URL
+    }
+}
+
+</script>
+
 </body>
 
 </html>
