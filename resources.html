@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f7fa;
+            background: radial-gradient(rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%);
             color: #333;
         }
 
@@ -19,6 +19,52 @@
             padding-top: 10px;
             text-align: center;
         }
+		.ocean {
+		  height: 5%;
+		  width: 100%;
+		  position: absolute;
+		  bottom: 0;
+		  left: 0;
+		  background: #015871;
+		  z-index: -1;
+		}
+
+		.wave {
+		  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x;
+		  position: absolute;
+		  width: 6400px;
+		  top: -198px;
+		  left: 0;
+		  height: 198px;
+		  transform: translate(0, 0, 0);
+		  animation: wave 7s ease infinite;
+		}
+
+		.wave:nth-of-type(2) {
+		  top: -168px;
+		  animation: swell 4s ease infinite;
+		  opacity: 1;
+		}
+
+		.wave:nth-of-type(3) {
+		  top: -138px; /* Shorter wave position */
+		  height: 150px; /* Shorter height */
+		  animation: wave 6s ease infinite; /* Slightly faster animation */
+		}
+
+		@keyframes wave {
+		  0% { margin-left: 0; }
+		  100% { margin-left: -1600px; }
+		}
+
+		@keyframes swell {
+		  0%, 100% {
+			transform: translate(0, -30px);
+		  }
+		  50% {
+			transform: translate(0, 5px);
+		  }
+		}
 
         main {
             padding: 20px;
@@ -149,6 +195,11 @@
     </header>
 	
 	<br>
+	<div class="ocean">
+	<div class="wave"></div>
+	<div class="wave wave2"></div>
+	<div class="wave wave3"></div> 
+	</div>
 	
     <main>
         <section class="section">
