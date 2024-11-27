@@ -89,11 +89,11 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
 <li><a href="breathe.php">Zen Zone</a></li>
 
-<li><a href="subscriptions/doctor.html">Subscriptions</a></li>
+<li><a href="subscriptions/doctor.php">Subscriptions</a></li>
 
 <li><a href="badges/badges.html">Badges</a></li>
 
-<li><a href="contacts/contacts_index.php">Emergency Contact</a></li>
+<li><a href="contacts/contacts_index.html">Emergency Contact</a></li>
 
 
 <li><a href="javascript:void(0);" onclick="confirmLogout()">Log Out</a></li> <!-- Log Out link -->

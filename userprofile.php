@@ -1,6 +1,5 @@
-<?php
+<?php 
 session_start();
-
 
 // Determine username from session or cookie
 if (isset($_SESSION['username'])) {
@@ -20,28 +19,28 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
     exit();
 }
 
-/*
-session_start();
-if (isset($_SESSION['ID'])) {
-    $user_id = $_SESSION['ID']; // Use session if available
-  } elseif (isset($_COOKIE['ID'])) {
-    $user_id = $_COOKIE['ID']; // Use cookie if session doesn't exist
-  } else {
-    $user_id = 0; // Fallback for anonymous access
-  }*/
-  
-
 // Database connection
-$conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
+$host = "localhost";
+$db_username = "root";
+$password = "";
+$databasename = "mentalhealthapp";
+
+// Create connection
+$conn = new mysqli($host, $db_username, $password, $databasename);
+
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Retrieve user ID from session (assuming ID is saved in session)
+$user_id = $_SESSION['ID'] ?? 0;  // Ensure user_id is fetched from session
+
 // Initialize default profile picture
 $default_pic = 'uploads/default-profile.png';
 
-// Retrieve user profile picture
-$sql = "SELECT profile_pic FROM userloginreg WHERE ID = ?";
+// Retrieve user profile picture, username, and email from the database
+$sql = "SELECT profile_pic, username, email FROM userloginreg WHERE ID = ?";
 $stmt = $conn->prepare($sql);
 if ($stmt) {
     $stmt->bind_param("i", $user_id);
@@ -49,66 +48,111 @@ if ($stmt) {
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
     $profile_pic = $user && $user['profile_pic'] ? $user['profile_pic'] : $default_pic;
+    $current_username = $user['username'] ?? '';
+    $user_email = $user['email'] ?? '';
 } else {
     $profile_pic = $default_pic; // Fallback to default
+    $current_username = '';
+    $user_email = '';
 }
-  
+
+// Initialize message variables
+$success_message = '';
+$error_message = '';
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['update_details'])) {
-        // Update username and email
-        $username = $conn->real_escape_string($_POST['username']);
-        $email = $conn->real_escape_string($_POST['email']);
-
-        $update_query = $conn->prepare("UPDATE userloginreg SET username = ?, email = ? WHERE ID = ?");
-        $update_query->bind_param("ssi", $username, $email, $user_id);
-
-        if ($update_query->execute()) {
-            $success_message = "Details updated successfully.";
+    if (isset($_POST['update_username'])) {
+        // Update username
+        $new_username = $conn->real_escape_string($_POST['username']);
+        // Update the username in the database
+        $update_query = "UPDATE userloginreg SET username = '$new_username' WHERE ID = $user_id";
+        if ($conn->query($update_query)) {
+            $success_message = "Username updated successfully.";
+            $_SESSION['username'] = $new_username;
+            $current_username = $new_username;  // Update current username in the session
         } else {
-            $error_message = "Error updating details: " . $conn->error;
+            $error_message = "Error updating username: " . $conn->error;
+        }
+    } elseif (isset($_POST['update_email'])) {
+        // Update email
+        $new_email = $conn->real_escape_string($_POST['email']);
+        // Update the email in the database
+        $update_query = "UPDATE userloginreg SET email = '$new_email' WHERE ID = $user_id";
+        if ($conn->query($update_query)) {
+            $success_message = "Email updated successfully.";
+            $user_email = $new_email;  // Update email in session
+        } else {
+            $error_message = "Error updating email: " . $conn->error;
         }
     } elseif (isset($_POST['update_photo']) && isset($_FILES['profile_pic'])) {
-        // Handle profile picture upload
-        $target_dir = "uploads/";
-        $image_name = basename($_FILES["profile_pic"]["name"]);
-        $target_file = $target_dir . uniqid() . "_" . $image_name;
-        $upload_ok = 1;
-        $image_file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        // Handle profile picture upload using the reference code logic
+        if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] == 0) {
+            $fileName = $_FILES['profile_pic']['name'];
+            $fileSize = $_FILES['profile_pic']['size'];
+            $fileType = $_FILES['profile_pic']['type'];
+            $fileTmpName = $_FILES['profile_pic']['tmp_name'];
+            
+            $uploadDir = "uploads/"; // Upload directory
+            
+            // Ensure the upload directory exists, create if not
+            if (!file_exists($uploadDir)) {
+                mkdir($uploadDir, 0777, true); // Creates the directory with write permissions
+            }
 
-        // Check if file is an image
-        $check = getimagesize($_FILES["profile_pic"]["tmp_name"]);
-        if ($check === false) {
-            $error_message = "File is not an image.";
-            $upload_ok = 0;
-        }
+            // Supported image formats
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
 
-        // Allow only certain file formats
-        if (!in_array($image_file_type, ['jpg', 'png', 'jpeg', 'gif'])) {
-            $error_message = "Only JPG, JPEG, PNG & GIF files are allowed.";
-            $upload_ok = 0;
-        }
+            // Extract file extension from mime type
+            $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-        if ($upload_ok == 1) {
-            if (move_uploaded_file($_FILES["profile_pic"]["tmp_name"], $target_file)) {
-                // Save the image path in the database
-                $update_query = $conn->prepare("UPDATE userloginreg SET profile_pic = ? WHERE ID = ?");
-                $update_query->bind_param("si", $target_file, $user_id);
+            // Check if the file type is allowed
+            if (in_array($fileExt, $allowedTypes)) {
+                // Create a new unique file name
+                $newFileName = md5(time() . $fileName) . '.' . $fileExt;
 
-                if ($update_query->execute()) {
-                    $success_message = "Profile picture updated successfully.";
-                    $profile_pic = $target_file; // Update current session
+                // Move the file to the upload directory
+                if (move_uploaded_file($fileTmpName, $uploadDir . $newFileName)) {
+                    // Prepare the update query using direct variable substitution
+                    $newProfilePicPath = $uploadDir . $newFileName;
+                    $newProfilePicPath = $conn->real_escape_string($newProfilePicPath); // Escape path for SQL query
+
+                    $update_query = "UPDATE userloginreg SET profile_pic = '$newProfilePicPath' WHERE ID = $user_id";
+
+                    if ($conn->query($update_query)) {
+                        $success_message = "Profile picture updated successfully.";
+                        $profile_pic = $newProfilePicPath; // Update current session with the new image
+                    } else {
+                        $error_message = "Error updating profile picture: " . $conn->error;
+                    }
                 } else {
-                    $error_message = "Error updating profile picture: " . $conn->error;
+                    $error_message = "Error uploading file.";
                 }
             } else {
-                $error_message = "Error uploading file.";
+                $error_message = "Invalid file format. Allowed formats are: jpg, jpeg, png, gif.";
             }
+        } else {
+            $error_message = "No file uploaded or an error occurred during file upload.";
         }
     }
 }
+
+$conn->close();
 ?>
+
+<?php if ($success_message || $error_message): ?>
+    <div id="messageBox" class="<?php echo $success_message ? 'success' : 'error'; ?>">
+        <?php echo $success_message ?: $error_message; ?>
+    </div>
+<?php endif; ?>
+
+
+
+<?php if ($success_message || $error_message): ?>
+    <div id="messageBox" class="<?php echo $success_message ? 'success' : 'error'; ?>">
+        <?php echo $success_message ?: $error_message; ?>
+    </div>
+<?php endif; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -116,22 +160,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
-	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <style>
+
         body {
-            font-family: Poppins, sans-serif;
-            background-color: #f4f4f9;
-            padding: 20px;
-        }
-        .container {
-            max-width: 500px;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 30px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
+    font-family: Poppins, sans-serif;
+    background-color: #f4f4f9;
+    padding: 0; /* Remove any body padding */
+    margin: 0; /* Remove any body margin */
+    height: 100vh; /* Set the body to take full viewport height */
+    background: url('beach3.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.container {
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+
         .profile-photo-circle {
             width: 100px;
             height: 100px;
@@ -143,16 +199,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             left: calc(50% - 50px);
             background-color: #fff;
         }
+
         h2 {
             text-align: center;
             color: #333;
             margin-top: 60px;
         }
+
         label {
             display: block;
             margin: 10px 0 5px;
             font-weight: bold;
         }
+
         input[type="text"], input[type="email"], input[type="file"] {
             width: 95%;
             padding: 10px;
@@ -160,6 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ddd;
             border-radius: 10px;
         }
+
         button {
             padding: 10px 15px;
             background-color: #00aaff;
@@ -168,90 +228,200 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 30px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0088cc;
         }
+
         .message {
             text-align: center;
             margin: 10px 0;
         }
+
         .success {
             color: green;
         }
+
         .error {
             color: red;
         }
+
+        #messageBox {
+            display: block;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 5px;
+            transition: opacity 1s ease;
+        }
+
+        .success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .error {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* Side Menu Styles */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -300px; /* Start off-screen */
+            width: 250px;
+            height: 100%;
+            background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
+            color: #fff;
+            padding: 20px;
+            transition: left 0.3s ease; /* Smooth transition when opening/closing */
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center the items vertically */
+            align-items: center; /* Center the items horizontally */
+        }
+
+        /* Menu List Styles */
+        .side-menu ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none; /* Remove bullet points */
+            text-align: center; /* Center the list items */
+        }
+
+        /* Menu Item Styles */
+        .side-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.5rem;
+            display: block;
+            margin: 5px 0; /* Reduced margin to bring items closer */
+            padding: 10px 15px; /* Adjusted padding for a more compact appearance */
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover Effect for Menu Items */
+        .side-menu a:hover {
+            background-color: white;
+            color: rgba(255, 200, 150, 0.7); /* Peach-colored text on hover */
+            transform: scale(1.05); /* Make items "pop" on hover */
+        }
+
+        /* Show the side menu when active */
+        .side-menu.active {
+            left: 0; /* Slide in */
+        }
+
+        /* Log Out Button Styles */
+        .logout-btn {
+            background-color: white; /* White background for the button */
+            color: rgba(255, 150, 100, 0.8); /* Darker peach color for the text */
+            font-size: 1.5rem;
+            padding: 12px 20px; /* Adjusted padding for better button size */
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px; /* Space above the Log Out button */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* Hover Effect for Log Out Button */
+        .logout-btn:hover {
+            background-color: rgba(255, 200, 150, 0.8); /* Darker peach background on hover */
+            transform: scale(1.05); /* Button expands slightly on hover */
+        }
+
+        /* Toggle Button Styles */
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #333;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 3;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+        }
+
     </style>
 </head>
 <body>
 
-	<header>
-    <nav class="navbar">
-        <button class="menu-toggle">☰</button>
-        <div class="fancy-menu">
-            <h1>Dashboard</h1>
-            <ul>
-				<li><a href="index.php">Home</a></li>
-                <li><a href="userprofile.php">Profile</a></li>
-                <li><a href="tasks\tasks_1.php">Tasks</a></li>
-                <li><a href="journal_final\journal.php">Journal</a></li>
-                <li><a href="subscriptions\doctor.html">Subscription</a></li>
-                <li><a href="badges\badges.html">Badges</a></li>
-                <li><a href="contacts\contacts_index.php">Emergency Contacts</a></li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<!-- Menu Toggle Button -->
+<button class="toggle-btn">☰</button>
 
-    <div class="container">
-        <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile Picture" class="profile-photo-circle">
-        <h2>Profile</h2>
+<!-- Side Menu -->
+<div class="side-menu">
+    <h1>Profile</h1>
+    <ul class="vertical-menu">
+        <li><a href="index.php">Home</a></li>
+        <li><a href="userprofile.php">Profile</a></li>
+        <li><a href="tasks\tasks_1.php">Tasks</a></li>
+        <li><a href="journal_final\journal.php">Journal</a></li>
+        <li><a href="breathe.php">Zen Zone</a></li>
+        <li><a href="subscriptions\doctor.html">Subscription</a></li>
+        <li><a href="badges\badges.html">Badges</a></li>
+        <li><a href="contacts\contacts_index.php">Emergency Contacts</a></li>
+    </ul>
+    <button class="logout-btn">Log Out</button>
+</div>
 
-        <!-- Success/Error Messages -->
-        <?php if (isset($success_message)) echo "<div class='message success'>$success_message</div>"; ?>
-        <?php if (isset($error_message)) echo "<div class='message error'>$error_message</div>"; ?>
+<!-- Main Content Container -->
+<div class="container">
+    <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile Picture" class="profile-photo-circle">
+    <h2>Profile</h2>
 
-        <!-- Update Details Form -->
-        <form method="POST" action="">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Enter new username" required>
+     <!-- Update Details Form with Individual Button -->
+     <form method="POST" action="">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter new username" required value="<?php echo htmlspecialchars($current_username); ?>">
+        <button type="submit" name="update_username">Update Details</button>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter new email">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter new email" value="<?php echo htmlspecialchars($user_email); ?>">
 
-            <button type="submit" name="update_details">Update Details</button>
-        </form>
+        <button type="submit" name="update_email">Update Details</button>
+    </form>
 
-        <!-- Update Profile Picture Form -->
-        <form method="POST" enctype="multipart/form-data" action="">
-            <label for="profile_pic">Profile Picture</label>
-            <input type="file" id="profile_pic" name="profile_pic" accept="image/*" required>
+    <!-- Update Profile Picture Form -->
+    <form method="POST" enctype="multipart/form-data" action="">
+        <label for="profile_pic">Profile Picture</label>
+        <input type="file" id="profile_pic" name="profile_pic" accept="image/*" required>
 
-            <button type="submit" name="update_photo">Update Profile Picture</button>
-        </form>
-    </div>
-	<script>
-		// Get the button and the menu
-    const menuToggle = document.querySelector('.menu-toggle');
-    const fancyMenu = document.querySelector('.fancy-menu');
+        <button type="submit" name="update_photo">Update Profile Picture</button>
+    </form>
+</div>
 
-    // Toggle the menu display when the button is clicked
+<script>
+    // Get the button and the side menu
+    const menuToggle = document.querySelector('.toggle-btn');
+    const sideMenu = document.querySelector('.side-menu');
+
+    // Toggle the side menu display when the button is clicked
     menuToggle.onclick = function() {
-        if (fancyMenu.style.display === "block") {
-            fancyMenu.style.display = "none";
-        } else {
-            fancyMenu.style.display = "block";
-        }
+        sideMenu.classList.toggle('active'); // Add or remove the 'active' class to slide in/out
     };
 
     // Optional: Close the menu if the user clicks outside of it
     window.onclick = function(event) {
-        if (!event.target.matches('.menu-toggle')) {
-            if (fancyMenu.style.display === "block") {
-                fancyMenu.style.display = "none";
-            }
+        if (!event.target.matches('.toggle-btn') && !event.target.closest('.side-menu')) {
+            sideMenu.classList.remove('active');
         }
     };
-	</script>
+</script>
+
 </body>
 </html>
