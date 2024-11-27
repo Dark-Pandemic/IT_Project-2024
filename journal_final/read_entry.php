@@ -1,34 +1,31 @@
 <?php
-
-
 session_start();
 
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username']; // Use session if available
+    $user_id = $_SESSION['ID']; // Assuming you store the user ID in the session as well
 } elseif (isset($_COOKIE['username'])) {
     $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+    $user_id = $_COOKIE['ID']; // Assuming you store the user ID in the cookie as well
 } else {
     $username = "Guest"; // Fallback for anonymous access
+    $user_id = null; // No user ID for guest
 }
 
 
-
-
 include 'db.php';
-
-
 
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 
 switch ($filter) {
     case '7days':
-        $sql = "SELECT * FROM journal WHERE created_at >= NOW() - INTERVAL 7 DAY ORDER BY created_at DESC";
+        $sql = "SELECT * FROM journal WHERE ID = ? AND created_at >= NOW() - INTERVAL 7 DAY ORDER BY created_at DESC";
         break;
     case 'month':
-        $sql = "SELECT * FROM journal WHERE created_at >= NOW() - INTERVAL 1 MONTH ORDER BY created_at DESC";
+        $sql = "SELECT * FROM journal WHERE ID = ? AND created_at >= NOW() - INTERVAL 1 MONTH ORDER BY created_at DESC";
         break;
     default:
-        $sql = "SELECT * FROM journal ORDER BY created_at DESC";
+        $sql = "SELECT * FROM journal WHERE ID = ? ORDER BY created_at DESC";
         break;
 }
 
