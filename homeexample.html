@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             background: linear-gradient(to bottom, #2bc0e4, #74ebd5, #ffffff, #ffffff, #FA709A); /* Beach gradient with sand and ocean */
-            height: 300vh;
+            height: 230vh;
             width: 100%;
         }
 
@@ -167,7 +167,6 @@
         }
 		
 		.ocean {
-		  height: 10%;
 		  width: 100%;
 		  position: absolute;
 		  bottom: 0;
@@ -180,7 +179,7 @@
 		  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x;
 		  position: absolute;
 		  width: 6400px;
-		  top: -198px;
+		  top: -400px;
 		  left: 0;
 		  height: 200px;
 		  transform: translate(0, 0, 0);
@@ -188,13 +187,13 @@
 		}
 
 		.wave:nth-of-type(2) {
-		  top: -168px;
+		  top: -400px;
 		  animation: swell 4s ease infinite;
 		  opacity: 1;
 		}
 
 		.wave:nth-of-type(3) {
-		  top: -138px; /* Shorter wave position */
+		  top: -390px; /* Shorter wave position */
 		  height: 150px; /* Shorter height */
 		  animation: wave 6s ease infinite; /* Slightly faster animation */
 		}
@@ -292,7 +291,7 @@
     </footer>
     <div class="cookie-consent" id="cookieConsent">
         <div class="cookie-consent-content">
-            <p>We use cookies to enhance your experience. By continuing, you agree to our <a href="#">cookie policy</a>.</p>
+            <p>We use cookies to enhance your experience. By continuing, you agree to our <a href="cookie.html">cookie policy</a>.</p>
             <button onclick="acceptCookies()">Got it!</button>
         </div>
     </div>

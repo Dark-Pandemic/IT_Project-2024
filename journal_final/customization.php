@@ -465,6 +465,7 @@ if (isset($_SESSION['username'])) {
             fancyMenu.classList.remove('show');
             body.classList.remove('menu-open');
         };
+		
     // Define available cover images
     const imageUrls = [
         'images/beach.jpg',
