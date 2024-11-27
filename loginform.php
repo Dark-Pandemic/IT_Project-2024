@@ -38,36 +38,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          $username = strtolower($username);
 ///////////////////
         // Check credentials in the database
-        $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE BINARY username = ? AND BINARY password = ?");
-        $stmt->bind_param('ss', $username, $password);
+        $stmt = $conn->prepare("SELECT * FROM userloginreg WHERE BINARY username = ?");
+        $stmt->bind_param('s', $username);
         $stmt->execute();
         $result = $stmt->get_result();
-
+        
         if ($result->num_rows > 0) {
-            // Login successful
-
-            // Set session variables
-            $_SESSION['username'] = $username;
-            $_SESSION['ID'] = $user_id;
-
-            // If "Remember me" is checked, create a cookie
-            if (isset($_POST['remember'])) {
-                // Set cookies for 1 week
-                setcookie('username', $username, time() + (86400 * 7), "/"); // 86400 = 1 day
-                setcookie('password', $password, time() + (86400 * 7), "/"); 
+            $user = $result->fetch_assoc(); // Fetch the user's details
+            // Use password_verify to check if the entered password matches the hashed password
+            if (password_verify($password, $user['password'])) {
+                // Login successful
+                // Set session variables
+                $_SESSION['username'] = $username;
+                $_SESSION['ID'] = $user['ID'];  // Assuming 'ID' is the primary key in your database
+        
+                // If "Remember me" is checked, create a cookie
+                if (isset($_POST['remember'])) {
+                    // Set cookies for 1 week
+                    setcookie('username', $username, time() + (86400 * 7), "/"); // 86400 = 1 day
+                    setcookie('password', $password, time() + (86400 * 7), "/");
+                }
+        
+                // Redirect to loading page
+                header("Location: loadingpage.php");
+                exit; // Ensure script ends here
+            } else {
+                // Incorrect credentials
+                $error = "Invalid username or password!";
             }
-
-            // Debugging: Check if session is set
-            // echo "Session set for " . $_SESSION['username'];
-
-            // Redirect to loading page
-            header("Location: loadingpage.php");
-            exit; // Ensure script ends here
-        } else {
-            // Incorrect credentials
-            $error = "Invalid username or password!";
         }
-    } 
+    }
 }
 
 // If cookies exist, use them to automatically log in

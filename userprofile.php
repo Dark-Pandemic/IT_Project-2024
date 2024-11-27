@@ -1,22 +1,34 @@
 <?php
 session_start();
-/*
+
+
+// Determine username from session or cookie
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username']; // Use session if available
 } elseif (isset($_COOKIE['username'])) {
     $username = $_COOKIE['username']; // Use cookie if session doesn't exist
 } else {
-    $username = "Guest"; // Fallback for anonymous access
+    $username = null; // No user logged in
 }
-*/
 
+// Check if the user is logged out, then destroy session and redirect
+if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
+    session_unset();
+    session_destroy();
+    setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
+    header("Location: loginform.php"); // Redirect to login page
+    exit();
+}
+
+/*
+session_start();
 if (isset($_SESSION['ID'])) {
     $user_id = $_SESSION['ID']; // Use session if available
   } elseif (isset($_COOKIE['ID'])) {
     $user_id = $_COOKIE['ID']; // Use cookie if session doesn't exist
   } else {
     $user_id = 0; // Fallback for anonymous access
-  }
+  }*/
   
 
 // Database connection
@@ -169,74 +181,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .error {
             color: red;
         }
-<<<<<<< HEAD
-        .profile-photo img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            margin: 10px auto;
-        }
-		
-		header {
-            position: fixed; /* Make the header fixed */
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000; /* Ensure it stays above other content */
-        }
-        .navbar {
-            padding: 10px;
-        }
-        .menu-toggle { 
-            color: black;
-            border: none;
-            cursor: pointer;
-            font-size: 20px;
-			border-radius: 7px;
-        }
-        .fancy-menu {
-            display: none; /* Hidden by default */
-            background-color: #6CB4EE;
-            position: absolute;
-            top: 90px; /* Adjust based on button height */
-            left: 0;
-            min-width: 220px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-			border-radius: 15px;
-			padding-bottom: 100%;
-        }
-        .fancy-menu h1 {
-            margin: 0;
-            padding: 10px;
-            color: white;
-			font-size: 1.5em;
-            text-align: center;
-            border-bottom: 1px solid #555;
-			padding-bottom: 10px;
-        }
-        .fancy-menu ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        .fancy-menu li {
-            padding: 10px 20px;
-        }
-        .fancy-menu a {
-            color: white;
-            text-decoration: none;
-            display: block;
-			text-align: center;
-        }
-        .fancy-menu a:hover {
-			color: grey;
-            transform: translateX(5px);
-        }
-=======
->>>>>>> f5a09246b4f069dd0846abb4554280b0a5bf09ee
     </style>
 </head>
 <body>
@@ -249,11 +193,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <ul>
 				<li><a href="index.php">Home</a></li>
                 <li><a href="userprofile.php">Profile</a></li>
-                <li><a href="tasks/tasks_1.php">Tasks</a></li>
-                <li><a href="journal_final/journal.php">Journal</a></li>
-                <li><a href="subscriptions/doctor.html">Subscription</a></li>
-                <li><a href="badges/badges.html">Badges</a></li>
-                <li><a href="contacts/contacts_index.php">Emergency Contacts</a></li>
+                <li><a href="tasks\tasks_1.php">Tasks</a></li>
+                <li><a href="journal_final\journal.php">Journal</a></li>
+                <li><a href="subscriptions\doctor.html">Subscription</a></li>
+                <li><a href="badges\badges.html">Badges</a></li>
+                <li><a href="contacts\contacts_index.php">Emergency Contacts</a></li>
             </ul>
         </div>
     </nav>
