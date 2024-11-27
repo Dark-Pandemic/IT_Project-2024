@@ -4,149 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moodify</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <style>
-	 body {
-            font-family: Arial, sans-serif;
+        body {
+            font-family: Poppins, cursive;
             margin: 0;
             padding: 0;
-            background: #A8B5E0;
-            height: 180vh;
-        }
-
-        header {
-            font-family: Arial, sans-serif; 
-            color: black;
-            text-align: center;
-            padding: 15px;
-        }
-
-        header h1 {
-            font-size: 2.5em;
-            margin: 0;
-        }
-
-        .navbar {
-            width: 110%;
-            height: 8%;
-            background: #A8B5E0;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-            top: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar ul {
-            margin: 0;
-            padding: 20px 30px;
-            display: flex;
-            justify-content: center;
-            list-style-type: none;
-        }
-
-        .navbar ul li {
-            position: relative;
-            display: inline-block;
-        }
-
-        .navbar ul li a {
-            display: block;
-            padding: 20px 30px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            border-radius: 30px;
-        }
-
-        .navbar ul li a:hover {
-            background-color: #c3b9b9;
-        }
-
-        .navbar .login {
-            margin-right: 150px;
-        }
-
-        .login a {
-            background-color: #d5cece;
-            padding: 15px 20px;
-            border-radius: 30px;
-            color: black;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .login a:hover {
-            background-color: #c3b9b9;
-        }
-
-        .content {
-            padding: 0;
-            text-align: center;
-            color: black;
-        }
-
-        .content-block {
-            background-color: #A8B5E0;
-            margin: 0;
-            padding: 20px;
+            background: linear-gradient(to bottom, #2bc0e4, #74ebd5, #ffffff, #ffffff, #FA709A); /* Beach gradient with sand and ocean */
+            height: 300vh;
             width: 100%;
         }
 
-        .content-block h2 {
-            margin-bottom: 15px;
-            font-size: 2em;
-            color: #fff;
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background-color: #0e5066; /* Dark navigation bar for contrast */
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            width: 96%;
         }
 
-        .content-block p {
-            font-size: 1.2em;
-            color: rgba(255, 255, 255, 0.8);
+        .navbar ul {
+            list-style-type: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            margin: 0 15px;
+        }
+
+        .login a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .login a:hover {
+            color: #c3b9b9;
+        }
+
+        .logo {
+            color: white;
         }
 
         .button-container {
             margin-bottom: 30px;
+			text-align: center;
         }
 
         .button-container a {
             text-decoration: none;
-            color: black;
+            color: white;
             padding: 10px 20px;
             margin: 10px;
-            background-color: #d5cece;
+            background-color: #00aaff;
             border-radius: 50px;
             transition: background-color 0.3s;
         }
 
         .button-container a:hover {
-            background-color: #c3b9b9;
+            background-color: #0088cc;
         }
 
-        a {
-            text-decoration: none;
-        }
-
-        img {
+        .image {
             width: 300px;
             height: 300px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 4px 6px grey;
             margin: 30px;
             padding-top: 0;
             border-radius: 300px;
         }
 
         footer {
-            background-color: #333;
+            background-color: #0e5066;
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 10px;
             width: 100%;
         }
 
         .footer-content {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -157,6 +102,8 @@
         .social-link {
             margin: 0 8px;
             color: white;
+            font-weight: bold;
+            font-size: 15px;
             text-decoration: none;
             transition: color 0.3s ease;
         }
@@ -214,55 +161,106 @@
         .cookie-consent button:hover {
             background-color: #c3b9b9;
         }
+		
+		.ocean {
+		  height: 10%;
+		  width: 100%;
+		  position: absolute;
+		  bottom: 0;
+		  left: 0;
+		  background: #015871;
+		  z-index: -1;
+		}
+
+		.wave {
+		  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x;
+		  position: absolute;
+		  width: 6400px;
+		  top: -198px;
+		  left: 0;
+		  height: 200px;
+		  transform: translate(0, 0, 0);
+		  animation: wave 7s ease infinite;
+		}
+
+		.wave:nth-of-type(2) {
+		  top: -168px;
+		  animation: swell 4s ease infinite;
+		  opacity: 1;
+		}
+
+		.wave:nth-of-type(3) {
+		  top: -138px; /* Shorter wave position */
+		  height: 150px; /* Shorter height */
+		  animation: wave 6s ease infinite; /* Slightly faster animation */
+		}
+
+		@keyframes wave {
+		  0% { margin-left: 0; }
+		  100% { margin-left: -1600px; }
+		}
+
+		@keyframes swell {
+		  0%, 100% {
+			transform: translate(0, -30px);
+		  }
+		  50% {
+			transform: translate(0, 5px);
+		  }
+		}       
     </style>
 </head>
 <body onload="checkCookieConsent()">
     <div class="navbar">
+        <div class="logo">
+            <h2>Moodify</h2>
+        </div>
         <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="resources.html">Resources</a></li>
-            <li><a href="aboutus.html">About Us</a></li>
-            <li><a href="contactus.html">Contact</a></li>
-            <li><a href="FAQ.html">FAQs</a></li>
+            <a href="aboutus.html" class="social-link">About Us&nbsp;&nbsp;</a>
+            <a href="resources.html" class="social-link">Resources&nbsp;&nbsp;</a>
+			<a href="contactus.html" class="social-link">Contact Us&nbsp;&nbsp;</a>
+            <a href="FAQ.html" class="social-link">FAQs</a>
         </ul>
         <div class="login">
-            <a href="loginform.php">Login</a>
+            <a href="loginexample.html">
+			    <i class="fa fa-user icon"></i>&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</a>
         </div>
     </div>
-
+	
     <div id="image">
-        <center><img src="C:\Users\juwairiyazra\Downloads\IMG-20241027-WA0000.jpg" alt="Moodify Image"></center>
+        <center><img src="C:\Users\juwairiyazra\Downloads\IMG-20241027-WA0000.jpg" alt="Moodify Image" class="image"></center>
     </div>
-    
-    <br><br>
-    
-    <div class="content">
-        <div class="content-block">
-            <h2>Your Mental Health Matters</h2>
-            <p>We're here to support you on your journey toward better mental health. Our platform offers a safe space to track your progress, access resources, and connect with others.</p>
+	
+    <h2 style = "text-align: center;">Your Mental Health Matters</h2>
+           <div style = "margin: 50px;"> 
+		   <p style = "color: #0e5066;">At Moodify, we are committed to supporting your mental health journey by providing a safe and nurturing space to 
+			grow and thrive. Our platform offers tools to track your progress through personalized journaling, mood trackers, 
+			and goal-setting features. You can access a wealth of resources, including badges, interactive tools, and online therapist, to deepen your understanding of mental well-being. 
+			We foster connection through community forums, peer groups, and discussion spaces where you can share experiences and find support. With a strong focus on privacy, security, and tailored experiences, Moodify empowers you to take meaningful steps toward a healthier and brighter future.</p>
+			</div>
             <br>
 
-            <h2>Resources Tailored for You</h2>
-            <p>Explore a variety of mental health resources, including expert blogs, self-care tips, and guided meditation sessions, designed to help you manage stress and improve your well-being.</p>
-            <br>
+            <h2 style = "text-align: center;">Resources Tailored for You</h2>
+			<div style = "margin: 50px;">
+            <p style = "color: #0e5066;">Discover a wide range of mental health resources tailored to support your emotional and mental well-being. Our platform offers daily tasks to help you stay motivated and establish healthy routines, ranging from simple goal-setting exercises to structured plans for personal growth. You’ll find practical self-care tips designed to encourage relaxation and balance, covering topics such as time management, healthy habits, mindfulness practices, and nurturing relationships. Additionally, guided meditation sessions are available to help you manage stress, improve focus, and cultivate inner peace. These sessions are led by experts and cater to different levels of experience, whether you’re new to meditation or looking to deepen your practice. With these resources, you can take actionable steps to reduce anxiety, enhance resilience, and achieve a sense of calm in your everyday life.</p>
+            </div>
+			<br>
 
-            <h2>About Us</h2>
-            <p>Our aim is to break the silence on mental health issues in a country where they are often overlooked, by offering a safe space for those struggling with mental illnesses.</p>
-        </div>
-
-        <br><br>
-
-        <div class="button-container">
-            <a href="itproject.html">Get Started</a>
-            <a href="registration.html">Already have an account? Log In</a>
-        </div>
+            <h2 style = "text-align: center;">Who we are?</h2>
+			<div style = "margin: 50px;">
+            <p style = "color: #0e5066;">Our mission is to challenge the stigma surrounding mental health in a society where these issues are often dismissed or misunderstood. We strive to create a compassionate and inclusive environment where individuals grappling with mental health challenges feel heard, valued, and supported. We aim to foster a culture that prioritizes mental well-being, encourages open dialogue, and ensures that no one facing mental health struggles feels neglected or isolated.</p>
+			</div><br><br>
+	
+    <div class="button-container">
+        <a href="itproject.html">Get Started</a>
+        <a href="registration.html">Already have an account? Log In</a>
     </div>
 
     <footer>
         <div class="footer-content">
             <div class="social-media">
                 <p>Follow us on:</p>
-                <a href="#" class="social-link">Facebook</a>
                 <a href="#" class="social-link">Twitter</a>
                 <a href="#" class="social-link">Instagram</a>
             </div>
@@ -279,6 +277,13 @@
                 <a href="FAQ.html" class="social-link">FAQs</a>
             </div>
         </div>
+		
+		<div class="ocean">
+	<div class="wave"></div>
+	<div class="wave wave2"></div>
+	<div class="wave wave3"></div> 
+</div>
+		
     </footer>
     <div class="cookie-consent" id="cookieConsent">
         <div class="cookie-consent-content">
@@ -288,14 +293,11 @@
     </div>
 
     <script>
-        // Always show the cookie consent popup
         function checkCookieConsent() {
-            // Simply show the cookie consent popup every time the page loads
             document.getElementById("cookieConsent").style.display = "flex";
         }
 
         function acceptCookies() {
-            // Store the cookie consent in localStorage to prevent showing the popup again
             localStorage.setItem("cookieConsent", "true");
             document.getElementById("cookieConsent").style.display = "none";
         }
