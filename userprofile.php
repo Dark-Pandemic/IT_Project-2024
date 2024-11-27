@@ -1,22 +1,34 @@
 <?php
 session_start();
-/*
+
+
+// Determine username from session or cookie
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username']; // Use session if available
 } elseif (isset($_COOKIE['username'])) {
     $username = $_COOKIE['username']; // Use cookie if session doesn't exist
 } else {
-    $username = "Guest"; // Fallback for anonymous access
+    $username = null; // No user logged in
 }
-*/
 
+// Check if the user is logged out, then destroy session and redirect
+if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
+    session_unset();
+    session_destroy();
+    setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
+    header("Location: loginform.php"); // Redirect to login page
+    exit();
+}
+
+/*
+session_start();
 if (isset($_SESSION['ID'])) {
     $user_id = $_SESSION['ID']; // Use session if available
   } elseif (isset($_COOKIE['ID'])) {
     $user_id = $_COOKIE['ID']; // Use cookie if session doesn't exist
   } else {
     $user_id = 0; // Fallback for anonymous access
-  }
+  }*/
   
 
 // Database connection
