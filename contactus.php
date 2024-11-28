@@ -1,3 +1,104 @@
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Load PHPMailer
+require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\PHPMailer.php';
+require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\SMTP.php';
+require 'C:\xampp\htdocs\IT_Project-2024\emailreset\PHPMailer-master\src\Exception.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Sanitize input
+    $name = htmlspecialchars(trim($_POST['name']));
+    $email = htmlspecialchars(trim($_POST['email']));
+    $message = htmlspecialchars(trim($_POST['message']));
+
+    // Validate email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "<script>
+                alert('Invalid email address. Please enter a valid email.');
+                window.history.back();
+              </script>";
+        exit();
+    }
+
+    // Validate other fields
+    if (empty($name) || empty($message)) {
+        echo "<script>
+                alert('Please fill in all required fields.');
+                window.history.back();
+              </script>";
+        exit();
+    }
+
+    // PHPMailer setup
+    $mail = new PHPMailer(true);
+
+    try {
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; // SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = 'moodifysa@gmail.com'; // Your email
+        $mail->Password = 'ffvl fgwa phqi qekp'; // Use app password for Gmail
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        // Send the user's message to your team
+        $mail->setFrom('moodifysa@gmail.com', 'Moodify Team'); // Your app's email
+        $mail->addAddress('moodifysa@gmail.com', 'Moodify Support'); // Recipient email
+        $mail->addReplyTo($email, $name); // User's email for replies
+
+        // Email content to your team
+        $mail->isHTML(true);
+        $mail->Subject = "New Contact Form Message from " . $name;
+        $mail->Body = "<h3>New Contact Form Message</h3>
+                       <p><b>Name:</b> $name</p>
+                       <p><b>Email:</b> $email</p>
+                       <p><b>Message:</b><br>$message</p>";
+        $mail->AltBody = "Name: $name\nEmail: $email\n\nMessage:\n$message";
+
+        $mail->send();
+
+        // Send a confirmation email to the user
+        $mail->clearAddresses(); // Clear previous recipients
+        $mail->addAddress($email, $name); // Send to the user's email
+
+        $mail->Subject = "Thank you for contacting Moodify!";
+        $mail->Body = "<h3>Hi $name,</h3>
+                       <p>Thank you for reaching out to us. We have received your message and will get back to you as soon as possible.</p>
+                       <p><b>Your message:</b><br>$message</p>
+                       <p>Best regards,<br>The Moodify Team</p>";
+        $mail->AltBody = "Hi $name,\n\nThank you for reaching out to us. We have received your message and will get back to you as soon as possible.\n\nYour message:\n$message\n\nBest regards,\nThe Moodify Team";
+
+        $mail->send();
+
+        // Success message and redirection
+        echo "<script>
+                alert('Thank you for your message! A confirmation email has been sent to you.');
+                window.location.href = 'thankyou.html'; // Redirect to a thank-you page
+              </script>";
+    } catch (Exception $e) {
+        // Error handling
+        echo "<script>
+                alert('There was an issue sending your message. Please try again later.');
+              </script>";
+        echo "Mailer Error: " . $mail->ErrorInfo; // Debugging output
+    }
+} else {
+    header("Location: contactus.html");
+    exit();
+}
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,7 +233,7 @@
 <body>
 <a href = "homeexample.html" class = "home">&larr; Home</a>
 <header>
-    <img src="C:/Users/juwairiyazra/Downloads/IMG-20241027-WA0000.jpg" alt="Moodify Logo" class="contact-image">
+    <img src="images\moodifylogo.jpg" alt="Moodify Logo" class="contact-image">
 </header><br><br>
 
 <div class="contact-container">
@@ -150,9 +251,9 @@
     <div class="footer-content">
         <div class="social-media">
             <p>Follow us on:</p>
-            <a href="#" class="social-link">Facebook</a>
-            <a href="#" class="social-link">Twitter</a>
-            <a href="#" class="social-link">Instagram</a>
+           
+            <a href="https://www.instagram.com/moodifysa/profilecard/?igsh=aXp6ejFjcHF2Z2E3" class="social-link">Instagram</a>
+     
         </div>
         <div class="contact-info">
             <p>Email us at: <a href="mailto:moodifysa@gmail.com">moodifysa@gmail.com</a></p>
@@ -193,7 +294,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('There was an issue sending your message. Please try again later.' 'color: red'); window.location.href='contactus.html';</script>";
     }
 } else {
-    header("Location: contactus.html");
+    header("Location: contactus.php");
     exit();
 }
 ?>

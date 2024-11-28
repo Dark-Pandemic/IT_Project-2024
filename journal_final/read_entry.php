@@ -13,6 +13,16 @@ if (isset($_SESSION['username'])) {
 }
 
 
+
+// Check if the user is logged out, then destroy session and redirect
+if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+  session_unset();
+  session_destroy();
+  setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
+  header("Location: loginform.php"); // Redirect to login page
+  exit();
+}
+
 include 'db.php';
 
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';

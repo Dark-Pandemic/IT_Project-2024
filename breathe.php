@@ -256,11 +256,12 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     background-color: white; /* White background for the button */
     color: rgba(255, 150, 100, 0.8); /* Darker peach color for the text */
     font-size: 1.5rem;
-    padding: 12px 20px; /* Adjusted padding for better button size */
+    padding: 12px 50px; /* Adjusted padding for better button size */
     border: none;
     border-radius: 20px;
     cursor: pointer;
     margin-top: 20px; /* Space above the Log Out button */
+    margin-bottom: 200px;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -269,6 +270,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     background-color: rgba(255, 200, 150, 0.8); /* Darker peach background on hover */
     transform: scale(1.05); /* Button expands slightly on hover */
 }
+
 
 
     </style>
@@ -280,16 +282,17 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
     <!-- Side Menu -->
     <div class="side-menu" id="side-menu">
+    <h2>Zen Zone</h2>
+    <a href="index.php">Home</a>
     <a href="userprofile.php">Profile</a>
     <a href="tasks/tasks_1.php">Tasks</a>
     <a href="journal_final/journal.php">Journal</a>
-    <a href="breathe.php">Zen Zone</a>
     <a href="subscriptions/doctor.html">Subscriptions</a>
-    <a href="badges/badges.html">Badges</a>
+    <a href="badges/badges.php">Badges</a>
     <a href="contacts/contacts_index.php">Emergency Contact</a>
 
 
-    <br><br>
+    <br>
 
     <!-- Log Out Button -->
     <button class="logout-btn" onclick="confirmLogout()">Log Out</button>
