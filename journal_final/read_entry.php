@@ -1,10 +1,24 @@
 <?php
 session_start();
 
-if (isset($_SESSION['username'])) {
+// Database Connection
+$host = 'localhost'; 
+$dbname = 'mentalhealthapp'; 
+$user = 'root'; 
+$pass = '';
+
+try {
+    $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
+// Check session or cookie for user
+if (isset($_SESSION['username']) && isset($_SESSION['ID'])) {
     $username = $_SESSION['username']; // Use session if available
     $user_id = $_SESSION['ID']; // Assuming you store the user ID in the session as well
-} elseif (isset($_COOKIE['username'])) {
+} elseif (isset($_COOKIE['username']) && isset($_COOKIE['ID'])) {
     $username = $_COOKIE['username']; // Use cookie if session doesn't exist
     $user_id = $_COOKIE['ID']; // Assuming you store the user ID in the cookie as well
 } else {
@@ -12,36 +26,42 @@ if (isset($_SESSION['username'])) {
     $user_id = null; // No user ID for guest
 }
 
-
-
 // Check if the user is logged out, then destroy session and redirect
 if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
-  session_unset();
-  session_destroy();
-  setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
-  header("Location: loginform.php"); // Redirect to login page
-  exit();
-}
-
-include 'db.php';
+    session_unset();
+    session_destroy();
+    setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
+    header("Location: loginform.php"); // Redirect to login page
+    exit();
+  }
+  
 
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 
-switch ($filter) {
-    case '7days':
-        $sql = "SELECT * FROM journal WHERE ID = ? AND created_at >= NOW() - INTERVAL 7 DAY ORDER BY created_at DESC";
-        break;
-    case 'month':
-        $sql = "SELECT * FROM journal WHERE ID = ? AND created_at >= NOW() - INTERVAL 1 MONTH ORDER BY created_at DESC";
-        break;
-    default:
-        $sql = "SELECT * FROM journal WHERE ID = ? ORDER BY created_at DESC";
-        break;
+function fetch_entries($filter, $conn, $user_id) {
+    switch ($filter) {
+        case '7days':
+            $sql = "SELECT * FROM journal WHERE ID = ? AND created_at >= NOW() - INTERVAL 7 DAY ORDER BY created_at DESC";
+            break;
+        case 'month':
+            $sql = "SELECT * FROM journal WHERE ID = ? AND created_at >= NOW() - INTERVAL 1 MONTH ORDER BY created_at DESC";
+            break;
+        default:
+            $sql = "SELECT * FROM journal WHERE ID = ? ORDER BY created_at DESC";
+            break;
+    }
+
+    // Prepare and execute the query in one step
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$user_id]); // Directly pass the user ID in an array
+
+    // Fetch all the results and return them
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$entries = $stmt->fetchAll();
+// Fetch the entries for the selected filter
+$entries = fetch_entries($filter, $conn, $user_id);
+
 ?>
 
 <!DOCTYPE html>
@@ -104,7 +124,7 @@ $entries = $stmt->fetchAll();
         }
         .filter-button, .back-button, .print-button {
             display: inline-block;
-            background-color: #00aaff;
+            background-color: #a7c7e7;
             color: white;
             padding: 12px 20px;
             text-align: center;
@@ -115,195 +135,55 @@ $entries = $stmt->fetchAll();
         .filter-button:hover, .back-button:hover, .print-button:hover {
             background-color: #0088cc;
         }
-		/* Menu styles */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
-
-        .navbar {
-            padding: 10px;
-        }
-
-        .menu-toggle {
-            color: black;
-            border: none;
-            cursor: pointer;
-            font-size: 20px;
-            border-radius: 7px;
-        }
-
-        .fancy-menu {
-            display: none;
-            background-color: #6CB4EE;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 220px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            border-radius: 15px 0 0 15px;
-            padding-top: 20px;
-            transition: transform 0.3s ease;
-            transform: translateX(-220px);
-        }
-
-        .fancy-menu.show {
-            display: block;
-            transform: translateX(0);
-        }
-
-        .content {
-            transition: margin-left 0.3s ease;
-        }
-
-        .menu-open .content {
-            margin-left: 220px;
-        }
-
-        .fancy-menu h1 {
-            margin: 0;
-            padding: 10px;
-            color: white;
-            font-size: 1.5em;
-            text-align: center;
-            border-bottom: 1px solid #555;
-            padding-bottom: 10px;
-        }
-
-        .fancy-menu ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .fancy-menu li {
-            padding: 10px 20px;
-        }
-
-        .fancy-menu a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-        }
-
-        .fancy-menu a:hover {
-            color: grey;
-            transform: translateX(5px);
-        }
-
-        .close-menu {
-            background-color: transparent;
-            color: white;
-            border: none;
-            font-size: 20px;
-            position: absolute;
-            top: 7px;
-            right: 180px;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .close-menu:hover {
-            color: grey;
-        }
-
     </style>
-    <script>
-		
-        function printEntry(entryId) {
-            const entry = document.getElementById('entry-' + entryId);
-            const printWindow = window.open('', '_blank', 'width=800,height=600');
-
-            // Create a clone of the entry content excluding the button
-            const entryContent = entry.cloneNode(true);
-            
-            // Remove the print button from the cloned content
-            const printButton = entryContent.querySelector('.print-button');
-            if (printButton) {
-                printButton.remove();
-            }
-
-            // Open the print window and write the content to it
-            printWindow.document.write('<html><head><title>Print Entry</title></head><body>');
-            printWindow.document.write(entryContent.innerHTML); // Only content, without the button
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
-        }
-    </script>
 </head>
 <body>
-	<header>
-        <nav class="navbar">
-            <button class="menu-toggle">☰</button>
-            <div class="fancy-menu">
-                <h1>Dashboard</h1>
-                <button class="close-menu">✖</button>
-                <ul>
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="userprofile.php">Profile</a></li>
-                    <li><a href="tasks/tasks_1.php">Tasks</a></li>
-                    <li><a href="journal_final/journal.php">Journal</a></li>
-                    <li><a href="subscriptions/doctor.html">Subscription</a></li>
-                    <li><a href="badges/badges.html">Badges</a></li>
-                    <li><a href="contacts/contacts_index.php">Emergency Contacts</a></li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-	
-	<div class = "content">
-    <div class="container">
-        <h1>Your Journal Entries</h1>
-        <div class="button-container">
-            <a href="?filter=7days" class="filter-button">Last 7 Days</a>
-            <a href="?filter=month" class="filter-button">Last Month</a>
-            <a href="?filter=all" class="filter-button">All Entries</a>
-        </div>
 
-        <?php if (empty($entries)) { ?>
-            <p>No entries found.</p>
-        <?php } else { ?>
-            <?php foreach ($entries as $entry) { ?>
-                <div class="entry" id="entry-<?php echo $entry['userID']; ?>">
-                    <h2><?php echo htmlspecialchars($entry['file_name']); ?></h2>
-                    <p><?php echo nl2br(htmlspecialchars($entry['file_content'])); ?></p>
-                    <p><small>Created on: <?php echo $entry['created_at']; ?></small></p>
-                    <!-- Updated print button -->
-                    <button class="print-button" onclick="printEntry(<?php echo $entry['userID']; ?>)">Print This Entry</button>
-                </div>
-            <?php } ?>
-        <?php } ?>
-
-        <a href="journal.php" class="back-button">Back to Home</a>
+<div class="container">
+    <h1>Your Journal Entries</h1>
+    <div class="button-container">
+        <a href="?filter=7days" class="filter-button">Last 7 Days</a>
+        <a href="?filter=month" class="filter-button">Last Month</a>
+        <a href="?filter=all" class="filter-button">All Entries</a>
     </div>
-	</div>
-	
-	<script>
-	// Get the button and the menu
-        const menuToggle = document.querySelector('.menu-toggle');
-        const fancyMenu = document.querySelector('.fancy-menu');
-        const closeMenuButton = document.querySelector('.close-menu');
-        const body = document.querySelector('body');
 
-        // Toggle the menu display when the button is clicked
-        menuToggle.onclick = function() {
-            fancyMenu.classList.toggle('show');
-            body.classList.toggle('menu-open');
-        };
+    <?php if (empty($entries)) { ?>
+        <p>No entries found.</p>
+    <?php } else { ?>
+        <?php foreach ($entries as $entry) { ?>
+            <div class="entry" id="entry-<?php echo $entry['ID']; ?>">
+                <h2><?php echo htmlspecialchars($entry['file_name']); ?></h2>
+                <p><?php echo nl2br(htmlspecialchars($entry['file_content'])); ?></p>
+                <p><small>Created on: <?php echo $entry['created_at']; ?></small></p>
+                <button class="print-button" onclick="printEntry(<?php echo $entry['ID']; ?>)">Print This Entry</button>
+            </div>
+        <?php } ?>
+    <?php } ?>
 
-        // Close the menu when the close button is clicked
-        closeMenuButton.onclick = function() {
-            fancyMenu.classList.remove('show');
-            body.classList.remove('menu-open');
-        };
-		</script>
+    <a href="journal.php" class="back-button">Back to Home</a>
+</div>
+
+<script>
+    function printEntry(entryId) {
+        const entry = document.getElementById('entry-' + entryId);
+        const printWindow = window.open('', '_blank', 'width=800,height=600');
+        const entryContent = entry.cloneNode(true);
+        const printButton = entryContent.querySelector('.print-button');
+        if (printButton) {
+            printButton.remove();
+        }
+        printWindow.document.write('<html><head><title>Print Entry</title></head><body>');
+        printWindow.document.write(entryContent.innerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
+</script>
 
 </body>
 </html>
+
+<?php
+// Close the database connection
+$conn = null;
+?>
