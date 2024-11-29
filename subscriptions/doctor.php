@@ -31,10 +31,11 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscribe to Doctor Access</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f9f9;
+            font-family: Poppins, sans-serif;
+            background: linear-gradient(to bottom, #43a3ec, #60dbe4);
             margin: 0;
             padding: 0;
             display: flex;
@@ -45,14 +46,14 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         }
         .container {
             background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 38px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             padding: 20px;
             max-width: 400px;
             text-align: center;
         }
         h1 {
-            color: #4A90E2; /* Soft blue color */
+            color: #0e5066; 
             margin-bottom: 20px;
         }
         p {
@@ -64,28 +65,154 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
             display: none; /* Hide hidden fields */
         }
         input[type="submit"] {
-            background-color: #4A90E2; /* Soft blue color */
+            background-color: #00aaff; 
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 30px;
             padding: 12px 20px;
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s;
         }
         input[type="submit"]:hover {
-            background-color: #357ABD; /* Darker blue on hover */
+            background-color: #0088cc; 
+			transform: scale(1.05);
         }
         .footer {
             margin-top: 20px;
             font-size: 14px;
             color: #999;
         }
+		
+		/* Menu styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            padding: 10px;
+        }
+
+        .menu-toggle {
+            color: black;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 7px;
+        }
+
+        .fancy-menu {
+            display: none;
+            background-color: #6CB4EE;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 220px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 15px 0 0 15px;
+            padding-top: 20px;
+            transition: transform 0.3s ease;
+            transform: translateX(-220px);
+        }
+
+        .fancy-menu.show {
+            display: block;
+            transform: translateX(0);
+        }
+
+        .content {
+            transition: margin-left 0.3s ease;
+        }
+
+        .menu-open .content {
+            margin-left: 220px;
+        }
+
+        .fancy-menu h1 {
+            margin: 0;
+            padding: 10px;
+            color: white;
+            font-size: 1.5em;
+            text-align: center;
+            border-bottom: 1px solid #555;
+            padding-bottom: 10px;
+        }
+
+        .fancy-menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .fancy-menu li {
+            padding: 10px 20px;
+        }
+
+        .fancy-menu a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .fancy-menu a:hover {
+            color: grey;
+            transform: scale(1.05);
+        }
+
+        .close-menu {
+            background-color: transparent;
+            color: white;
+            border: none;
+            font-size: 20px;
+            position: absolute;
+            top: 7px;
+            right: 180px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-menu:hover {
+            color: grey;
+			transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
+<header>
+        <nav class="navbar">
+            <button class="menu-toggle">☰</button>
+            <div class="fancy-menu">
+                <h1>Dashboard</h1>
+                <button class="close-menu">✖</button>
+                <ul>
+ <li><a href="../userprofile.php">Profile</a></li>
+
+<li><a href="../tasks/tasks_1.php">Tasks</a></li>
+
+<li><a href="../journal_final/journal.php">Journal</a></li>
+
+<li><a href="../breathe.php">Zen Zone</a></li>
+
+
+
+<li><a href="../badges/badges.php">Badges</a></li>
+
+<li><a href="../contacts/contacts_index.php">Emergency Contact</a></li>
+
+<li><a href="../chatroom/chatroom.php">Chat with a Therapist</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
     <div class="container">
-        <h1>Subscribe for R200/month</h1>
+        <h1>Subscribe for R10/month</h1>
         <p>Gain access to professional mental health support at your convenience.</p>
         <form id="subscriptionForm" action="https://www.payfast.co.za/eng/process" method="POST">
             <input type="hidden" name="merchant_id" value="25979149"> <!-- Your Merchant ID -->
@@ -103,6 +230,26 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
             <p>Your mental health matters. Take the first step today!</p>
         </div>
     </div>
+	<script>
+	
+	// Get the button and the menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const fancyMenu = document.querySelector('.fancy-menu');
+        const closeMenuButton = document.querySelector('.close-menu');
+        const body = document.querySelector('body');
+
+        // Toggle the menu display when the button is clicked
+        menuToggle.onclick = function() {
+            fancyMenu.classList.toggle('show');
+            body.classList.toggle('menu-open');
+        };
+
+        // Close the menu when the close button is clicked
+        closeMenuButton.onclick = function() {
+            fancyMenu.classList.remove('show');
+            body.classList.remove('menu-open');
+        };
+		</script>
 
     <script>
         // Handle return and cancel actions
