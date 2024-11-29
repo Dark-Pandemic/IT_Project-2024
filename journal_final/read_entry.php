@@ -73,7 +73,7 @@ $entries = $stmt->fetchAll();
             background: linear-gradient(135deg, #f4e1d2, #a7c7e7);
         }
         h1 {
-            color: #4e7ea1;
+            color: #0e5066;
             text-align: center;
             font-size: 36px;
         }
@@ -104,16 +104,16 @@ $entries = $stmt->fetchAll();
         }
         .filter-button, .back-button, .print-button {
             display: inline-block;
-            background-color: #f4e1d2;
+            background-color: #00aaff;
             color: white;
             padding: 12px 20px;
             text-align: center;
-            border-radius: 8px;
+            border-radius: 30px;
             text-decoration: none;
             margin-top: 20px;
         }
         .filter-button:hover, .back-button:hover, .print-button:hover {
-            background-color: #d3b59c;
+            background-color: #0088cc;
         }
 		/* Menu styles */
         header {

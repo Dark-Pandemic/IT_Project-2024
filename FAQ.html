@@ -65,7 +65,7 @@
         .icon {
             font-weight: bold;
             font-size: 1.2rem;
-            color: pink;
+            color: #FA709A;
             transition: transform 0.3s ease;
         }
 
@@ -78,13 +78,13 @@
         }
         
         .faq-image {
-			
+			margin: 20px;
             width: 200px;
             height: 200px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            margin: 30px;
-            padding-top: 0;
-            border-radius: 300px;
+            border-radius: 50%;
+            margin-bottom: 40px;
+            object-fit: cover;
         }
 		
 		footer {
@@ -135,13 +135,14 @@
 		}
 		.home:hover{
 			color: grey;
+			transform: scale(1.05);
 		}
     </style>
 </head>
 <body>    
 	<a href = "homeexample.html" class = "home">&larr; Home</a>
 
-    <img src="images\moodifylogo.jpg" alt="Moodify Logo" class="faq-image">
+    <img src="C:\Users\juwairiyazra\Downloads\IMG-20241027-WA0000.jpg" alt="Moodify Logo" class="faq-image">
 
     <div class="faq-container">
         <h1>Frequently Asked Questions</h1>
@@ -169,7 +170,7 @@
 
         <div class="faq-item" onclick="toggleFAQ(this)">
             <h3>How can I contact Moodify for support? <span class="icon">+</span></h3>
-            <p class = "p">You can reach us through our <a href="contactus.php">Contact Us</a> page, where you’ll find our email and phone support options.</p>
+            <p class = "p">You can reach us through our <a href="contactus.html">Contact Us</a> page, where you’ll find our email and phone support options.</p>
         </div>
     </div>
 	
@@ -180,9 +181,9 @@
     <div class="footer-content">
         <div class="social-media">
             <p>Follow us on:</p>
-            
-            <a href="https://www.instagram.com/moodifysa/profilecard/?igsh=aXp6ejFjcHF2Z2E3" class="social-link">Instagram</a>
-     
+            <a href="#" class="social-link">Facebook</a>
+            <a href="#" class="social-link">Twitter</a>
+            <a href="#" class="social-link">Instagram</a>
         </div>
         <div class="contact-info">
             <p>Email us at: <a href="mailto:moodifysa@gmail.com" style="color: white">moodifysa@gmail.com</a></p>
@@ -192,7 +193,7 @@
             <a href="homeexample.html" class="social-link">Home</a>
 			<a href="aboutus.html" class="social-link">About us</a>
             <a href="aboutus.html" class="social-link">Resources</a>
-            <a href="contactus.php" class="social-link">Contact Us</a>
+            <a href="contactus.html" class="social-link">Contact Us</a>
         </div>
     </div>
 </footer>
