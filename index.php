@@ -125,6 +125,8 @@ $conn->close();
 
 <li><a href="contacts/contacts_index.php">Emergency Contact</a></li>
 
+<li><a href="chatroom/chatroom.php">Chat with a Therapist</a></li>
+
 
 <li><a href="javascript:void(0);" onclick="confirmLogout()">Log Out</a></li> <!-- Log Out link -->
 

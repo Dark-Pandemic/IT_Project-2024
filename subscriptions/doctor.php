@@ -84,8 +84,9 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     </style>
 </head>
 <body>
+<a href = "homeexample.html" class = "home">&larr; Home</a>
     <div class="container">
-        <h1>Subscribe for R200/month</h1>
+        <h1>Subscribe for R10/month</h1>
         <p>Gain access to professional mental health support at your convenience.</p>
         <form id="subscriptionForm" action="https://www.payfast.co.za/eng/process" method="POST">
             <input type="hidden" name="merchant_id" value="25979149"> <!-- Your Merchant ID -->
