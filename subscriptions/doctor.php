@@ -185,9 +185,6 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     </style>
 </head>
 <body>
-<<<<<<< HEAD
-<a href = "homeexample.html" class = "home">&larr; Home</a>
-=======
 <header>
         <nav class="navbar">
             <button class="menu-toggle">☰</button>
@@ -195,18 +192,25 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
                 <h1>Dashboard</h1>
                 <button class="close-menu">✖</button>
                 <ul>
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="userprofile.php">Profile</a></li>
-                    <li><a href="tasks/tasks_1.php">Tasks</a></li>
-                    <li><a href="journal_final/journal.php">Journal</a></li>
-                    <li><a href="subscriptions/doctor.html">Subscription</a></li>
-                    <li><a href="badges/badges.html">Badges</a></li>
-                    <li><a href="contacts/contacts_index.php">Emergency Contacts</a></li>
+ <li><a href="../userprofile.php">Profile</a></li>
+
+<li><a href="../tasks/tasks_1.php">Tasks</a></li>
+
+<li><a href="../journal_final/journal.php">Journal</a></li>
+
+<li><a href="../breathe.php">Zen Zone</a></li>
+
+
+
+<li><a href="../badges/badges.php">Badges</a></li>
+
+<li><a href="../contacts/contacts_index.php">Emergency Contact</a></li>
+
+<li><a href="../chatroom/chatroom.php">Chat with a Therapist</a></li>
                 </ul>
             </div>
         </nav>
     </header>
->>>>>>> 2cc92338f90d2aba2f32ab577af145e5d5048413
     <div class="container">
         <h1>Subscribe for R10/month</h1>
         <p>Gain access to professional mental health support at your convenience.</p>
