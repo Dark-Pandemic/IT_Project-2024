@@ -39,7 +39,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
             font-family: Poppins, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: white;
+            background-color: #e7e7e7;
         }
         
         h2 {
@@ -79,11 +79,11 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         }
         
         form input {
-            width: 100%;
+            width: 25%;
             padding: 10px;
             margin: 5px 0;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 30px;
         }
         
         form button {
@@ -97,11 +97,12 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         
         form button:hover {
             background-color: #0088cc;
+			transform: scale(1.05);
         }
         
        
                 footer {
-                    background-color: #6CB4EE;
+                    background-color: #0e5066;
                     color: white;
                     text-align: center;
                     padding: 20px ;
@@ -264,7 +265,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 <div class = "content">
 	
     <section class="contacts">
-        <h2 style = "text-align: center; color: #0e5066; background-color: white;">Emergency Contact Numbers</h2>
+        <h2 style = "text-align: center; color: #0e5066;">Emergency Contact Numbers</h2>
         <div class="contact-card">
             <h3>Police</h3>
             <p><a href="tel:10111">10111</a></p>
@@ -309,7 +310,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     </section>
 
     <section class="custom-contact">
-        <h2>Your Own Emergency Contacts</h2>
+        <h2 style = "color: black; text-align: center;">Your Own Emergency Contacts</h2>
         <p>If you have personal contacts or a therapist you would like to store for emergencies, you can add them here.</p>
         <form id="contactForm">
             <label for="contactName">Contact Name:</label>
@@ -331,7 +332,6 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 		<div class="footer-content">
         <div class="social-media">
             <p>Follow us on:</p>
-            <a href="#" class="social-link">Twitter</a>
             <a href="#" class="social-link">Instagram</a>
         </div>
         <div class="contact-info">
