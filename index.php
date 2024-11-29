@@ -127,6 +127,8 @@ $conn->close();
 
 <li><a href="chatroom/chatroom.php">Chat with a Therapist</a></li>
 
+<li><a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a></li>
+
 
 <li><a href="javascript:void(0);" onclick="confirmLogout()">Log Out</a></li> <!-- Log Out link -->
 

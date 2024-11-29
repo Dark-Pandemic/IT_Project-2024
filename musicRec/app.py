@@ -21,6 +21,10 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
 def home():
     return render_template("index.html")
 
+@app.route("/music-recommendation", methods=["GET"])
+def music_recommendation():
+    return render_template("index.html")
+
 @app.route("/recommend", methods=["POST"])
 def recommend():
     emotion = request.form.get("emotion")
