@@ -1,3 +1,26 @@
+<?php
+session_start();
+
+// Determine username from session or cookie
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = null; // No user logged in
+}
+
+// Check if the user is logged out, then destroy session and redirect
+if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
+    session_unset();
+    session_destroy();
+    setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
+    header("Location: loginform.php"); // Redirect to login page
+    exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,133 +91,120 @@
             background-color: #0088cc; 
         }
 		
-		header {
+		/* Side Menu Styles */
+        .side-menu {
             position: fixed;
             top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
-
-        .navbar {
-            padding: 10px;
-        }
-
-        .menu-toggle {
-            color: black;
-            border: none;
-            cursor: pointer;
-            font-size: 20px;
-            border-radius: 7px;
-        }
-
-        .fancy-menu {
-            display: none;
-            background-color: #6CB4EE;
-            position: fixed;
-            top: 0;
-            left: 0;
+            left: -300px; /* Start off-screen */
+            width: 250px;
             height: 100%;
-            width: 220px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            border-radius: 15px 0 0 15px;
-            padding-top: 20px;
-            transition: transform 0.3s ease;
-            transform: translateX(-220px);
-        }
-
-        .fancy-menu.show {
-            display: block;
-            transform: translateX(0);
-        }
-
-        .content {
-            transition: margin-left 0.3s ease;
-        }
-
-        .menu-open .content {
-            margin-left: 220px;
-        }
-
-        .fancy-menu h1 {
-            margin: 0;
+            background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
+            color: #fff;
             padding: 10px;
-            color: white;
-            font-size: 1.5em;
-            text-align: center;
-            border-bottom: 1px solid #555;
-            padding-bottom: 10px;
+            transition: left 0.3s ease; /* Smooth transition when opening/closing */
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center the items vertically */
+            align-items: center; /* Center the items horizontally */
         }
 
-        .fancy-menu ul {
-            list-style-type: none;
+        /* Menu List Styles */
+        .side-menu ul {
             padding: 0;
             margin: 0;
+            list-style-type: none; /* Remove bullet points */
+            text-align: center; /* Center the list items */
         }
 
-        .fancy-menu li {
-            padding: 10px 20px;
-        }
-
-        .fancy-menu a {
-            color: white;
+        /* Menu Item Styles */
+        .side-menu a {
+            color: #fff;
             text-decoration: none;
+            font-size: 1.5rem;
             display: block;
-            text-align: center;
+            margin: 5px 0; /* Reduced margin to bring items closer */
+            padding: 5px 15px; /* Adjusted padding for a more compact appearance */
+            border-radius: 20px;
+            transition: all 0.3s ease;
         }
 
-        .fancy-menu a:hover {
-            color: grey;
-			transform: scale(1.05);
+        /* Hover Effect for Menu Items */
+        .side-menu a:hover {
+            background-color: white;
+            color: rgba(240, 180, 130, 0.7); /* Slightly darker peach color */
+
+
+            transform: scale(1.05); /* Make items "pop" on hover */
         }
 
-        .close-menu {
-            background-color: transparent;
-            color: white;
+        /* Show the side menu when active */
+        .side-menu.active {
+            left: 0; /* Slide in */
+        }
+
+        /* Log Out Button Styles */
+        .logout-btn {
+            background-color: white; /* White background for the button */
+            color: rgba(255, 150, 100, 0.8); /* Darker peach color for the text */
+            font-size: 1.5rem;
+            padding: 12px 20px; /* Adjusted padding for better button size */
             border: none;
-            font-size: 20px;
-            position: absolute;
-            top: 7px;
-            right: 180px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: color 0.3s;
+            margin-top: 20px; /* Space above the Log Out button */
+            margin-bottom: 20px; 
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
-        .close-menu:hover {
-            color: grey;
-			transform: scale(1.05);
+        /* Hover Effect for Log Out Button */
+        .logout-btn:hover {
+            background-color: rgba(255, 200, 150, 0.8); /* Darker peach background on hover */
+            transform: scale(1.05); /* Button expands slightly on hover */
+        }
+
+        /* Toggle Button Styles */
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #333;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 3;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
         }
 
     </style>
 </head>
 <body>
-<header>
-        <nav class="navbar">
-            <button class="menu-toggle">☰</button>
-            <div class="fancy-menu">
-                <h1>Dashboard</h1>
-                <button class="close-menu">✖</button>
-                <ul>
-                <li><a href="../userprofile.php">Profile</a></li>
+<!-- Menu Toggle Button -->
+<button class="toggle-btn">☰</button>
 
-<li><a href="../tasks/tasks_1.php">Tasks</a></li>
+<!-- Side Menu -->
+<div class="side-menu">
+    <h1>Profile</h1>
+    <ul class="vertical-menu">
+        <li><a href="index.php">Home</a></li>
+        
+        <li><a href="journal_final\journal.php">Journal</a></li>
+        <li><a href="breathe.php">Zen Zone</a></li>
+        <li><a href="subscriptions\doctor.php">Subscription</a></li>
+        <li><a href="contacts\contacts_index.php">Emergency Contacts</a></li>
+        <br><br>
+    </ul>
+    <button class="logout-btn">Log Out</button>
+</div>
 
-<li><a href="../journal_final/journal.php">Journal</a></li>
-
-<li><a href="../breathe.php">Zen Zone</a></li>
-
-<li><a href="../subscriptions/doctor.php">Subscriptions</a></li>
-
-<li><a href="../badges/badges.php">Badges</a></li>
-
-<li><a href="../contacts/contacts_index.php">Emergency Contact</a></li>
-
-
-                </ul>
-            </div>
-        </nav>
-    </header>
 	<h2 style = "color: #0e5066; text-align: center;">Chat with a Therapist</h2>
 <div class = "content">
 
@@ -209,23 +219,21 @@
 	
 	<script>
 	
-	// Get the button and the menu
-        const menuToggle = document.querySelector('.menu-toggle');
-        const fancyMenu = document.querySelector('.fancy-menu');
-        const closeMenuButton = document.querySelector('.close-menu');
-        const body = document.querySelector('body');
+	// Get the button and the side menu
+    const menuToggle = document.querySelector('.toggle-btn');
+    const sideMenu = document.querySelector('.side-menu');
 
-        // Toggle the menu display when the button is clicked
-        menuToggle.onclick = function() {
-            fancyMenu.classList.toggle('show');
-            body.classList.toggle('menu-open');
-        };
+    // Toggle the side menu display when the button is clicked
+    menuToggle.onclick = function() {
+        sideMenu.classList.toggle('active'); // Add or remove the 'active' class to slide in/out
+    };
 
-        // Close the menu when the close button is clicked
-        closeMenuButton.onclick = function() {
-            fancyMenu.classList.remove('show');
-            body.classList.remove('menu-open');
-        };
+    // Optional: Close the menu if the user clicks outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.toggle-btn') && !event.target.closest('.side-menu')) {
+            sideMenu.classList.remove('active');
+        }
+    };
 		
 		</script>
 

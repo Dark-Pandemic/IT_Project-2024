@@ -33,239 +33,277 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     <title>Emergency Contacts - Mental Health Awareness</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 	<style>
-		
 		/* Basic Styles */
-        body {
-            font-family: Poppins, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #e7e7e7;
-        }
-        
-        h2 {
-            font-size: 2rem;
-        }
-        
-        .contact-card {
-            background-color: white;
-            color: #0e5066;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .contact-card h3 {
-            color: #333;
-        }
-        
-        .contact-card p {
-            font-size: 1.2rem;
-            margin: 5px 0;
-        }
-        
-        .custom-contact {
-            background-color: white;
-            color: #0e5066;
-            padding: 20px;
-            margin: 30px 0;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        form label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        
-        form input {
-            width: 25%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ddd;
-            border-radius: 30px;
-        }
-        
-        form button {
-            background-color: #00aaff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-        }
-        
-        form button:hover {
-            background-color: #0088cc;
-			transform: scale(1.05);
-        }
-        
-       
-                footer {
-                    background-color: #0e5066;
-                    color: white;
-                    text-align: center;
-                    padding: 20px ;
-                    width: 100%;
-                }
-                
-                .footer-content {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                }
-        
-                .social-media {
-                    margin-bottom: 5px;
-                }
-        
-                .social-link {
-                    margin: 0 8px;
-                    color: white;
-                    text-decoration: none;
-                    transition: color 0.3s ease;
-                }
-        
-                .social-link:hover {
-                    color: grey;
-                }
-        
-                .contact-info p {
-                    margin: 3px 0;
-                }
-        
-                .contact-info a {
-                    color: #333;
-                    text-decoration: none;
-                }
-        
-                .contact-info a:hover {
-                    text-decoration: underline;
-                }
-				 header {
+body {
+    font-family: Poppins, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #ffe4e1, #fafad2, #e0ffff, #d8bfd8, #ffe4b5);
+    background-size: 100% 200%;
+    animation: gradientAnimation 15s ease infinite;
+    color: #333;
+}
+
+/* Animation for smooth gradient blending */
+@keyframes gradientAnimation {
+    0% {
+        background-position: top;
+    }
+    50% {
+        background-position: bottom;
+    }
+    100% {
+        background-position: top;
+    }
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+.contact-card {
+    background-color: rgba(255, 255, 255, 0.20);
+    color: #0e5066;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact-card h3 {
+    color: #333;
+}
+
+.contact-card p {
+    font-size: 1.2rem;
+    margin: 5px 0;
+}
+
+.custom-contact {
+    background-color: rgba(255, 255, 255, 0.20);
+    color: #0e5066;
+    padding: 20px;
+    margin: 30px 0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #00aaff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0088cc;
+}
+
+footer {
+    background-color: #6CB4EE;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.social-media {
+    margin-bottom: 5px;
+}
+
+.social-link {
+    margin: 0 8px;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.social-link:hover {
+    color: grey;
+}
+
+.contact-info p {
+    margin: 3px 0;
+}
+
+.contact-info a {
+    color: #333;
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+/* Side Menu Styles */
+        .side-menu {
             position: fixed;
             top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
-
-        .navbar {
-            padding: 10px;
-        }
-
-        .menu-toggle {
-            color: black;
-            border: none;
-            cursor: pointer;
-            font-size: 20px;
-            border-radius: 7px;
-        }
-
-        .fancy-menu {
-            display: none;
-            background-color: #6CB4EE;
-            position: fixed;
-            top: 0;
-            left: 0;
+            left: -300px; /* Start off-screen */
+            width: 250px;
             height: 100%;
-            width: 220px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            border-radius: 15px 0 0 15px;
-            padding-top: 20px;
-            transition: transform 0.3s ease;
-            transform: translateX(-220px);
-        }
-
-        .fancy-menu.show {
-            display: block;
-            transform: translateX(0);
-        }
-
-        .content {
-            transition: margin-left 0.3s ease;
-        }
-
-        .menu-open .content {
-            margin-left: 220px;
-        }
-
-        .fancy-menu h1 {
-            margin: 0;
+            background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
+            color: #fff;
             padding: 10px;
-            color: white;
-            font-size: 1.5em;
-            text-align: center;
-            border-bottom: 1px solid #555;
-            padding-bottom: 10px;
+            transition: left 0.3s ease; /* Smooth transition when opening/closing */
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center the items vertically */
+            align-items: center; /* Center the items horizontally */
         }
 
-        .fancy-menu ul {
-            list-style-type: none;
+        /* Menu List Styles */
+        .side-menu ul {
             padding: 0;
             margin: 0;
+            list-style-type: none; /* Remove bullet points */
+            text-align: center; /* Center the list items */
         }
 
-        .fancy-menu li {
-            padding: 10px 20px;
-        }
-
-        .fancy-menu a {
-            color: white;
+        /* Menu Item Styles */
+        .side-menu a {
+            color: #fff;
             text-decoration: none;
+            font-size: 1.5rem;
             display: block;
-            text-align: center;
+            margin: 5px 0; /* Reduced margin to bring items closer */
+            padding: 5px 15px; /* Adjusted padding for a more compact appearance */
+            border-radius: 20px;
+            transition: all 0.3s ease;
         }
 
-        .fancy-menu a:hover {
-            color: grey;
-            transform: translateX(5px);
+        /* Hover Effect for Menu Items */
+        .side-menu a:hover {
+            background-color: white;
+            color: rgba(240, 180, 130, 0.7); /* Slightly darker peach color */
+
+
+            transform: scale(1.05); /* Make items "pop" on hover */
         }
 
-        .close-menu {
-            background-color: transparent;
-            color: white;
+        /* Show the side menu when active */
+        .side-menu.active {
+            left: 0; /* Slide in */
+        }
+
+        /* Log Out Button Styles */
+        .logout-btn {
+            background-color: white; /* White background for the button */
+            color: rgba(255, 150, 100, 0.8); /* Darker peach color for the text */
+            font-size: 1.5rem;
+            padding: 12px 20px; /* Adjusted padding for better button size */
             border: none;
-            font-size: 20px;
-            position: absolute;
-            top: 7px;
-            right: 180px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: color 0.3s;
+            margin-top: 20px; /* Space above the Log Out button */
+            margin-bottom: 20px; 
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
-        .close-menu:hover {
-            color: grey;
+        /* Hover Effect for Log Out Button */
+        .logout-btn:hover {
+            background-color: rgba(255, 200, 150, 0.8); /* Darker peach background on hover */
+            transform: scale(1.05); /* Button expands slightly on hover */
         }
 
-                
+        /* Toggle Button Styles */
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #333;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 3;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+        }
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .fancy-menu {
+        width: 100%;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .menu-toggle {
+        font-size: 25px;
+    }
+
+    .fancy-menu h1 {
+        font-size: 1.2em;
+    }
+
+    .fancy-menu li {
+        padding: 8px 15px;
+    }
+
+    .footer-content {
+        font-size: 0.8em;
+    }
+}
+   
 	</style>
 		
 </head>
 <body>
-<header>
-        <nav class="navbar">
-            <button class="menu-toggle">☰</button>
-            <div class="fancy-menu">
-                <h1>Dashboard</h1>
-                <button class="close-menu">✖</button>
-                <ul>
-                    <li><a href="../index.php">Home</a></li>
-                    <li><a href="../userprofile.php">Profile</a></li>
-                    <li><a href="../tasks/tasks_1.php">Tasks</a></li>
-                    <li><a href="../journal_final/journal.php">Journal</a></li>
-                    <li><a href="../breathe.php">Zen Zone</a></li>
-                    <li><a href="../subscriptions/doctor.php">Subscription</a></li>
-                    <li><a href="../badges/badges.php">Badges</a></li>
-                    
-                </ul>
-            </div>
-        </nav>
-    </header>
+<!-- Menu Toggle Button -->
+<button class="toggle-btn">☰</button>
+
+<!-- Side Menu -->
+<div class="side-menu">
+    <h1>Profile</h1>
+    <ul class="vertical-menu">
+        <li><a href="index.php">Home</a></li>
+        
+        <li><a href="tasks\tasks_1.php">Tasks</a></li>
+        <li><a href="journal_final\journal.php">Journal</a></li>
+        <li><a href="breathe.php">Zen Zone</a></li>
+        <li><a href="subscriptions\doctor.php">Subscription</a></li>
+        <li><a href="badges\badges.php">Badges</a></li>
+        <li><a href="contacts\contacts_index.php">Emergency Contacts</a></li>
+        <br><br>
+    </ul>
+    <button class="logout-btn">Log Out</button>
+</div>
+
 <div class = "content">
 	
     <section class="contacts">
-        <h2 style = "text-align: center; color: #0e5066;">Emergency Contact Numbers</h2>
+        <h2 style = "text-align: center; color: #0e5066; background-color: white;">Emergency Contact Numbers</h2>
         <div class="contact-card">
             <h3>Police</h3>
             <p><a href="tel:10111">10111</a></p>
@@ -310,14 +348,14 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     </section>
 
     <section class="custom-contact">
-        <h2 style = "color: black; text-align: center;">Your Own Emergency Contacts</h2>
+        <h2>Your Own Emergency Contacts</h2>
         <p>If you have personal contacts or a therapist you would like to store for emergencies, you can add them here.</p>
         <form id="contactForm">
             <label for="contactName">Contact Name:</label>
             <input type="text" id="contactName" name="contactName" placeholder = "Enter your Full Name" required>
 
             <label for="contactNumber">Contact Number:</label>
-            <input type="tel" id="contactNumber" name="contactNumber" required pattern="[0-9+ ]+" placeholder="Enter a valid phone number">
+            <input type="tel" id="contactNumber" name="contactNumber" required pattern="[0-9]{3}[0-9]{3}[0-9]{4}" placeholder="Enter a valid phone number">
 
 			<br><br>
             <button type="submit">Save Contact</button>
@@ -341,23 +379,21 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     </footer>
 
     <script>
-	// Get the button and the menu
-        const menuToggle = document.querySelector('.menu-toggle');
-        const fancyMenu = document.querySelector('.fancy-menu');
-        const closeMenuButton = document.querySelector('.close-menu');
-        const body = document.querySelector('body');
+	// Get the button and the side menu
+    const menuToggle = document.querySelector('.toggle-btn');
+    const sideMenu = document.querySelector('.side-menu');
 
-        // Toggle the menu display when the button is clicked
-        menuToggle.onclick = function() {
-            fancyMenu.classList.toggle('show');
-            body.classList.toggle('menu-open');
-        };
+    // Toggle the side menu display when the button is clicked
+    menuToggle.onclick = function() {
+        sideMenu.classList.toggle('active'); // Add or remove the 'active' class to slide in/out
+    };
 
-        // Close the menu when the close button is clicked
-        closeMenuButton.onclick = function() {
-            fancyMenu.classList.remove('show');
-            body.classList.remove('menu-open');
-        };
+    // Optional: Close the menu if the user clicks outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.toggle-btn') && !event.target.closest('.side-menu')) {
+            sideMenu.classList.remove('active');
+        }
+    };
 
 
         // Get references to the form and list
@@ -387,6 +423,26 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
             // Clear the form inputs
             contactForm.reset();
+        });
+        contactCard.classList.add('contact-card');
+            contactCard.innerHTML = `
+                <h3>${contactName}</h3>
+                <p><a href="tel:${contactNumber}">${contactNumber}</a></p>
+                <button class="delete-contact">Delete</button>
+            `;
+
+            // Append the new contact card to the list
+            savedContactsList.appendChild(contactCard);
+
+            // Clear the form inputs
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactNumber').value = '';
+
+            // Add delete functionality
+            const deleteButton = contactCard.querySelector('.delete-contact');
+            deleteButton.addEventListener('click', () => {
+                savedContactsList.removeChild(contactCard);
+                
         });
     </script>
 </body>
