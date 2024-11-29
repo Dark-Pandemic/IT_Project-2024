@@ -66,8 +66,11 @@ $conn->close();
 <title>Welcome to Moodify</title>
 
 <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
 <style>
+
+
 
 .logout-popup {
     position: fixed;
@@ -113,23 +116,17 @@ $conn->close();
 
 <li><a href="userprofile.php">Profile</a></li>
 
-<li><a href="tasks/tasks_1.php">Tasks</a></li>
-
 <li><a href="journal_final/journal.php">Journal</a></li>
 
 <li><a href="breathe.php">Zen Zone</a></li>
 
 <li><a href="subscriptions/doctor.php">Subscriptions</a></li>
 
-<li><a href="badges/badges.php">Badges</a></li>
-
 <li><a href="contacts/contacts_index.php">Emergency Contact</a></li>
 
 <li><a href="chatroom/chatroom.php">Chat with a Therapist</a></li>
 
 <li><a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a></li>
-
-<li><a href="reflection/weeklyreflectionform.php">Weekly Reflection</a></li>
 
 
 <li><a href="javascript:void(0);" onclick="confirmLogout()">Log Out</a></li> <!-- Log Out link -->
@@ -295,12 +292,13 @@ quoteElement.textContent = randomQuote; // Display the random quote
 <footer class="footer">
   <div class="footer-content">
     <div class="social-media">
+	<p>Follow us on:</p>
      
     <a href="https://www.instagram.com/moodifysa/profilecard/?igsh=aXp6ejFjcHF2Z2E3" class="social-link">Instagram</a>
         
     </div>
     <div class="contact-info">
-      <p>Contact us: <a href="mailto:info@moodify.com">info@moodify.com</a></p>
+	  <p>Email us at: <a href="mailto:moodifysa@gmail.com" style="color: white">moodifysa@gmail.com</a></p>
       <p>© 2024 Moodify. All rights reserved.</p>
     </div>
   </div>
