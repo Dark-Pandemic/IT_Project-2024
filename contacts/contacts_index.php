@@ -33,212 +33,254 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     <title>Emergency Contacts - Mental Health Awareness</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 	<style>
-		
 		/* Basic Styles */
-        body {
-            font-family: Poppins, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #e7e7e7;
-        }
-        
-        h2 {
-            font-size: 2rem;
-        }
-        
-        .contact-card {
-            background-color: white;
-            color: #0e5066;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .contact-card h3 {
-            color: #333;
-        }
-        
-        .contact-card p {
-            font-size: 1.2rem;
-            margin: 5px 0;
-        }
-        
-        .custom-contact {
-            background-color: white;
-            color: #0e5066;
-            padding: 20px;
-            margin: 30px 0;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        form label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        
-        form input {
-            width: 25%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ddd;
-            border-radius: 30px;
-        }
-        
-        form button {
-            background-color: #00aaff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-        }
-        
-        form button:hover {
-            background-color: #0088cc;
-			transform: scale(1.05);
-        }
-        
-       
-                footer {
-                    background-color: #0e5066;
-                    color: white;
-                    text-align: center;
-                    padding: 20px ;
-                    width: 100%;
-                }
-                
-                .footer-content {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                }
-        
-                .social-media {
-                    margin-bottom: 5px;
-                }
-        
-                .social-link {
-                    margin: 0 8px;
-                    color: white;
-                    text-decoration: none;
-                    transition: color 0.3s ease;
-                }
-        
-                .social-link:hover {
-                    color: grey;
-                }
-        
-                .contact-info p {
-                    margin: 3px 0;
-                }
-        
-                .contact-info a {
-                    color: #333;
-                    text-decoration: none;
-                }
-        
-                .contact-info a:hover {
-                    text-decoration: underline;
-                }
-				 header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-        }
+body {
+    font-family: Poppins, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #ffe4e1, #fafad2, #e0ffff, #d8bfd8, #ffe4b5);
+    background-size: 100% 200%;
+    animation: gradientAnimation 15s ease infinite;
+    color: #333;
+}
 
-        .navbar {
-            padding: 10px;
-        }
+/* Animation for smooth gradient blending */
+@keyframes gradientAnimation {
+    0% {
+        background-position: top;
+    }
+    50% {
+        background-position: bottom;
+    }
+    100% {
+        background-position: top;
+    }
+}
 
-        .menu-toggle {
-            color: black;
-            border: none;
-            cursor: pointer;
-            font-size: 20px;
-            border-radius: 7px;
-        }
+h2 {
+    font-size: 2rem;
+}
 
-        .fancy-menu {
-            display: none;
-            background-color: #6CB4EE;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 220px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            border-radius: 15px 0 0 15px;
-            padding-top: 20px;
-            transition: transform 0.3s ease;
-            transform: translateX(-220px);
-        }
+.contact-card {
+    background-color: rgba(255, 255, 255, 0.20);
+    color: #0e5066;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-        .fancy-menu.show {
-            display: block;
-            transform: translateX(0);
-        }
+.contact-card h3 {
+    color: #333;
+}
 
-        .content {
-            transition: margin-left 0.3s ease;
-        }
+.contact-card p {
+    font-size: 1.2rem;
+    margin: 5px 0;
+}
 
-        .menu-open .content {
-            margin-left: 220px;
-        }
+.custom-contact {
+    background-color: rgba(255, 255, 255, 0.20);
+    color: #0e5066;
+    padding: 20px;
+    margin: 30px 0;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-        .fancy-menu h1 {
-            margin: 0;
-            padding: 10px;
-            color: white;
-            font-size: 1.5em;
-            text-align: center;
-            border-bottom: 1px solid #555;
-            padding-bottom: 10px;
-        }
+form label {
+    display: block;
+    margin: 10px 0 5px;
+}
 
-        .fancy-menu ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
+form input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 
-        .fancy-menu li {
-            padding: 10px 20px;
-        }
+form button {
+    background-color: #00aaff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+}
 
-        .fancy-menu a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-        }
+form button:hover {
+    background-color: #0088cc;
+}
 
-        .fancy-menu a:hover {
-            color: grey;
-            transform: translateX(5px);
-        }
+footer {
+    background-color: #6CB4EE;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+}
 
-        .close-menu {
-            background-color: transparent;
-            color: white;
-            border: none;
-            font-size: 20px;
-            position: absolute;
-            top: 7px;
-            right: 180px;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        .close-menu:hover {
-            color: grey;
-        }
+.social-media {
+    margin-bottom: 5px;
+}
 
-                
+.social-link {
+    margin: 0 8px;
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.social-link:hover {
+    color: grey;
+}
+
+.contact-info p {
+    margin: 3px 0;
+}
+
+.contact-info a {
+    color: #333;
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+/* Header Styles */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navbar {
+    padding: 10px;
+}
+
+.menu-toggle {
+    color: black;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 7px;
+}
+
+.fancy-menu {
+    display: none;
+    background-color: #6CB4EE;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 220px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 15px 0 0 15px;
+    padding-top: 20px;
+    transition: transform 0.3s ease;
+    transform: translateX(-220px);
+}
+
+.fancy-menu.show {
+    display: block;
+    transform: translateX(0);
+}
+
+.content {
+    transition: margin-left 0.3s ease;
+}
+
+.menu-open .content {
+    margin-left: 220px;
+}
+
+.fancy-menu h1 {
+    margin: 0;
+    padding: 10px;
+    color: white;
+    font-size: 1.5em;
+    text-align: center;
+    border-bottom: 1px solid #555;
+    padding-bottom: 10px;
+}
+
+.fancy-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.fancy-menu li {
+    padding: 10px 20px;
+}
+
+.fancy-menu a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.fancy-menu a:hover {
+    color: grey;
+    transform: translateX(5px);
+}
+
+.close-menu {
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 20px;
+    position: absolute;
+    top: 7px;
+    right: 180px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-menu:hover {
+    color: grey;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .fancy-menu {
+        width: 100%;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .menu-toggle {
+        font-size: 25px;
+    }
+
+    .fancy-menu h1 {
+        font-size: 1.2em;
+    }
+
+    .fancy-menu li {
+        padding: 8px 15px;
+    }
+
+    .footer-content {
+        font-size: 0.8em;
+    }
+}
+   
 	</style>
 		
 </head>
@@ -265,7 +307,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 <div class = "content">
 	
     <section class="contacts">
-        <h2 style = "text-align: center; color: #0e5066;">Emergency Contact Numbers</h2>
+        <h2 style = "text-align: center; color: #0e5066; background-color: white;">Emergency Contact Numbers</h2>
         <div class="contact-card">
             <h3>Police</h3>
             <p><a href="tel:10111">10111</a></p>
@@ -310,14 +352,14 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     </section>
 
     <section class="custom-contact">
-        <h2 style = "color: black; text-align: center;">Your Own Emergency Contacts</h2>
+        <h2>Your Own Emergency Contacts</h2>
         <p>If you have personal contacts or a therapist you would like to store for emergencies, you can add them here.</p>
         <form id="contactForm">
             <label for="contactName">Contact Name:</label>
             <input type="text" id="contactName" name="contactName" placeholder = "Enter your Full Name" required>
 
             <label for="contactNumber">Contact Number:</label>
-            <input type="tel" id="contactNumber" name="contactNumber" required pattern="[0-9+ ]+" placeholder="Enter a valid phone number">
+            <input type="tel" id="contactNumber" name="contactNumber" required pattern="[0-9]{3}[0-9]{3}[0-9]{4}" placeholder="Enter a valid phone number">
 
 			<br><br>
             <button type="submit">Save Contact</button>
@@ -332,6 +374,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 		<div class="footer-content">
         <div class="social-media">
             <p>Follow us on:</p>
+            <a href="#" class="social-link">Twitter</a>
             <a href="#" class="social-link">Instagram</a>
         </div>
         <div class="contact-info">
@@ -387,6 +430,26 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
             // Clear the form inputs
             contactForm.reset();
+        });
+        contactCard.classList.add('contact-card');
+            contactCard.innerHTML = `
+                <h3>${contactName}</h3>
+                <p><a href="tel:${contactNumber}">${contactNumber}</a></p>
+                <button class="delete-contact">Delete</button>
+            `;
+
+            // Append the new contact card to the list
+            savedContactsList.appendChild(contactCard);
+
+            // Clear the form inputs
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactNumber').value = '';
+
+            // Add delete functionality
+            const deleteButton = contactCard.querySelector('.delete-contact');
+            deleteButton.addEventListener('click', () => {
+                savedContactsList.removeChild(contactCard);
+                
         });
     </script>
 </body>
