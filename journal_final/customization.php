@@ -8,6 +8,17 @@ if (isset($_SESSION['username'])) {
 } else {
     $username = "Guest"; // Fallback for anonymous access
 }
+
+
+
+// Check if the user is logged out, then destroy session and redirect
+if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+  session_unset();
+  session_destroy();
+  setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
+  header("Location: loginform.php"); // Redirect to login page
+  exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -439,7 +450,7 @@ if (isset($_SESSION['username'])) {
         <div class="journal-pages"></div>
 		<br><br><br>
 		
-        <a href="journal.html" class = "write">Write Entry</a>
+        <a href="write_entry.php" class = "write">Write Entry</a>
     </div>
 </td>
 </div>
@@ -468,16 +479,16 @@ if (isset($_SESSION['username'])) {
 		
     // Define available cover images
     const imageUrls = [
-        'images/beach.jpg',
-        'images/blackandgrey.jpg',
-        'images/brown.jpg',
-        'images/butterfly.jpg',
-        'images/groovy.jpg',
-        'images/plants.jpg',
-        'images/purpleabstract.jpg',
-        'images/strawberry.jpg',
-        'images/space.jpg',
-        'images/shells.jpg',
+        'beach.jpg',
+        'blackandgrey.jpg',
+        'brown.jpg',
+        'butterfly.jpg',
+        'groovy.jpg',
+        'plants.jpg',
+        'purpleabstract.jpg',
+        'strawberry.jpg',
+        'space.jpg',
+        'shells.jpg',
     ];
 
     // Selectors for journal and image container

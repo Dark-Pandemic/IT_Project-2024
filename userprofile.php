@@ -275,7 +275,7 @@ $conn->close();
             height: 100%;
             background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
             color: #fff;
-            padding: 20px;
+            padding: 10px;
             transition: left 0.3s ease; /* Smooth transition when opening/closing */
             z-index: 2;
             display: flex;
@@ -299,7 +299,7 @@ $conn->close();
             font-size: 1.5rem;
             display: block;
             margin: 5px 0; /* Reduced margin to bring items closer */
-            padding: 10px 15px; /* Adjusted padding for a more compact appearance */
+            padding: 5px 15px; /* Adjusted padding for a more compact appearance */
             border-radius: 20px;
             transition: all 0.3s ease;
         }
@@ -307,7 +307,9 @@ $conn->close();
         /* Hover Effect for Menu Items */
         .side-menu a:hover {
             background-color: white;
-            color: rgba(255, 200, 150, 0.7); /* Peach-colored text on hover */
+            color: rgba(240, 180, 130, 0.7); /* Slightly darker peach color */
+
+
             transform: scale(1.05); /* Make items "pop" on hover */
         }
 
@@ -326,6 +328,7 @@ $conn->close();
             border-radius: 20px;
             cursor: pointer;
             margin-top: 20px; /* Space above the Log Out button */
+            margin-bottom: 20px; 
             transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
@@ -368,13 +371,14 @@ $conn->close();
     <h1>Profile</h1>
     <ul class="vertical-menu">
         <li><a href="index.php">Home</a></li>
-        <li><a href="userprofile.php">Profile</a></li>
+        
         <li><a href="tasks\tasks_1.php">Tasks</a></li>
         <li><a href="journal_final\journal.php">Journal</a></li>
         <li><a href="breathe.php">Zen Zone</a></li>
-        <li><a href="subscriptions\doctor.html">Subscription</a></li>
-        <li><a href="badges\badges.html">Badges</a></li>
+        <li><a href="subscriptions\doctor.php">Subscription</a></li>
+        <li><a href="badges\badges.php">Badges</a></li>
         <li><a href="contacts\contacts_index.php">Emergency Contacts</a></li>
+        <br><br>
     </ul>
     <button class="logout-btn">Log Out</button>
 </div>

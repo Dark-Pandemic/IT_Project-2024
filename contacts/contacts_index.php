@@ -1,3 +1,29 @@
+<?php
+session_start();
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = "Guest"; // Fallback for anonymous access
+}
+
+
+
+// Check if the user is logged out, then destroy session and redirect
+if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+  session_unset();
+  session_destroy();
+  setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
+  header("Location: loginform.php"); // Redirect to login page
+  exit();
+}
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -223,13 +249,14 @@
                 <h1>Dashboard</h1>
                 <button class="close-menu">✖</button>
                 <ul>
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="userprofile.php">Profile</a></li>
-                    <li><a href="tasks/tasks_1.php">Tasks</a></li>
-                    <li><a href="journal_final/journal.php">Journal</a></li>
-                    <li><a href="subscriptions/doctor.html">Subscription</a></li>
-                    <li><a href="badges/badges.html">Badges</a></li>
-                    <li><a href="contacts/contacts_index.php">Emergency Contacts</a></li>
+                    <li><a href="../index.php">Home</a></li>
+                    <li><a href="../userprofile.php">Profile</a></li>
+                    <li><a href="../tasks/tasks_1.php">Tasks</a></li>
+                    <li><a href="../journal_final/journal.php">Journal</a></li>
+                    <li><a href="../breathe.php">Zen Zone</a></li>
+                    <li><a href="../subscriptions/doctor.php">Subscription</a></li>
+                    <li><a href="../badges/badges.php">Badges</a></li>
+                    
                 </ul>
             </div>
         </nav>

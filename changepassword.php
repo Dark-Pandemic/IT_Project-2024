@@ -1,6 +1,31 @@
 <?php
+
 session_start();
-$user_id = $_SESSION['user_id'];
+
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Use session if available
+} elseif (isset($_COOKIE['username'])) {
+    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
+} else {
+    $username = "Guest"; // Fallback for anonymous access
+}
+
+
+
+// Check if the user is logged out, then destroy session and redirect
+if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+  session_unset();
+  session_destroy();
+  setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
+  header("Location: loginform.php"); // Redirect to login page
+  exit();
+}
+
+
+
+
+
+
 $conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
 
 if ($conn->connect_error) {

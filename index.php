@@ -20,7 +20,37 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
   exit();
 }
 
+// Database connection
+$host = 'localhost'; // Update with your database host
+$user = 'root'; // Update with your database username
+$password = ''; // Update with your database password
+$dbname = 'mentalhealthapp'; // Update with your database name
 
+$conn = new mysqli($host, $user, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$profile_pic = 'default_profile.png'; // Default profile picture
+
+if ($username !== "Guest") {
+    // Fetch profile picture for logged-in user
+    $stmt = $conn->prepare("SELECT profile_pic FROM userloginreg WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $profile_pic = $row['profile_pic'] ?: $profile_pic; // Use default if no profile picture
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -74,7 +104,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         <p><?php echo htmlspecialchars($username); ?></p> <!-- Display the username -->
     </div>
     &nbsp;
-    <img src="" alt="Profile Icon" class="profile-icon"> <!-- Placeholder for profile icon -->
+    <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile Icon" class="profile-icon"> <!-- Display the profile icon -->
 </a>
 
 <nav class="fancy-menu">
@@ -91,9 +121,9 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
 <li><a href="subscriptions/doctor.php">Subscriptions</a></li>
 
-<li><a href="badges/badges.html">Badges</a></li>
+<li><a href="badges/badges.php">Badges</a></li>
 
-<li><a href="contacts/contacts_index.html">Emergency Contact</a></li>
+<li><a href="contacts/contacts_index.php">Emergency Contact</a></li>
 
 
 <li><a href="javascript:void(0);" onclick="confirmLogout()">Log Out</a></li> <!-- Log Out link -->
@@ -117,17 +147,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
 </div>
 
-<!-- User Profile Section -->
 
-<div class="profile-section">
-
-<h2>User Profile</h2>
-
-<div class="profile-info">
-
-<img src="images/profile-placeholder.png" alt="Profile Picture" class="profile-pic">
-
-</div>
 <div class="level-up">
   <h3>Level: <span class="user-level">5</span></h3>
   <div class="progress-bar">
@@ -269,9 +289,9 @@ quoteElement.textContent = randomQuote; // Display the random quote
 <footer class="footer">
   <div class="footer-content">
     <div class="social-media">
-      <a href="#" class="social-link">Facebook</a>
-      <a href="#" class="social-link">Twitter</a>
-      <a href="#" class="social-link">Instagram</a>
+     
+    <a href="https://www.instagram.com/moodifysa/profilecard/?igsh=aXp6ejFjcHF2Z2E3" class="social-link">Instagram</a>
+        
     </div>
     <div class="contact-info">
       <p>Contact us: <a href="mailto:info@moodify.com">info@moodify.com</a></p>
