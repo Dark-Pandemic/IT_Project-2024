@@ -119,6 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin: 0;
         }
 
+        
         .contact-image {
             width: 200px;
             height: 200px;
@@ -221,6 +222,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 		
 		.home{
+            position:absolute;
+            top: 50%;
+            left:50%;
+            transform: translate(-50%, -50%);
+            z-index:10;
+            padding:10px 20px;
 			margin-right: 1400px;
 			text-decoration: none;
 			color: black;

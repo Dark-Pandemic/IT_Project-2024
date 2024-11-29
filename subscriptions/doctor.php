@@ -189,16 +189,25 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         <nav class="navbar">
             <button class="menu-toggle">☰</button>
             <div class="fancy-menu">
-                <h1>Dashboard</h1>
+                <h1>Subscription</h1>
                 <button class="close-menu">✖</button>
                 <ul>
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="userprofile.php">Profile</a></li>
-                    <li><a href="tasks/tasks_1.php">Tasks</a></li>
-                    <li><a href="journal_final/journal.php">Journal</a></li>
-                    <li><a href="subscriptions/doctor.html">Subscription</a></li>
-                    <li><a href="badges/badges.html">Badges</a></li>
-                    <li><a href="contacts/contacts_index.php">Emergency Contacts</a></li>
+
+ <li><a href="../userprofile.php">Profile</a></li>
+
+<li><a href="../tasks/tasks_1.php">Tasks</a></li>
+
+<li><a href="../journal_final/journal.php">Journal</a></li>
+
+<li><a href="../breathe.php">Zen Zone</a></li>
+
+
+
+<li><a href="../badges/badges.php">Badges</a></li>
+
+<li><a href="../contacts/contacts_index.php">Emergency Contact</a></li>
+
+<li><a href="../chatroom/chatroom.php">Chat with a Therapist</a></li>
                 </ul>
             </div>
         </nav>
