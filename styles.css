@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: #e0f7fa; /* Light blue background */
 }
 
@@ -350,12 +350,13 @@ body {
     transform: translateX(-50%) translateY(-100vh); /* Move up and out of view */
   }
 }
-.footer {
-  background-color: #f3879e; /* Footer background color */
-  padding: 10px; /* Reduced padding */
-  text-align: center;
-  position: relative;
-}
+footer {
+            background-color: #0e5066;
+            color: white;
+            text-align: center;
+            padding: 38px;
+            width: 100%;
+        }
 
 .footer-content {
   max-width: 1200px;
@@ -367,14 +368,14 @@ body {
 }
 
 .social-link {
-  margin: 0 8px; /* Slightly smaller margin */
-  color: #333; /* Link color */
-  text-decoration: none; /* Remove underline */
-  transition: color 0.3s ease; /* Transition for hover effect */
-}
+            margin: 0 8px;
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
 
 .social-link:hover {
-  color: #FFD700; /* Change color on hover */
+  color: grey; /* Change color on hover */
 }
 
 .contact-info p {
