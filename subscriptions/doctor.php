@@ -189,9 +189,10 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         <nav class="navbar">
             <button class="menu-toggle">☰</button>
             <div class="fancy-menu">
-                <h1>Dashboard</h1>
+                <h1>Subscription</h1>
                 <button class="close-menu">✖</button>
                 <ul>
+
  <li><a href="../userprofile.php">Profile</a></li>
 
 <li><a href="../tasks/tasks_1.php">Tasks</a></li>

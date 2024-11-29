@@ -36,10 +36,11 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(to right, #ff9a9e, #fad0c4, #fbc2eb);
+            background: linear-gradient(135deg, #9ef3b9, #6ae992, #6ae9b8, #58d5b1);
             color: #333;
             text-align: center;
             overflow: hidden; /* Prevent scrollbars */
+			height: 100vh;
         }
         h1 {
             font-size: 2.5em;
@@ -153,11 +154,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
             transform: scale(1.05);
             background-color: rgba(255, 255, 255, 0.7);
         }
-        .footer {
-            margin-top: 40px;
-            font-size: 0.9em;
-            color: #333;
-        }
+        
         .tooltip {
             position: absolute;
             bottom: 130%; /* Position above the badge */
@@ -204,7 +201,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
             cursor: pointer;
             font-size: 20px;
             border-radius: 7px;
-			margin-right: 1090px;
+			margin-right: 1470px;
         }
 
         .fancy-menu {
@@ -307,7 +304,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     </header>
 	<div class = "content">
 
-    <h1>Badge Locker - Your Mental Health Journey</h1>
+    <h1 style = "color: #0e5066;">Badge Locker - Your Mental Health Journey</h1>
 
     <div class="filter-container">
         <label for="filter">Filter Badges: </label>
@@ -323,13 +320,11 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     </div>
 
     <div class="trophy-wall" id="trophyWall">
-        <h2>Your Trophy Wall</h2>
+        <h2 style = "color: #0e5066;">Your Trophy Wall</h2>
         <div id="selectedBadges"></div>
     </div>
 
-    <div class="footer">
-        <p>&copy; 2024 Mental Health Journey. All rights reserved.</p>
-    </div>
+    
 	</div>
 	
 	<script>

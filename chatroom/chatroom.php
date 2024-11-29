@@ -19,7 +19,7 @@
             margin: auto;
             background: white;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             overflow: hidden;
         }
         #messages {
@@ -58,14 +58,14 @@
         #messageInput button {
             padding: 10px;
             border: none;
-            background-color: #00796b; /* Teal color */
+            background-color: #00aaff;
             color: white;
-            border-radius: 4px;
-            margin-left: 10px;
+            border-radius: 10px;
+            margin-left: 6px;
             cursor: pointer;
         }
         #messageInput button:hover {
-            background-color: #004d40; /* Darker teal */
+            background-color: #0088cc; 
         }
 		
 		header {
@@ -146,7 +146,7 @@
 
         .fancy-menu a:hover {
             color: grey;
-            transform: translateX(5px);
+			transform: scale(1.05);
         }
 
         .close-menu {
@@ -163,6 +163,7 @@
 
         .close-menu:hover {
             color: grey;
+			transform: scale(1.05);
         }
 
     </style>
@@ -194,6 +195,7 @@
             </div>
         </nav>
     </header>
+	<h2 style = "color: #0e5066; text-align: center;">Chat with a Therapist</h2>
 <div class = "content">
 
     <div id="chatContainer">
