@@ -2,7 +2,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #FDEB71, hsla(183, 60%, 77%, 0.541));
+    background: linear-gradient(135deg, #91e670, #9de4ea, #f388ca);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,7 +20,7 @@ body {
 }
 
 h1 {
-    color: #333;
+    color: #0e5066;
     font-size: 2.5em;
     margin-bottom: 30px;
 }
@@ -39,7 +39,7 @@ select {
 
 input[type="submit"] {
     padding: 15px 30px;
-    background-color: #6c5ce7;
+    background-color: #00aaff;
     color: white;
     border: none;
     border-radius: 50px;
@@ -50,5 +50,5 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     transform: scale(1.05);
-    background-color: #5a4cc6;
+    background-color: #0088cc;
 }
