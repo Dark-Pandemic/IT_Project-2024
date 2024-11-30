@@ -283,14 +283,15 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     <!-- Side Menu -->
     <div class="side-menu" id="side-menu">
     <h2>Zen Zone</h2>
+  
     <a href="index.php">Home</a>
-    <a href="userprofile.php">Profile</a>
-    <a href="journal_final/journal.php">Journal</a>
-    <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
-    <a href="chatroom/chatroom.php">Chat with a Therapist</a>
-    <a href="subscriptions/doctor.html">Subscriptions</a>
-    <a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
-    <a href="contacts/contacts_index.php">Emergency Contact</a>
+<a href="userprofile.php">Profile</a>
+<a href="journal_final/journal.php">Journal</a>
+<a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
+<a href="chatroom/chatroom.php">Chat with a Therapist</a>
+<a href="subscriptions/doctor.php">Subscriptions</a>
+<a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
+<a href="contacts/contacts_index.php">Emergency Contact</a>
 
     <br>
 
