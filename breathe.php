@@ -287,7 +287,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     <a href="userprofile.php">Profile</a>
     <a href="tasks/tasks_1.php">Tasks</a>
     <a href="journal_final/journal.php">Journal</a>
-    <a href="subscriptions/doctor.html">Subscriptions</a>
+    <a href="subscriptions/doctor.php">Subscriptions</a>
     <a href="badges/badges.php">Badges</a>
     <a href="contacts/contacts_index.php">Emergency Contact</a>
 
