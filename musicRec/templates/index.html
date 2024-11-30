@@ -5,8 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emotion Recognition & Song Recommendations</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+	
+	
 </head>
 <body>
+<!-- Menu Toggle Button -->
+<button class="toggle-btn">☰</button>
+
+<!-- Side Menu -->
+<div class="side-menu">
+    <h1 style = "color: white;">Tunes for Your Mood</h1>
+    <ul class="vertical-menu">
+        <a href="index.php">Home</a>
+<a href="userprofile.php">Profile</a>
+<a href="journal_final/journal.php">Journal</a>
+<a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
+<a href="chatroom/chatroom.php">Chat with a Therapist</a>
+<a href="breath.php">Zen Zone</a>
+<a href="subscriptions/doctor.php">Subscriptions</a>
+<a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
+<a href="contacts/contacts_index.php">Emergency Contact</a>
+        
+    </ul>
+    <button class="logout-btn">Log Out</button>
+</div>
     <div class="container">
         <h1>How are you feeling today?</h1>
         <form action="/recommend" method="POST">
@@ -21,5 +44,24 @@
             <input type="submit" value="Get Recommendations">
         </form>
     </div>
+	<script>
+	
+	// Get the button and the side menu
+    const menuToggle = document.querySelector('.toggle-btn');
+    const sideMenu = document.querySelector('.side-menu');
+
+    // Toggle the side menu display when the button is clicked
+    menuToggle.onclick = function() {
+        sideMenu.classList.toggle('active'); // Add or remove the 'active' class to slide in/out
+    };
+
+    // Optional: Close the menu if the user clicks outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.toggle-btn') && !event.target.closest('.side-menu')) {
+            sideMenu.classList.remove('active');
+        }
+    };
+		
+		</script>
 </body>
 </html>
