@@ -86,6 +86,91 @@ $conn->close();
     font-size: 18px;
 }
 
+
+.task-btn {
+    padding: 14px 50px;
+    background-color: #00796b; /* Matches task item background */
+    color: white; /* Task item text color */
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 5px;
+    font-family: 'Poppins', Arial, sans-serif; /* Clean font style */
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-btn:hover {
+    background-color: #b2ebf2; /* Slightly darker for hover */
+    transform: scale(1.05);
+}
+
+.task-btn.active {
+    background-color: #b2ebf2; /* Same as hover to indicate active state */
+    color: #004d40; /* Slightly darker text color for active button */
+}
+/* Task item styling */
+.task-item {
+    background: #e0f7fa;
+    padding: 16px;
+    margin: 10px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.task-item:hover {
+    background: #b2ebf2;
+    transform: translateY(-5px);
+}
+
+.task-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00796b;
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-description {
+    font-size: 16px;
+    color: #004d40;
+    padding-top: 10px;
+    display: none;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.5s ease;
+    max-height: 0;
+    opacity: 0;
+}
+
+/* Toggle visibility smoothly */
+.task-item.active .task-description {
+    display: block;
+    max-height: 500px;
+    opacity: 1;
+}
+
+.task-container {
+    background-image: url('images/indexCon.jpg'); /* Replace with your image path */
+    background-size: cover;  /* Ensures the image covers the entire container */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    padding: 20px; /* Adds padding for internal spacing */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a soft shadow */
+}
+
+.div-container {
+  display: flex;
+  position: relative;
+  width: 100px; 
+  height: 20px; /* Set height to a fixed value, or you can also use a percentage */
+  margin: 0 auto; /* Center the container horizontally */
+  background-color: #f0f0f0;/
+  
+}
 </style>
 
 </head>
@@ -143,35 +228,7 @@ $conn->close();
 
 <h1>Welcome to Moodify, <?php echo htmlspecialchars($username); ?>!</h1>
 
-
-
-
 <div id="quote" class="quote"></div>
-
-</div>
-
-
-<div class="level-up">
-  <h3>Level: <span class="user-level">5</span></h3>
-  <div class="progress-bar">
-    <div class="progress"></div>
-  </div>
-  <p class="experience-points">Experience: <span class="current-exp">1400</span>/<span class="max-exp">2000</span></p>
-</div>
-
-<!-- Daily Tasks Section -->
-<div class="daily-tasks">
-  <h3>Daily Tasks</h3>
-  <ul>
-    <li><input type="checkbox" class="task-checkbox"> Meditate for 10 minutes</li>
-    <li><input type="checkbox" class="task-checkbox"> Go for a walk</li>
-    <li><input type="checkbox" class="task-checkbox"> Read a book</li>
-    <li><input type="checkbox" class="task-checkbox"> Write in your journal</li>
-    <li><input type="checkbox" class="task-checkbox"> Drink 8 glasses of water</li>
-  </ul>
-  <button class="view-all-tasks">View All Tasks</button>
-</div>
-</div>
 
 </div>
 
@@ -211,50 +268,6 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Animate progress bar on page load
-
-window.onload = function() {
-
-const currentExp = 1400; // Current experience
-
-const maxExp = 2000; // Maximum experience
-
-const progressBar = document.querySelector('.progress');
-
-const progressPercentage = (currentExp / maxExp) * 100;
-
-// Set the width of the progress bar with animation
-
-progressBar.style.width = progressPercentage + '%';
-
-};
-
-// Task completion animation
-
-const checkboxes = document.querySelectorAll('.task-checkbox');
-
-checkboxes.forEach(checkbox => {
-
-checkbox.addEventListener('change', function() {
-
-const listItem = this.parentElement;
-
-if (this.checked) {
-
-listItem.classList.add('completed-task');
-
-} else {
-
-listItem.classList.remove('completed-task');
-
-}
-
-});
-
-});
-
-
-
 document.addEventListener("DOMContentLoaded", function() {
 
 const quotes = [
@@ -285,9 +298,82 @@ const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 quoteElement.textContent = randomQuote; // Display the random quote
 
 });
+// tasks 
+document.addEventListener("DOMContentLoaded", function () {
+    // Fetch tasks from the backend after the user logs in
+    fetch('indexFetch_tasks.php')  // Endpoint to fetch tasks from the server
+        .then(response => response.json())
+        .then(data => {
+            // Store the tasks globally or in session for easy access
+            window.taskData = {
+                daily: data.filter(task => task.task_type === 'daily').slice(0, 5),
+                weekly: data.filter(task => task.task_type === 'weekly').slice(0, 5),
+                monthly: data.filter(task => task.task_type === 'monthly').slice(0, 5),
+            };
 
+            // Show daily tasks by default (or another type based on logic)
+            showTasks('daily');
+        })
+        .catch(error => console.error('Error fetching tasks:', error));
+});
+
+// Function to show tasks (daily, weekly, monthly)
+function showTasks(type) {
+    // Update button styles
+    document.querySelectorAll('.task-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`${type}-btn`).classList.add('active');
+
+    // Clear and display tasks
+    const container = document.getElementById('task-list');
+    container.innerHTML = '';  // Clear existing tasks
+
+    if (window.taskData[type].length === 0) {
+        container.innerHTML = `<div class="task-item">No tasks available for ${type}.</div>`;
+        return;
+    }
+
+    window.taskData[type].forEach(task => {
+        const taskItem = document.createElement('div');
+        taskItem.className = 'task-item';
+        taskItem.innerHTML = `
+            <div class="task-header">${task.task_name}</div>
+            <div class="task-description">${task.task_description}</div>
+        `;
+
+        // Toggle description display with smooth animation
+        taskItem.querySelector('.task-header').addEventListener('click', function () {
+            taskItem.classList.toggle('active');
+        });
+
+        container.appendChild(taskItem);
+    });
+}
 
 </script>
+
+
+<!-- div sepearting images  -->
+<div class="div-container">
+  
+</div>
+
+<!--tasks-->
+<div class="task-container">
+    <h1 class="task-title"><center>Small Steps, Big Change: Try these tasks to boost your mental and physical wellbeing!</center></h1>
+    <h3><center>Click task to see description</center></h3>
+    
+    <div class="task-buttons">
+        <center>
+        <button id="daily-btn" class="task-btn active" onclick="showTasks('daily')">Daily</button>
+        <button id="weekly-btn" class="task-btn" onclick="showTasks('weekly')">Weekly</button>
+        <button id="monthly-btn" class="task-btn" onclick="showTasks('monthly')">Monthly</button>
+        </center>
+    </div>
+
+    <div id="task-list" class="task-list">
+        <!-- Tasks will be dynamically added here -->
+    </div>
+</div>
 
 <footer class="footer">
   <div class="footer-content">
