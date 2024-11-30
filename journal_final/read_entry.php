@@ -144,7 +144,7 @@ $entries = fetch_entries($filter, $conn, $user_id);
             left: -300px; /* Start off-screen */
             width: 250px;
             height: 100%;
-            background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
+            background-color: rgba(255, 170, 120, 0.9); /* Slightly darker peach */
             color: #fff;
             padding: 10px;
             transition: left 0.3s ease; /* Smooth transition when opening/closing */
@@ -237,20 +237,19 @@ $entries = fetch_entries($filter, $conn, $user_id);
 
 <!-- Side Menu -->
 <div class="side-menu">
-    <h1 style = "color: white;">Journal</h1>
+    <h1 style = "color: white;">Read Journal</h1>
     <ul class="vertical-menu">
-        <a href="index.php">Home</a>
-<a href="userprofile.php">Profile</a>
-<a href="journal_final/journal.php">Journal</a>
-<a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
-<a href="chatroom/chatroom.php">Chat with a Therapist</a>
-<a href="breath.php">Zen Zone</a>
-<a href="subscriptions/doctor.php">Subscriptions</a>
-<a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
-<a href="contacts/contacts_index.php">Emergency Contact</a>
+<a href="../index.php">Home</a>
+<a href="../userprofile.php">Profile</a>
+<a href="../http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
+
+<a href="../breath.php">Zen Zone</a>
+<a href="../subscriptions/doctor.php">Subscriptions</a>
+<a href="../reflection/weeklyreflectionform.php">Weekly Reflection</a>
+<a href="../contacts/contacts_index.php">Emergency Contact</a>
         
     </ul>
-    <button class="logout-btn">Log Out</button>
+    <button class="logout-btn"  onclick="confirmLogout()">Log Out</button>
 </div>
 <div class="container">
     <h1>Your Journal Entries</h1>
@@ -308,6 +307,14 @@ $entries = fetch_entries($filter, $conn, $user_id);
         printWindow.document.close();
         printWindow.print();
     }
+
+    function confirmLogout() {
+    const confirmation = confirm("Are you sure you want to log out?");
+    if (confirmation) {
+        // Redirect to the log-out page or perform your logout logic here
+        window.location.href = "../loginform.php"; // Change this to your logout URL
+    }
+}
 </script>
 
 </body>

@@ -48,6 +48,7 @@
 
         .login a:hover {
             color: #c3b9b9;
+			transform: scale(1.05);
         }
 
         .logo {
@@ -71,16 +72,13 @@
 
         .button-container a:hover {
             background-color: #0088cc;
+			transform: scale(1.05);
         }
 
-        a {
-            text-decoration: none;
-        }
-
-        img {
-            width: 200px;
-            height: 200px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        .image {
+            width: 300px;
+            height: 300px;
+            box-shadow: 2px 4px 6px grey;
             margin: 30px;
             padding-top: 0;
             border-radius: 300px;
@@ -128,43 +126,6 @@
         .contact-info a:hover {
             text-decoration: underline;
         }
-
-        .cookie-consent {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); 
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .cookie-consent-content {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 500px;
-        }
-
-        .cookie-consent button {
-            background-color: #d5cece;
-            color: black;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-        }
-
-        .cookie-consent button:hover {
-            background-color: #c3b9b9;
-        }
 		
 		.ocean {
 		  width: 100%;
@@ -210,7 +171,47 @@
 		  50% {
 			transform: translate(0, 5px);
 		  }
-		}       
+		}
+		
+		 #cookie-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #f8f9fa;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            display: none; 
+            z-index: 1000;
+        }
+        #cookie-popup p {
+            margin: 0 0 10px;
+        }
+        #cookie-popup button {
+            margin-right: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        #accept-btn {
+            background-color: #00aaff;
+            color: white;
+        }
+        #reject-btn {
+            background-color: #00aaff;
+            color: white;
+        }
+		
+		#accept-btn:hover {
+            background-color: #93C572;
+			transform: scale(1.05);
+        }
+        #reject-btn:hover {
+            background-color: #de3838;
+			transform: scale(1.05);
+        }
+		
     </style>
 </head>
 <body onload="checkCookieConsent()">
@@ -225,16 +226,16 @@
             <a href="FAQ.html" class="social-link">FAQs</a>
         </ul>
         <div class="login">
-            <a href="loginform.php">
+            <a href="loginexample.html">
 			    <i class="fa fa-user icon"></i>&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			</a>
         </div>
     </div>
 	
     <div id="image">
-        <center><img src="images\moodifylogo.jpg" alt="Moodify Image" class="image"></center>
+        <center><img src="C:\Users\juwairiyazra\Downloads\IMG-20241027-WA0000.jpg" alt="Moodify Image" class="image"></center>
     </div>
-	<br><br>
+	
     <h2 style = "text-align: center;">Your Mental Health Matters</h2>
            <div style = "margin: 50px;"> 
 		   <p style = "color: #0e5066;">At Moodify, we are committed to supporting your mental health journey by providing a safe and nurturing space to 
@@ -256,31 +257,29 @@
 			</div><br><br>
 	
     <div class="button-container">
-        <a href="signupform.php">Get Started</a>
-        <a href="loginform.php">Already have an account? Log In</a>
+        <a href="itproject.html">Get Started</a>
+        <a href="registration.html">Already have an account? Log In</a>
     </div>
 
     <footer>
         <div class="footer-content">
             <div class="social-media">
                 <p>Follow us on:</p>
-               
-                <a href="https://www.instagram.com/moodifysa/profilecard/?igsh=aXp6ejFjcHF2Z2E3" class="social-link">Instagram</a>
+                <a href= "https://www.instagram.com/moodifysa/profilecard/?igsh=aXp6ejFjcHF2Z2E3" class="social-link">Instagram</a>
             </div>
             <div class="contact-info">
                 <p>Email us at: <a href="mailto:moodifysa@gmail.com" style="color: white">moodifysa@gmail.com</a></p>
-                <p>Phone: <a href="tel:+27123456789" style="color: white">+27123456789</a></p> <!-- Make phone number clickable -->
-     
             </div>
             &copy; 2024 Moodify | All Rights Reserved
             <br><br>
             <div class="social-media">
                 <a href="aboutus.html" class="social-link">About Us</a>
                 <a href="resources.html" class="social-link">Resources</a>
-                <a href="contactus.php" class="social-link">Contact Us</a>
+                <a href="contactus.html" class="social-link">Contact Us</a>
                 <a href="FAQ.html" class="social-link">FAQs</a>
             </div>
         </div>
+		
 		
 		<div class="ocean">
 	<div class="wave"></div>
@@ -289,22 +288,77 @@
 </div>
 		
     </footer>
-    <div class="cookie-consent" id="cookieConsent">
-        <div class="cookie-consent-content">
-            <p>We use cookies to enhance your experience. By continuing, you agree to our <a href="cookie.html">cookie policy</a>.</p>
-            <button onclick="acceptCookies()">Got it!</button>
-        </div>
+	
+	
+	<div id="cookie-popup">
+        <p>We use cookies to enhance your experience.</p>
+		<p>By continuing, you agree to our <a href="cookie.html">cookie policy</a>.</p>
+		<center>
+        <button id="accept-btn">Accept</button>
+        <button id="reject-btn">Reject</button>
+		</center>
     </div>
-
-    <script>
-        function checkCookieConsent() {
-            document.getElementById("cookieConsent").style.display = "flex";
+	
+	<script>
+        // Function to set a cookie
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Convert days to milliseconds
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
         }
 
-        function acceptCookies() {
-            localStorage.setItem("cookieConsent", "true");
-            document.getElementById("cookieConsent").style.display = "none";
+        // Function to get a cookie value by name
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.indexOf(nameEQ) === 0) {
+                    return cookie.substring(nameEQ.length, cookie.length);
+                }
+            }
+            return null;
         }
+
+        // Function to delete a cookie
+        function deleteCookie(name) {
+            document.cookie = name + "=; expires=Thu, 08 Dec 2024 00:00:00 UTC; path=/;";
+        }
+
+        // Show or hide popup based on consent status
+        function managePopup() {
+            const consent = getCookie("siteConsent");
+            const popup = document.getElementById("cookie-popup");
+
+            if (!consent) {
+                popup.style.display = "block"; // Show popup if consent is not set
+            } else {
+                popup.style.display = "none"; // Hide popup if consent is already set
+            }
+        }
+
+        // Accept button handler
+        document.getElementById("accept-btn").addEventListener("click", function () {
+            setCookie("siteConsent", "accepted", 30); // Set cookie for 30 days
+            document.getElementById("cookie-popup").style.display = "none"; // Hide popup
+            
+        });
+
+        // Reject button handler
+        document.getElementById("reject-btn").addEventListener("click", function () {
+            setCookie("siteConsent", "rejected", 30); // Set cookie for 30 days
+            document.getElementById("cookie-popup").style.display = "none"; // Hide popup
+            
+        });
+
+        // Manage popup on page load
+        window.onload = managePopup;
     </script>
+
+    
 </body>
 </html>

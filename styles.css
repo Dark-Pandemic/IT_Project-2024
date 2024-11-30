@@ -299,6 +299,7 @@ body {
   position: relative; /* Position for pseudo-elements */
   overflow: hidden; /* Ensure animations stay within the button */
   transition: transform 0.3s ease; /* Smooth transform on hover */
+  
 }
 
 .view-all-tasks::before,

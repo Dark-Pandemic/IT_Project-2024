@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2024 at 08:11 PM
+-- Generation Time: Nov 30, 2024 at 02:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -50,23 +50,45 @@ INSERT INTO `badges` (`id`, `title`, `unlocked`, `criteria`, `dateUnlocked`, `im
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `emergency_contacts`
+--
+
+CREATE TABLE `emergency_contacts` (
+  `contact_id` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
+  `contact_name` varchar(255) NOT NULL,
+  `contact_number` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `emergency_contacts`
+--
+
+INSERT INTO `emergency_contacts` (`contact_id`, `ID`, `contact_name`, `contact_number`) VALUES
+(1, 38, 'Shannon Styles', '0283883729');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `journal`
 --
 
 CREATE TABLE `journal` (
-  `userID` int(11) NOT NULL,
-  `file_name` char(100) NOT NULL,
-  `file_content` blob NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `journal_id` int(11) NOT NULL,
+  `ID` int(11) NOT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_content` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `journal`
 --
 
-INSERT INTO `journal` (`userID`, `file_name`, `file_content`, `created_at`) VALUES
-(1, 'mood for today', 0x546f6461792069206665656c20677261746566756c20666f72207468652070656f706c65207468617420737572726f756e64206d65, '2024-11-18 08:37:04'),
-(1, 'Monday madness', 0x49206861766520616c6f74206f6620776f726b20746f20646f20746f646179202c206275742069206665656c206966206920736574206f75742061206c697374206f66207768617420746f20636f6d706c65746520692063616e20626520646f6e65206561726c69657220616e642068617665206d6f72652074696d6520746f20676f206f7574207769746820667269656e6473206c617465722e, '2024-11-18 08:51:12');
+INSERT INTO `journal` (`journal_id`, `ID`, `file_name`, `file_content`, `created_at`) VALUES
+(2, 37, 'Friyay', 'hiii', '2024-11-29 20:28:28'),
+(3, 37, 'mood for today', 'cool yooo', '2024-11-29 20:35:31'),
+(4, 38, 'Coffee', 'i hope this works', '2024-11-29 20:59:44');
 
 -- --------------------------------------------------------
 
@@ -186,7 +208,7 @@ CREATE TABLE `userloginreg` (
   `ID` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(200) NOT NULL,
   `timecreated` timestamp NOT NULL DEFAULT current_timestamp(),
   `points` int(255) NOT NULL,
   `level` int(100) NOT NULL,
@@ -202,10 +224,8 @@ CREATE TABLE `userloginreg` (
 --
 
 INSERT INTO `userloginreg` (`ID`, `username`, `email`, `password`, `timecreated`, `points`, `level`, `name`, `contact`, `reset_token`, `reset_expires`, `profile_pic`) VALUES
-(33, 'Shan', 'shannonlsahdeo@gmail.com', 'shannon', '2024-11-10 05:10:58', 0, 0, 'shannon sahdeo', '0670124691', '1c01302c350adf24d7a1ea615f18ecedb457190f05fdf0ad48511eeaf109409e', '2024-11-18 17:43:50', NULL),
-(34, 'TomJ', 'thomasJ@gmail.com', 'tomPass@11', '2024-11-19 15:13:15', 0, 0, 'Tom Jerry', '0746754378', '', NULL, NULL),
-(35, 'haleyG', 'haleygovender21@gmail.com', 'hales@21', '2024-11-25 12:27:44', 0, 0, 'Haley Govender', '083123456', '', NULL, NULL),
-(36, 'cass00', 'casso14@gmail.com', 'bees@1209', '2024-11-26 12:46:29', 0, 0, 'Cassidy Reece', '+278352674', '', NULL, NULL);
+(37, 'hales', 'haleygovender21@gmail.com', '$2y$10$U1s9hHZqLBQe.zbWLCUHfuFNhbukwX1xhGzA735xr65AGVzsgdhN2', '2024-11-29 18:57:40', 0, 0, 'Haley Govender', '+274827489', '', NULL, 0x75706c6f6164732f39393362303532393664636534393264646437313536616266346261633666662e6a7067),
+(38, 'tommy', 'tomj@gmail.com', '$2y$10$AHxrt199X6ybshXbLIbKI.0DKhi5P1PHifj0PpTeWeGijr0hWZ0Hu', '2024-11-29 20:58:36', 0, 0, 'Tom Jery', '+272378379', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -221,6 +241,29 @@ CREATE TABLE `user_tasks` (
   `completed_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `weekly_reflections`
+--
+
+CREATE TABLE `weekly_reflections` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) DEFAULT NULL,
+  `week_start_date` date DEFAULT NULL,
+  `question_1` text DEFAULT NULL,
+  `question_2` text DEFAULT NULL,
+  `question_3` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `weekly_reflections`
+--
+
+INSERT INTO `weekly_reflections` (`id`, `username`, `week_start_date`, `question_1`, `question_2`, `question_3`, `created_at`) VALUES
+(1, 'tommy', '2024-11-25', 'our website is coming together', 'alot of coding issues', 'finish my degree', '2024-11-30 13:16:22');
+
 --
 -- Indexes for dumped tables
 --
@@ -230,6 +273,20 @@ CREATE TABLE `user_tasks` (
 --
 ALTER TABLE `badges`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `emergency_contacts`
+--
+ALTER TABLE `emergency_contacts`
+  ADD PRIMARY KEY (`contact_id`),
+  ADD KEY `ID` (`ID`);
+
+--
+-- Indexes for table `journal`
+--
+ALTER TABLE `journal`
+  ADD PRIMARY KEY (`journal_id`),
+  ADD KEY `ID` (`ID`);
 
 --
 -- Indexes for table `messages`
@@ -274,8 +331,26 @@ ALTER TABLE `user_tasks`
   ADD KEY `task_id` (`task_id`);
 
 --
+-- Indexes for table `weekly_reflections`
+--
+ALTER TABLE `weekly_reflections`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `emergency_contacts`
+--
+ALTER TABLE `emergency_contacts`
+  MODIFY `contact_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `journal`
+--
+ALTER TABLE `journal`
+  MODIFY `journal_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `messages`
@@ -305,7 +380,7 @@ ALTER TABLE `therapists`
 -- AUTO_INCREMENT for table `userloginreg`
 --
 ALTER TABLE `userloginreg`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `user_tasks`
@@ -314,8 +389,26 @@ ALTER TABLE `user_tasks`
   MODIFY `user_task_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `weekly_reflections`
+--
+ALTER TABLE `weekly_reflections`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `emergency_contacts`
+--
+ALTER TABLE `emergency_contacts`
+  ADD CONSTRAINT `emergency_contacts_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `userloginreg` (`ID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `journal`
+--
+ALTER TABLE `journal`
+  ADD CONSTRAINT `journal_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `userloginreg` (`ID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `messages`

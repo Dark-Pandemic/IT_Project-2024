@@ -491,6 +491,9 @@ if (isset($_GET['token'])) {
     <?php if (isset($resetMessage) || isset($passwordResetMessage)) { ?>
         document.getElementById('messageModal').style.display = 'flex';
     <?php } ?>
+
+
+   
 </script>
 
 </body>
