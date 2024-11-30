@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         
 		.entry{
-            color: #FA709A; 
+            color: rgba(255, 170, 120, 0.9);
             font-size: 40px; /* Smaller header font size */
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -108,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     textarea:focus {
         outline: none; /* Removes the default outline */
     }
-        }
+        
 			
 		textarea.plain {
 			background-image: none; /* No background pattern */
@@ -157,77 +157,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 		
 		
-		/* Side Menu Styles */
-        .side-menu {
-            position: fixed;
-            top: 0;
-            left: -300px; /* Start off-screen */
-            width: 250px;
-            height: 100%;
-            background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
-            color: #fff;
-            padding: 10px;
-            transition: left 0.3s ease; /* Smooth transition when opening/closing */
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center the items vertically */
-            align-items: center; /* Center the items horizontally */
-        }
+		 /* Side Menu Styles */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Start off-screen */
+    width: 250px;
+    height: 100%;
+    background-color: rgba(255, 170, 120, 0.9); /* Peach color with transparency */
+    color: #fff;
+    padding: 20px;
+    transition: left 0.3s ease; /* Smooth transition when opening/closing */
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align items to the top */
+}
 
-        /* Menu List Styles */
-        .side-menu ul {
-            padding: 0;
-            margin: 0;
-            list-style-type: none; /* Remove bullet points */
-            text-align: center; /* Center the list items */
-        }
+/* Menu Item Styles */
+.side-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.3rem;
+    display: block;
+    margin: -1px 0; /* Reduced margin to bring items closer */
+    margin-left: 20px;
+    padding: 8px 15px; /* Adjusted padding for a more compact appearance */
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
 
-        /* Menu Item Styles */
-        .side-menu a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.3rem;
-            display: block;
-            margin: 5px 0; /* Reduced margin to bring items closer */
-            padding: 5px 15px; /* Adjusted padding for a more compact appearance */
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
+/* Hover Effect for Menu Items */
+.side-menu a:hover {
+    background-color: white;
+    color: rgba(255, 200, 150, 0.7); /* Peach-colored text on hover */
+    transform: scale(1.05); /* Make items "pop" on hover */
+}
 
-        /* Hover Effect for Menu Items */
-        .side-menu a:hover {
-            background-color: white;
-            color: rgba(240, 180, 130, 0.7); /* Slightly darker peach color */
-
-
-            transform: scale(1.05); /* Make items "pop" on hover */
-        }
-
-        /* Show the side menu when active */
-        .side-menu.active {
-            left: 0; /* Slide in */
-        }
+/* Show the side menu when active */
+.side-menu.active {
+    left: 0; /* Slide in */
+}
 
         /* Log Out Button Styles */
-        .logout-btn {
-            background-color: white; /* White background for the button */
-            color: rgba(255, 150, 100, 0.8); /* Darker peach color for the text */
-            font-size: 1.5rem;
-            padding: 12px 20px; /* Adjusted padding for better button size */
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 20px; /* Space above the Log Out button */
-            margin-bottom: 20px; 
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
+.logout-btn {
+    background-color: white; /* White background for the button */
+    color: rgba(255, 150, 100, 0.8); /* Darker peach color for the text */
+    font-size: 1.5rem;
+    padding: 12px 50px; /* Adjusted padding for better button size */
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 20px; /* Space above the Log Out button */
+    margin-bottom: 200px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-        /* Hover Effect for Log Out Button */
-        .logout-btn:hover {
-            background-color: rgba(255, 200, 150, 0.8); /* Darker peach background on hover */
-            transform: scale(1.05); /* Button expands slightly on hover */
-        }
+/* Hover Effect for Log Out Button */
+.logout-btn:hover {
+    background-color: rgba(255, 200, 150, 0.8); /* Darker peach background on hover */
+    transform: scale(1.05); /* Button expands slightly on hover */
+}
+
 
         /* Toggle Button Styles */
         .toggle-btn {
@@ -257,21 +248,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <button class="toggle-btn">☰</button>
 
 <!-- Side Menu -->
-<div class="side-menu">
-    <h1 style = "color: white;">Journal</h1>
-    <ul class="vertical-menu">
-        <a href="index.php">Home</a>
-<a href="userprofile.php">Profile</a>
-<a href="journal_final/journal.php">Journal</a>
+<div class="side-menu" id="side-menu">
+    <center>
+    <h2>Write Journal</h2>
+  
+<a href="../index.php">Home</a>
+<a href="../userprofile.php">Profile</a>
+
+<a href="../breathe.php">Zen Zone</a>
 <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
-<a href="chatroom/chatroom.php">Chat with a Therapist</a>
-<a href="breath.php">Zen Zone</a>
-<a href="subscriptions/doctor.php">Subscriptions</a>
-<a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
-<a href="contacts/contacts_index.php">Emergency Contact</a>
-        
-    </ul>
-    <button class="logout-btn">Log Out</button>
+
+<a href="../subscriptions/doctor.php">Subscriptions</a>
+<a href="../reflection/weeklyreflectionform.php">Weekly Reflection</a>
+<a href="../contacts/contacts_index.php">Emergency Contact</a>
+
+   
+
+    <!-- Log Out Button -->
+    <button class="logout-btn" onclick="confirmLogout()">Log Out</button>
+<center>
 </div>
 	<div class = "content">
 
@@ -334,6 +329,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         paperTypeSelect.addEventListener('change', () => {
             localStorage.setItem('journal_paper_type', paperTypeSelect.value);
         });
+
+
+        function confirmLogout() {
+    const confirmation = confirm("Are you sure you want to log out?");
+    if (confirmation) {
+        // Redirect to the log-out page or perform your logout logic here
+        window.location.href = "../loginform.php"; // Change this to your logout URL
+    }
+}
 
         
   </script>

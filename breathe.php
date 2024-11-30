@@ -210,6 +210,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         }
 
         /* Side Menu Styles */
+             /* Side Menu Styles */
 .side-menu {
     position: fixed;
     top: 0;
@@ -226,7 +227,15 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     justify-content: flex-start; /* Align items to the top */
 }
 
-/* Menu Item Styles */
+        /* Menu List Styles */
+        .side-menu ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none; /* Remove bullet points */
+            text-align: center; /* Center the list items */
+        }
+
+       /* Menu Item Styles */
 .side-menu a {
     color: #fff;
     text-decoration: none;
@@ -239,7 +248,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     transition: all 0.3s ease;
 }
 
-/* Hover Effect for Menu Items */
+       /* Hover Effect for Menu Items */
 .side-menu a:hover {
     background-color: white;
     color: rgba(255, 200, 150, 0.7); /* Peach-colored text on hover */
@@ -251,7 +260,14 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     left: 0; /* Slide in */
 }
 
-/* Log Out Button Styles */
+
+       
+h2 {
+            color: white;
+        }
+
+
+         /* Log Out Button Styles */
 .logout-btn {
     background-color: white; /* White background for the button */
     color: rgba(255, 150, 100, 0.8); /* Darker peach color for the text */
@@ -271,6 +287,28 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
     transform: scale(1.05); /* Button expands slightly on hover */
 }
 
+        /* Toggle Button Styles */
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #333;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 3;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+        }
+
+
 
 
     </style>
@@ -288,12 +326,12 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 <a href="userprofile.php">Profile</a>
 <a href="journal_final/journal.php">Journal</a>
 <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
-<a href="chatroom/chatroom.php">Chat with a Therapist</a>
+
 <a href="subscriptions/doctor.php">Subscriptions</a>
 <a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
 <a href="contacts/contacts_index.php">Emergency Contact</a>
 
-    <br>
+<br><br><br><br><br><br><br><br>
 
     <!-- Log Out Button -->
     <button class="logout-btn" onclick="confirmLogout()">Log Out</button>

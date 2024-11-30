@@ -281,7 +281,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
             left: -300px; /* Start off-screen */
             width: 250px;
             height: 100%;
-            background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
+            background-color: rgba(255, 170, 120, 0.9); /* Slightly darker peach */
             color: #fff;
             padding: 10px;
             transition: left 0.3s ease; /* Smooth transition when opening/closing */
@@ -376,20 +376,20 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
 <!-- Side Menu -->
 <div class="side-menu">
-    <h1>Journal</h1>
+    <h2>Customize Journal</h2>
     <ul class="vertical-menu">
-        <a href="index.php">Home</a>
-<a href="userprofile.php">Profile</a>
-<a href="journal_final/journal.php">Journal</a>
+        <a href="../index.php">Home</a>
+<a href="../userprofile.php">Profile</a>
+
 <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
-<a href="chatroom/chatroom.php">Chat with a Therapist</a>
-<a href="breath.php">Zen Zone</a>
-<a href="subscriptions/doctor.php">Subscriptions</a>
-<a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
-<a href="contacts/contacts_index.php">Emergency Contact</a>
+
+<a href="../breathe.php">Zen Zone</a>
+<a href="../subscriptions/doctor.php">Subscriptions</a>
+<a href="../reflection/weeklyreflectionform.php">Weekly Reflection</a>
+<a href="../contacts/contacts_index.php">Emergency Contact</a>
         
     </ul>
-    <button class="logout-btn">Log Out</button>
+    <button class="logout-btn" onclick="confirmLogout()">Log Out</button>
 </div>
 
 <div class = "content">
@@ -480,16 +480,16 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 		
     // Define available cover images
     const imageUrls = [
-        'images/beach.jpg',
-        'images/blackandgrey.jpg',
-        'images/brown.jpg',
-        'images/butterfly.jpg',
-        'images/groovy.jpg',
-        'images/plants.jpg',
-        'images/purpleabstract.jpg',
-        'images/strawberry.jpg',
-        'images/space.jpg',
-        'images/shells.jpg',
+        '../journal_final/beach.jpg',
+        '../journal_final/blackandgrey.jpg',
+        '../journal_final/brown.jpg',
+        '../journal_final/butterfly.jpg',
+        '../journal_final/groovy.jpg',
+        '../journal_final/plants.jpg',
+        '../journal_final/purpleabstract.jpg',
+        '../journal_final/strawberry.jpg',
+        '../journal_final/space.jpg',
+        '../journal_final/shells.jpg',
     ];
 
     // Selectors for journal and image container
@@ -584,7 +584,13 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         });
     }
 	
-
+    function confirmLogout() {
+    const confirmation = confirm("Are you sure you want to log out?");
+    if (confirmation) {
+        // Redirect to the log-out page or perform your logout logic here
+        window.location.href = "../loginform.php"; // Change this to your logout URL
+    }
+}
     </script>
 </body>
 </html>
