@@ -18,7 +18,7 @@
         
 		
         main {
-            
+            padding: 80px;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -38,27 +38,7 @@
 			color: #0e5066;
         }
 
-        .badge {
-            display: inline-block;
-            background-color: #D4AF37;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 20px;
-            margin: 5px;
-            font-weight: bold;
-        }
-
-        .tasks {
-            margin-top: 20px;
-        }
-
-        .task-item {
-            padding: 10px;
-            background-color: #e8f5e9;
-            border: 1px solid #A8B5E0;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
+        
 
         footer {
             background-color: #0e5066;
@@ -111,6 +91,7 @@
 
         .button:hover {
             background-color: #0088cc;
+			transform: scale(1.05);
         }
 
         #quote {
@@ -132,10 +113,10 @@
 		img {
             width: 200px;
             height: 200px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            margin: 30px;
-            padding-top: 0;
-            border-radius: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+			padding-top: 20px;
         }
 		
 		.home{
@@ -145,6 +126,7 @@
 		}
 		.home:hover{
 			color: grey;
+			transform: scale(1.05);
 		}
     </style>
 </head>
@@ -152,7 +134,7 @@
 <a href = "homeexample.html" class = "home">&larr; Home</a>
 		<div id="image">
 		<center>
-			<img src="images\moodifylogo.jpg" alt="Team Image">
+			<img src="C:/Users/juwairiyazra/Downloads/IMG-20241027-WA0000.jpg" alt="Team Image">
 			</center>
 		</div>
 		
@@ -170,22 +152,20 @@
 		<br>
 
         <section class="section">
-            <h2>Complete  daily,weekly and monthly tasks to level up and become the very best you!</h2>
-            <div class="tasks">
-                <div class="task-item"><strong>Daily Tasks</strong></div>
-                <div class="task-item"><strong>Weekly Tasks</strong></div>
-                <div class="task-item"><strong>Monthly Tasks</strong></div>
-            </div>
-        </section>
+            <h2>Weekly Reflections</h2>
+            <p>
+                The Moodify Weekly Reflections feature provides users with a structured way to review their emotional and 
+				mental health progress over the week.  The feature also tracks achievements, milestones, and personal goals, 
+				offering actionable insights for unmet objectives. Users have the option to print their reflections and insights 
+				to a PDF, enabling easy sharing or offline review for personal growth or professional consultations.
+            </p>
+        </section><br>
 
         <section class="section">
-            <h2>Badges for Achievements</h2>
-			<center>
-            <p>Celebrate your milestones with our rewarding system:</p>
-            <div class="badge">5-Day Streak</div>
-            <div class="badge">Mood Improved</div>
-            <div class="badge">First Journal Entry</div>
-			</center>
+            <h2>Zen Zone</h2>
+            <p>
+				The Zen Zone feature is a dedicated space within Moodify designed to help users find calm, focus, and emotional balance. It offers a variety of mindfulness and relaxation tools, including breathing exercises, tailored to individual preferences and needs. By promoting mindfulness and relaxation, the Zen Zone supports emotional well-being and mental clarity, providing users with an accessible retreat from the stresses of daily life.
+			</p>
         </section>
 		
 		<br>
@@ -194,9 +174,10 @@
             <h2>Resources to Support Your Growth</h2>
             <ul style= "color: #0e5066;">
                 <li>Journals</li>
-                <li>Tasks</li>
-                <li>Badges</li>
+                <li>Weekly Reflection</li>
                 <li>Helpline resources</li>
+				<li>Zen Zone</li>
+				<li>Tunes for Your Mood</li>
                 <li>Chatroom with therapists coming soon!`</li>
             </ul>
         </section>
@@ -220,9 +201,7 @@
         <div class="footer-content">
             <div class="social-media">
 			<p>Follow us on:</p>
-            <a href="https://www.instagram.com/moodifysa/profilecard/?igsh=aXp6ejFjcHF2Z2E3" class="social-link">Instagram</a>
-     
-                
+                <a href="https://www.instagram.com/moodifysa/profilecard/?igsh=aXp6ejFjcHF2Z2E3" class="social-link">Instagram</a>
             </div>
             <div class="contact-info">
                 <p>Email us at: <a href="mailto:moodifysa@gmail.com" style = "color: white">moodifysa@gmail.com</a></p>
@@ -230,7 +209,7 @@
 			<div class="social-media">
                 <a href="homeexample.html" class="social-link">Home</a>
                 <a href="aboutus.html" class="social-link">About Us</a>
-                <a href="contactus.php" class="social-link">Contact Us</a>
+                <a href="contactus.html" class="social-link">Contact Us</a>
 				<a href="FAQ.html" class="social-link">FAQs</a>
             </div>
         </div>
