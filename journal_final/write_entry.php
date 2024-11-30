@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         
 		.entry{
-            color: #FA709A; 
+            color: rgba(255, 170, 120, 0.9);
             font-size: 40px; /* Smaller header font size */
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     left: -300px; /* Start off-screen */
     width: 250px;
     height: 100%;
-    background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
+    background-color: rgba(255, 170, 120, 0.9); /* Peach color with transparency */
     color: #fff;
     padding: 20px;
     transition: left 0.3s ease; /* Smooth transition when opening/closing */
@@ -335,7 +335,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     const confirmation = confirm("Are you sure you want to log out?");
     if (confirmation) {
         // Redirect to the log-out page or perform your logout logic here
-        window.location.href = "loginform.php"; // Change this to your logout URL
+        window.location.href = "../loginform.php"; // Change this to your logout URL
     }
 }
 

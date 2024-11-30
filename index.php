@@ -344,6 +344,14 @@ function showTasks(type) {
     });
 }
 
+function confirmLogout() {
+    const confirmation = confirm("Are you sure you want to log out?");
+    if (confirmation) {
+        // Redirect to the log-out page or perform your logout logic here
+        window.location.href = "loginform.php"; // Change this to your logout URL
+    }
+}
+
 </script>
 
 

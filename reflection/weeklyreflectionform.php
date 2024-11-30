@@ -357,17 +357,17 @@ input[type="submit"]:hover {
 <div class="side-menu" id="side-menu">
     <center>
     <h2>Weekly Reflection</h2>
+
     <a href="../index.php">Home</a>
     <a href="../userprofile.php">Profile</a>
-    <a href="../tasks/tasks_1.php">Tasks</a>
     <a href="../journal_final/journal.php">Journal</a>
-    <a href="breathe.php">Zen Zone</a>
-    <a href="../subscriptions/doctor.php">Subscriptions</a>
-    <a href="../badges/badges.php">Badges</a>
+    <a href="../breathe.php">Zen Zone</a>
     <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
+    <a href="../chatroom/chatroom.php">Chat with a Therapist</a>
+    <a href="../subscriptions/doctor.php">Subscriptions</a>
     <a href="../contacts/contacts_index.php">Emergency Contact</a>
 
-    <br>
+    <br><br>
     <button class="logout-btn" onclick="confirmLogout()">Log Out</button>
 </center>
     

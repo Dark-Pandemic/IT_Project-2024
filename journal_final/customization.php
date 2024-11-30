@@ -376,20 +376,20 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
 <!-- Side Menu -->
 <div class="side-menu">
-    <h1>Journal</h1>
+    <h2>Customize Journal</h2>
     <ul class="vertical-menu">
-        <a href="index.php">Home</a>
-<a href="userprofile.php">Profile</a>
-<a href="journal_final/journal.php">Journal</a>
+        <a href="../index.php">Home</a>
+<a href="../userprofile.php">Profile</a>
+
 <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
-<a href="chatroom/chatroom.php">Chat with a Therapist</a>
-<a href="breath.php">Zen Zone</a>
-<a href="subscriptions/doctor.php">Subscriptions</a>
-<a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
-<a href="contacts/contacts_index.php">Emergency Contact</a>
+<a href="../chatroom/chatroom.php">Chat with a Therapist</a>
+<a href="../breathe.php">Zen Zone</a>
+<a href="../subscriptions/doctor.php">Subscriptions</a>
+<a href="../reflection/weeklyreflectionform.php">Weekly Reflection</a>
+<a href="../contacts/contacts_index.php">Emergency Contact</a>
         
     </ul>
-    <button class="logout-btn">Log Out</button>
+    <button class="logout-btn" onclick="confirmLogout()">Log Out</button>
 </div>
 
 <div class = "content">
@@ -584,7 +584,13 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
         });
     }
 	
-
+    function confirmLogout() {
+    const confirmation = confirm("Are you sure you want to log out?");
+    if (confirmation) {
+        // Redirect to the log-out page or perform your logout logic here
+        window.location.href = "../loginform.php"; // Change this to your logout URL
+    }
+}
     </script>
 </body>
 </html>
