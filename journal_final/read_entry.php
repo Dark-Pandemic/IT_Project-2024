@@ -124,7 +124,7 @@ $entries = fetch_entries($filter, $conn, $user_id);
         }
         .filter-button, .back-button, .print-button {
             display: inline-block;
-            background-color: #a7c7e7;
+            background-color: #00aaff;
             color: white;
             padding: 12px 20px;
             text-align: center;
@@ -134,11 +134,124 @@ $entries = fetch_entries($filter, $conn, $user_id);
         }
         .filter-button:hover, .back-button:hover, .print-button:hover {
             background-color: #0088cc;
+			transform: scale(1.05);
+        }
+		
+		/* Side Menu Styles */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -300px; /* Start off-screen */
+            width: 250px;
+            height: 100%;
+            background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
+            color: #fff;
+            padding: 10px;
+            transition: left 0.3s ease; /* Smooth transition when opening/closing */
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center the items vertically */
+            align-items: center; /* Center the items horizontally */
+        }
+
+        /* Menu List Styles */
+        .side-menu ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none; /* Remove bullet points */
+            text-align: center; /* Center the list items */
+        }
+
+        /* Menu Item Styles */
+        .side-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.3rem;
+            display: block;
+            margin: 5px 0; /* Reduced margin to bring items closer */
+            padding: 5px 15px; /* Adjusted padding for a more compact appearance */
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover Effect for Menu Items */
+        .side-menu a:hover {
+            background-color: white;
+            color: rgba(240, 180, 130, 0.7); /* Slightly darker peach color */
+
+
+            transform: scale(1.05); /* Make items "pop" on hover */
+        }
+
+        /* Show the side menu when active */
+        .side-menu.active {
+            left: 0; /* Slide in */
+        }
+
+        /* Log Out Button Styles */
+        .logout-btn {
+            background-color: white; /* White background for the button */
+            color: rgba(255, 150, 100, 0.8); /* Darker peach color for the text */
+            font-size: 1.5rem;
+            padding: 12px 20px; /* Adjusted padding for better button size */
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px; /* Space above the Log Out button */
+            margin-bottom: 20px; 
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* Hover Effect for Log Out Button */
+        .logout-btn:hover {
+            background-color: rgba(255, 200, 150, 0.8); /* Darker peach background on hover */
+            transform: scale(1.05); /* Button expands slightly on hover */
+        }
+
+        /* Toggle Button Styles */
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #333;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 3;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
+<!-- Menu Toggle Button -->
+<button class="toggle-btn">☰</button>
 
+<!-- Side Menu -->
+<div class="side-menu">
+    <h1 style = "color: white;">Journal</h1>
+    <ul class="vertical-menu">
+        <a href="index.php">Home</a>
+<a href="userprofile.php">Profile</a>
+<a href="journal_final/journal.php">Journal</a>
+<a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
+<a href="chatroom/chatroom.php">Chat with a Therapist</a>
+<a href="breath.php">Zen Zone</a>
+<a href="subscriptions/doctor.php">Subscriptions</a>
+<a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
+<a href="contacts/contacts_index.php">Emergency Contact</a>
+        
+    </ul>
+    <button class="logout-btn">Log Out</button>
+</div>
 <div class="container">
     <h1>Your Journal Entries</h1>
     <div class="button-container">
@@ -164,6 +277,23 @@ $entries = fetch_entries($filter, $conn, $user_id);
 </div>
 
 <script>
+	// Get the button and the side menu
+    const menuToggle = document.querySelector('.toggle-btn');
+    const sideMenu = document.querySelector('.side-menu');
+
+    // Toggle the side menu display when the button is clicked
+    menuToggle.onclick = function() {
+        sideMenu.classList.toggle('active'); // Add or remove the 'active' class to slide in/out
+    };
+
+    // Optional: Close the menu if the user clicks outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.toggle-btn') && !event.target.closest('.side-menu')) {
+            sideMenu.classList.remove('active');
+        }
+    };
+
+
     function printEntry(entryId) {
         const entry = document.getElementById('entry-' + entryId);
         const printWindow = window.open('', '_blank', 'width=800,height=600');
