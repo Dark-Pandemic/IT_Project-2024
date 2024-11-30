@@ -103,7 +103,7 @@ error_log("User $username accessed the application on " . date('Y-m-d H:i:s'));
             background: linear-gradient(60deg, #f0e4b0 0%, #f7f0d1 100%);
         }
         h2 {
-            color: #4f4d4e;
+            color: white;
         }
         button {
             background-color: #FF9966; /* Peach color */
@@ -171,6 +171,10 @@ error_log("User $username accessed the application on " . date('Y-m-d H:i:s'));
     margin: 20px auto;
 }
 
+.reflec{
+    color: #4f4d4e;
+}
+
 .filter-button {
     background-color: #FFDAB9; /* Peach color */
     color: #2c3e50; /* Dark text color */
@@ -233,7 +237,7 @@ error_log("User $username accessed the application on " . date('Y-m-d H:i:s'));
 .side-menu a {
     color: #fff;
     text-decoration: none;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     display: block;
     margin: -1px 0; /* Reduced margin to bring items closer */
     margin-left: 20px;
@@ -322,7 +326,25 @@ input[type="submit"]:hover {
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
 }
 
+/* Log Out Button Styles */
+.logout-btn {
+    background-color: white; /* White background for the button */
+    color: rgba(255, 150, 100, 0.8); /* Darker peach color for the text */
+    font-size: 1.5rem;
+    padding: 12px 50px; /* Adjusted padding for better button size */
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 20px; /* Space above the Log Out button */
+    margin-bottom: 200px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
+/* Hover Effect for Log Out Button */
+.logout-btn:hover {
+    background-color: rgba(255, 200, 150, 0.8); /* Darker peach background on hover */
+    transform: scale(1.05); /* Button expands slightly on hover */
+}
 
     </style>
 </head>
@@ -339,14 +361,20 @@ input[type="submit"]:hover {
     <a href="../userprofile.php">Profile</a>
     <a href="../tasks/tasks_1.php">Tasks</a>
     <a href="../journal_final/journal.php">Journal</a>
+    <a href="breathe.php">Zen Zone</a>
     <a href="../subscriptions/doctor.php">Subscriptions</a>
     <a href="../badges/badges.php">Badges</a>
     <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
     <a href="../contacts/contacts_index.php">Emergency Contact</a>
+
+    <br>
+    <button class="logout-btn" onclick="confirmLogout()">Log Out</button>
 </center>
     
     <hr>
 </div>
+
+
 
 <?php if ($view === 'form'): ?>
     <header style="text-align: center; margin-bottom: 20px;">
@@ -357,6 +385,15 @@ input[type="submit"]:hover {
     <a href="?view=report"><button style="position: absolute; top: 20px; right: 160px;">View Report</button></a>
     <button style="position: absolute; top: 20px; right: 20px;" onclick="window.print()">Print Report</button>
 </header>
+
+<center>
+<?php if (isset($message)): ?>
+        <div class="message">
+            <?php echo $message; ?>
+        </div>
+    <?php endif; ?>
+
+</center>
 
     <hr>
             
@@ -408,7 +445,7 @@ input[type="submit"]:hover {
         <!-- Horizontal Line -->
         <hr class="no-print">
 
-        <h2>Your Weekly Reflections</h2>
+        <h2 class="reflec" >Your Weekly Reflections</h2>
         <hr>
 
        <!-- Filter Section -->
@@ -492,7 +529,16 @@ if (isset($_GET['filter'])) {
             }
         });
 
+        
     
+        function confirmLogout() {
+    const confirmation = confirm("Are you sure you want to log out?");
+    if (confirmation) {
+        // Redirect to the log-out page or perform your logout logic here
+        window.location.href = "../loginform.php"; // Change this to your logout URL
+    }
+}
+
     </script>
 
 <footer class="footer">
