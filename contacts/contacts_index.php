@@ -38,31 +38,18 @@ body {
     font-family: Poppins, sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(to bottom, #ffe4e1, #fafad2, #e0ffff, #d8bfd8, #ffe4b5);
+    background: #e7e7e7;
     background-size: 100% 200%;
-    animation: gradientAnimation 15s ease infinite;
     color: #333;
 }
 
-/* Animation for smooth gradient blending */
-@keyframes gradientAnimation {
-    0% {
-        background-position: top;
-    }
-    50% {
-        background-position: bottom;
-    }
-    100% {
-        background-position: top;
-    }
-}
 
 h2 {
     font-size: 2rem;
 }
 
 .contact-card {
-    background-color: rgba(255, 255, 255, 0.20);
+    background-color: white;
     color: #0e5066;
     padding: 15px;
     margin: 10px 0;
@@ -80,7 +67,7 @@ h2 {
 }
 
 .custom-contact {
-    background-color: rgba(255, 255, 255, 0.20);
+    background-color: white;
     color: #0e5066;
     padding: 20px;
     margin: 30px 0;
@@ -94,11 +81,11 @@ form label {
 }
 
 form input {
-    width: 100%;
+    width: 25%;
     padding: 10px;
     margin: 5px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: 1px solid grey;
+    border-radius: 30px;
 }
 
 form button {
@@ -112,10 +99,11 @@ form button {
 
 form button:hover {
     background-color: #0088cc;
+	transform: scale(1.05);
 }
 
 footer {
-    background-color: #6CB4EE;
+    background-color: #0e5066;
     color: white;
     text-align: center;
     padding: 20px;
@@ -248,34 +236,6 @@ footer {
             transform: scale(1.1);
         }
 
-/* Mobile Styles */
-@media (max-width: 768px) {
-    .fancy-menu {
-        width: 100%;
-    }
-
-    .navbar {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .menu-toggle {
-        font-size: 25px;
-    }
-
-    .fancy-menu h1 {
-        font-size: 1.2em;
-    }
-
-    .fancy-menu li {
-        padding: 8px 15px;
-    }
-
-    .footer-content {
-        font-size: 0.8em;
-    }
-}
-   
 	</style>
 		
 </head>
@@ -289,11 +249,9 @@ footer {
     <ul class="vertical-menu">
         <li><a href="index.php">Home</a></li>
         
-        <li><a href="tasks\tasks_1.php">Tasks</a></li>
         <li><a href="journal_final\journal.php">Journal</a></li>
         <li><a href="breathe.php">Zen Zone</a></li>
         <li><a href="subscriptions\doctor.php">Subscription</a></li>
-        <li><a href="badges\badges.php">Badges</a></li>
         <li><a href="contacts\contacts_index.php">Emergency Contacts</a></li>
         <br><br>
     </ul>
@@ -303,7 +261,7 @@ footer {
 <div class = "content">
 	
     <section class="contacts">
-        <h2 style = "text-align: center; color: #0e5066; background-color: white;">Emergency Contact Numbers</h2>
+        <h2 style = "text-align: center; color: #0e5066;">Emergency Contact Numbers</h2>
         <div class="contact-card">
             <h3>Police</h3>
             <p><a href="tel:10111">10111</a></p>
@@ -374,7 +332,6 @@ footer {
         </div>
         <div class="contact-info">
             <p>Email us at: <a href="mailto:moodifysa@gmail.com" style="color: white">moodifysa@gmail.com</a></p>
-            <p>Phone: +1-234-567-890</p>
         </div>
     </footer>
 
