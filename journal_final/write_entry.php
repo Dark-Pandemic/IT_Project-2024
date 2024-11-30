@@ -108,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     textarea:focus {
         outline: none; /* Removes the default outline */
     }
-        }
+        
 			
 		textarea.plain {
 			background-image: none; /* No background pattern */

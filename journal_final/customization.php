@@ -480,16 +480,16 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 		
     // Define available cover images
     const imageUrls = [
-        'images/beach.jpg',
-        'images/blackandgrey.jpg',
-        'images/brown.jpg',
-        'images/butterfly.jpg',
-        'images/groovy.jpg',
-        'images/plants.jpg',
-        'images/purpleabstract.jpg',
-        'images/strawberry.jpg',
-        'images/space.jpg',
-        'images/shells.jpg',
+        '../journal_final/beach.jpg',
+        '../journal_final/blackandgrey.jpg',
+        '../journal_final/brown.jpg',
+        '../journal_final/butterfly.jpg',
+        '../journal_final/groovy.jpg',
+        '../journal_final/plants.jpg',
+        '../journal_final/purpleabstract.jpg',
+        '../journal_final/strawberry.jpg',
+        '../journal_final/space.jpg',
+        '../journal_final/shells.jpg',
     ];
 
     // Selectors for journal and image container
