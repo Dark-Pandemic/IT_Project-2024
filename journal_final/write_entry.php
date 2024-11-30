@@ -1,49 +1,50 @@
 <?php
-
 session_start();
 
-if (isset($_SESSION['username'])) {
-    $username = $_SESSION['username']; // Use session if available
-} elseif (isset($_COOKIE['username'])) {
-    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
-} else {
-    $username = "Guest"; // Fallback for anonymous access
+// Database Connection
+$host = 'localhost'; 
+$dbname = 'mentalhealthapp'; 
+$user = 'root'; 
+$pass = '';
+
+try {
+    $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
 
-
-
-// Check if the user is logged out, then destroy session and redirect
-if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
-  session_unset();
-  session_destroy();
-  setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
-  header("Location: loginform.php"); // Redirect to login page
-  exit();
+// Ensure the user is logged in and the ID exists in session
+if (!isset($_SESSION['ID'])) {
+    header("Location: loginform.php");
+    exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if the form data is set and not empty
+    if (isset($_POST['file_name']) && isset($_POST['file_content']) && !empty($_POST['file_name']) && !empty($_POST['file_content'])) {
+        $userId = $_SESSION['ID'];  // Get the user ID from the session
+        $file_name = $_POST['file_name'];
+        $file_content = $_POST['file_content'];
 
+        // Insert journal entry into the database
+        $sql = "INSERT INTO journal (ID, file_name, file_content) VALUES (:userId, :file_name, :file_content)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':userId', $userId);
+        $stmt->bindParam(':file_name', $file_name);
+        $stmt->bindParam(':file_content', $file_content);
 
-
-include 'db.php';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $userId = 1;  // Set this dynamically for logged-in users.
-    $file_name = $_POST['file_name'];
-    $file_content = $_POST['file_content'];
-
-    $sql = "INSERT INTO journal (userId, file_name, file_content) VALUES (:userId, :file_name, :file_content)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':userId', $userId);
-    $stmt->bindParam(':file_name', $file_name);
-    $stmt->bindParam(':file_content', $file_content);
-    
-    if ($stmt->execute()) {
-        echo "<p class='success'>Entry saved successfully!</p>";
+        if ($stmt->execute()) {
+            echo "<p class='success'>Entry saved successfully!</p>";
+        } else {
+            echo "<p class='error'>Error saving entry. Please try again.</p>";
+        }
     } else {
-        echo "<p class='error'>Error saving entry. Please try again.</p>";
+        echo "<p class='error'>Please fill in all fields.</p>";
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -104,20 +105,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #f9f9f9; /* Light background color for the textarea */
             color: #333;
         }
-			
-		textarea.plain {
-			background-image: none; /* No background pattern */
-			background-color: white; /* Plain white background */
-		}
-		textarea.lined {
-			background-image: repeating-linear-gradient(to bottom, #ccc 0, #ccc 1px, transparent 1px, transparent 32px);
-		}
 
-    
-		textarea.dotted {
-			background-image: radial-gradient(circle, #ccc 1px, transparent 1px);
-			background-size: 22px 22px;
-		}
+        textarea.plain {
+            background-image: none; /* No background pattern */
+            background-color: white; /* Plain white background */
+        }
+        textarea.lined {
+            background-image: repeating-linear-gradient(to bottom, #ccc 0, #ccc 1px, transparent 1px, transparent 32px);
+        }
+
+        textarea.dotted {
+            background-image: radial-gradient(circle, #ccc 1px, transparent 1px);
+            background-size: 22px 22px;
+        }
 
         button {
             background-color: #a7c7e7; /* Pastel blue */
@@ -150,26 +150,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #e1c1a0; /* Slightly darker beige */
             transform: translateY(-4px);
         }
-		
-		.back{
-			text-decoration: none;
-			display: inline-block;
-			padding: 8px 16px;
-		}
 
-		.back:hover {
-			background-color: #ddd;
-			color: black;
-		}
+        .back{
+            text-decoration: none;
+            display: inline-block;
+            padding: 8px 16px;
+        }
 
-		.previous {
-			background-color: grey;
-			color: black;
-		}
+        .back:hover {
+            background-color: #ddd;
+            color: black;
+        }
 
-		.round {
-		border-radius: 50%;
-		}
+        .previous {
+            background-color: grey;
+            color: black;
+        }
+
+        .round {
+        border-radius: 50%;
+        }
     </style>
 </head>
 <body>
@@ -177,58 +177,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <header>
         <h1>Write a New Journal Entry</h1>
     </header>
-	
-	<br>
-	<a href="journal.php" class="previous round" id = "back">&#8249;</a>
+
+    <br>
+    <a href="journal.php" class="previous round" id="back">&#8249;</a>
 
     <div class="form-container">
         <form action="write_entry.php" method="POST">
-		
-			<label for="paper_type">Select Paper Type:</label>
-			<select id="paper_type" name="paper_type">
-				<option value="plain">Plain</option>
-				<option value="lined">Lined</option>
-				<option value="dotted">Dotted</option>
-			</select>
-			
+
+            <label for="paper_type">Select Paper Type:</label>
+            <select id="paper_type" name="paper_type">
+                <option value="plain">Plain</option>
+                <option value="lined">Lined</option>
+                <option value="dotted">Dotted</option>
+            </select>
+
             <label for="file_name">Title of Your Journal Entry:</label>
             <input type="text" id="file_name" name="file_name" placeholder="Enter a title for your journal entry" required style="width: 100%; padding: 15px; font-size: 18px; border-radius: 8px; border: 1px solid #ccc; background-color: #f9f9f9; box-sizing: border-box;">
-			
+
             <label for="file_content">Your Journal Entry:</label>
             <textarea id="file_content" name="file_content" placeholder="Write your journal entry here..." required></textarea>
 
             <button type="submit">Save Entry</button>
         </form>
-		
+
         <a href="journal.php" class="back-home-btn">Back to Home</a>
     </div>
-	
-	<script>
+
+    <script>
     document.getElementById('paper_type').addEventListener('change', function () {
-      const textarea = document.getElementById('file_content');
-      textarea.className = ''; // Clear existing classes
-      textarea.classList.add(this.value); // Add the selected class based on the dropdown value
+        const textarea = document.getElementById('file_content');
+        textarea.className = ''; // Clear existing classes
+        textarea.classList.add(this.value); // Add the selected class based on the dropdown value
     });
-	
-	const paperTypeSelect = document.getElementById('paper_type');
 
-        // Save data to localStorage on change
-        paperTypeSelect.addEventListener('change', () => {
-            localStorage.setItem('journal_paper_type', paperTypeSelect.value);
-        });
+    const paperTypeSelect = document.getElementById('paper_type');
 
-        // Load data from localStorage on page load
-        window.addEventListener('load', () => {
-            const savedPaperType = localStorage.getItem('journal_paper_type');
+    // Save data to localStorage on change
+    paperTypeSelect.addEventListener('change', () => {
+        localStorage.setItem('journal_paper_type', paperTypeSelect.value);
+    });
 
-            
-            if (savedPaperType) {
-                paperTypeSelect.value = savedPaperType;
-                textarea.className = ''; // Clear existing classes
-                textarea.classList.add(savedPaperType); // Apply the saved paper type
-            }
-        });
-  </script>
+    // Load data from localStorage on page load
+    window.addEventListener('load', () => {
+        const savedPaperType = localStorage.getItem('journal_paper_type');
 
+        if (savedPaperType) {
+            paperTypeSelect.value = savedPaperType;
+            textarea.className = ''; // Clear existing classes
+            document.getElementById('file_content').classList.add(savedPaperType); // Apply saved style
+        }
+    });
+    </script>
 </body>
 </html>
