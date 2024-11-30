@@ -1,46 +1,44 @@
 <?php
-
-
 session_start();
 
-if (isset($_SESSION['username'])) {
-    $username = $_SESSION['username']; // Use session if available
-} elseif (isset($_COOKIE['username'])) {
-    $username = $_COOKIE['username']; // Use cookie if session doesn't exist
-} else {
-    $username = "Guest"; // Fallback for anonymous access
+// Database Connection
+$host = 'localhost'; 
+$dbname = 'mentalhealthapp'; 
+$user = 'root'; 
+$pass = '';
+
+try {
+    $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
 
+// Check if user is logged in
+$user_id = $_SESSION['ID'] ?? null; // Get user ID from session, or null if not logged in
 
-// Check if the user is logged out, then destroy session and redirect
-if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
-  session_unset();
-  session_destroy();
-  setcookie("username", "", time() - 3600, "/"); // Optional: Delete the cookie
-  header("Location: loginform.php"); // Redirect to login page
-  exit();
-}
+if ($_SERVER["REQUEST_METHOD"] == "POST" && $user_id) {
+    $file_name = $_POST['file_name'] ?? '';
+    $file_content = $_POST['file_content'] ?? '';
 
-include 'db.php';
+    if ($file_name && $file_content) {
+        // Simple insert query
+        $sql = "INSERT INTO journal (ID, file_name, file_content) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $userId = 1;  // Set this dynamically for logged-in users.
-    $file_name = $_POST['file_name'];
-    $file_content = $_POST['file_content'];
-
-    $sql = "INSERT INTO journal (userId, file_name, file_content) VALUES (:userId, :file_name, :file_content)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':userId', $userId);
-    $stmt->bindParam(':file_name', $file_name);
-    $stmt->bindParam(':file_content', $file_content);
-    
-    if ($stmt->execute()) {
-        echo "<p class='success'>Entry saved successfully!</p>";
+        if ($stmt->execute([$user_id, $file_name, $file_content])) {
+            echo "<p class='success'>Entry saved successfully!</p>";
+        } else {
+            echo "<p class='error'>Error saving entry. Please try again.</p>";
+        }
     } else {
-        echo "<p class='error'>Error saving entry. Please try again.</p>";
+        echo "<p class='error'>Both file name and content are required.</p>";
     }
+} else {
+    echo "<p class='error'>You must be logged in to save a journal entry.</p>";
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
