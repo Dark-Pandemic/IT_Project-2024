@@ -300,9 +300,9 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             // Store the tasks globally or in session for easy access
             window.taskData = {
-                daily: data.filter(task => task.task_type === 'daily').slice(0, 5),
-                weekly: data.filter(task => task.task_type === 'weekly').slice(0, 5),
-                monthly: data.filter(task => task.task_type === 'monthly').slice(0, 5),
+                daily: data.daily,
+                weekly: data.weekly,
+                monthly: data.monthly
             };
 
             // Show daily tasks by default (or another type based on logic)
