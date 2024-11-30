@@ -14,21 +14,25 @@
 <button class="toggle-btn">☰</button>
 
 <!-- Side Menu -->
-<div class="side-menu">
-    <h1 style = "color: white;">Tunes for Your Mood</h1>
-    <ul class="vertical-menu">
-        <a href="index.php">Home</a>
-<a href="userprofile.php">Profile</a>
-<a href="journal_final/journal.php">Journal</a>
-<a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
-<a href="chatroom/chatroom.php">Chat with a Therapist</a>
-<a href="breath.php">Zen Zone</a>
-<a href="subscriptions/doctor.php">Subscriptions</a>
-<a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
-<a href="contacts/contacts_index.php">Emergency Contact</a>
-        
-    </ul>
-    <button class="logout-btn">Log Out</button>
+<div class="side-menu" id="side-menu">
+    <center>
+    <h2>Tunes for Your Mood</h2>
+  
+<a href="../index.php">Home</a>
+<a href="../userprofile.php">Profile</a>
+<a href="../journal_final/journal.php">Journal</a>
+<a href="../breathe.php">Zen Zone</a>
+
+<a href="../chatroom/chatroom.php">Chat with a Therapist</a>
+<a href="../subscriptions/doctor.php">Subscriptions</a>
+<a href="../reflection/weeklyreflectionform.php">Weekly Reflection</a>
+<a href="../contacts/contacts_index.php">Emergency Contact</a>
+
+   
+
+    <!-- Log Out Button -->
+    <button class="logout-btn" onclick="confirmLogout()">Log Out</button>
+<center>
 </div>
     <div class="container">
         <h1>How are you feeling today?</h1>
