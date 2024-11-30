@@ -281,7 +281,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
             left: -300px; /* Start off-screen */
             width: 250px;
             height: 100%;
-            background-color: rgba(255, 200, 150, 0.7); /* Peach color with transparency */
+            background-color: rgba(255, 170, 120, 0.9); /* Slightly darker peach */
             color: #fff;
             padding: 10px;
             transition: left 0.3s ease; /* Smooth transition when opening/closing */
@@ -382,7 +382,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 <a href="../userprofile.php">Profile</a>
 
 <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
-<a href="../chatroom/chatroom.php">Chat with a Therapist</a>
+
 <a href="../breathe.php">Zen Zone</a>
 <a href="../subscriptions/doctor.php">Subscriptions</a>
 <a href="../reflection/weeklyreflectionform.php">Weekly Reflection</a>

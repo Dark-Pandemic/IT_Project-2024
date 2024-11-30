@@ -375,7 +375,7 @@ $conn->close();
 <li><a href="journal_final/journal.php">Journal</a></li>
 <li><a href="breathe.php">Zen Zone</a></li>
 <li><a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a></li>
-<li><a href="chatroom/chatroom.php">Chat with a Therapist</a></li>
+
 <li><a href="subscriptions/doctor.php">Subscriptions</a></li>
 <li><a href="reflection/weeklyreflectionform.php">Weekly Reflection</a></li>
 <li><a href="contacts/contacts_index.php">Emergency Contact</a></li>

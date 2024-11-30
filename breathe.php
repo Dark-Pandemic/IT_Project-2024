@@ -326,7 +326,7 @@ h2 {
 <a href="userprofile.php">Profile</a>
 <a href="journal_final/journal.php">Journal</a>
 <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
-<a href="chatroom/chatroom.php">Chat with a Therapist</a>
+
 <a href="subscriptions/doctor.php">Subscriptions</a>
 <a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
 <a href="contacts/contacts_index.php">Emergency Contact</a>

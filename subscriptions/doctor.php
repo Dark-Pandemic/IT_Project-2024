@@ -191,7 +191,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 <a href="../journal_final/journal.php">Journal</a>
 <a href="../breathe.php">Zen Zone</a>
 <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
-<a href="../chatroom/chatroom.php">Chat with a Therapist</a>
+
 
 <a href="../reflection/weeklyreflectionform.php">Weekly Reflection</a>
 <a href="../contacts/contacts_index.php">Emergency Contact</a>
