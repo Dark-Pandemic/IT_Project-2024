@@ -21,7 +21,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 // Database connection
 $host = 'localhost'; // Update with your database host
 $user = 'root'; // Update with your database username
-$password = ''; // Update with your database password
+$password = '@MentalH2024'; // Update with your database password
 $dbname = 'mentalhealthapp'; // Update with your database name
 
 $conn = new mysqli($host, $user, $password, $dbname);
@@ -471,7 +471,7 @@ button {
 <li><a href="../breathe.php">Zen Zone</a></li>
 <li><a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a></li>
 
-<li><a href="../subscriptions/doctor.php">Subscriptions</a></li>
+<li><a href="../subscriptions/doctor.php">Donations</a></li>
 <li><a href="../reflection/weeklyreflectionform.php">Weekly Reflection</a></li>
 <li><a href="../contacts/contacts_index.php">Emergency Contact</a></li>
 <br><br><br>

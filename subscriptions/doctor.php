@@ -201,8 +201,8 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 </div>
 
     <div class="container">
-        <h1>Subscribe for R10/month</h1>
-        <p>Gain access to professional mental health support at your convenience.</p>
+        <h1>Support the platform?</h1>
+        <p>Enjoying our website?If you are finding our website helpful please consider to leave a small donation to help us facilitate further development and improve our site. </p>
         <form id="subscriptionForm" action="https://www.payfast.co.za/eng/process" method="POST">
             <input type="hidden" name="merchant_id" value="25979149"> <!-- Your Merchant ID -->
             <input type="hidden" name="merchant_key" value="lnfvdj2rwg575"> <!-- Your Merchant Key -->
@@ -210,13 +210,13 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
             <input type="hidden" name="cancel_url" value="http://localhost:3000/payment-cancel"> <!-- Replace with your cancel URL -->
             <input type="hidden" name="notify_url" value="http://localhost:3000/payment-notify"> <!-- Replace with your notify URL -->
             <input type="hidden" name="amount" value="10.00">
-            <input type="hidden" name="item_name" value="Doctor Access Subscription">
+            <input type="hidden" name="item_name" value="Donation">
             <input type="hidden" name="email" value="USER_EMAIL"> <!-- Replace with the user's email -->
             <input type="submit" value="Subscribe Now">
         </form>
         <div id="message" style="margin-top: 20px; color: #4A90E2;"></div>
         <div class="footer">
-            <p>Your mental health matters. Take the first step today!</p>
+            <p>Thank you</p>
         </div>
     </div>
 	<script>

@@ -327,7 +327,7 @@ h2 {
 <a href="journal_final/journal.php">Journal</a>
 <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
 
-<a href="subscriptions/doctor.php">Subscriptions</a>
+<a href="subscriptions/doctor.php">Donations</a>
 <a href="reflection/weeklyreflectionform.php">Weekly Reflection</a>
 <a href="contacts/contacts_index.php">Emergency Contact</a>
 

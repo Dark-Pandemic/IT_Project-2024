@@ -26,7 +26,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
 
 
-$conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
+$conn = new mysqli('localhost', 'root', '@MentalH2024', 'mentalhealthapp');
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

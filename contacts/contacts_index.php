@@ -25,7 +25,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
 $servername = "localhost"; // Your database server
 $usernameDB = "root"; // Your database username
-$passwordDB = ""; // Your database password
+$passwordDB = "@MentalH2024"; // Your database password
 $dbname = "mentalhealthapp"; // Your database name
 
 // Create connection
@@ -302,7 +302,7 @@ footer {
 <a href="../breathe.php">Zen Zone</a>
 <a href="http://localhost:5000/music-recommendation">Tunes for Your Mood</a>
 
-<a href="../subscriptions/doctor.php">Subscriptions</a>
+<a href="../subscriptions/doctor.php">Donations</a>
 <a href="../reflection/weeklyreflectionform.php">Weekly Reflection</a>
 
         
