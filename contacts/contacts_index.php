@@ -25,7 +25,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
 
 $servername = "localhost"; // Your database server
 $usernameDB = "root"; // Your database username
-$passwordDB = "@MentalH2024"; // Your database password
+$passwordDB = ""; // Your database password
 $dbname = "mentalhealthapp"; // Your database name
 
 // Create connection

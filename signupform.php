@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
 $username = "root";
-$password = "@MentalH2024";
+$password = "";
 $databasename = "mentalhealthapp";
 
 // Create connection

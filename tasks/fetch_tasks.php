@@ -20,7 +20,7 @@ if (!isset($_SESSION['username'])) {
 $user_id = $_SESSION['ID'];
 $servername = "localhost";
 $username = "root";
-$password = "@MentalH2024";
+$password = "";
 $dbname = "mentalhealthapp";
 
 // Create connection

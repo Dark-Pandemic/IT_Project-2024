@@ -17,7 +17,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Database connection
-$conn = new mysqli('localhost', 'root', '@MentalH2024', 'mentalhealthapp');
+$conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
 date_default_timezone_set('Africa/Johannesburg');
 
 // Check connection

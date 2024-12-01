@@ -2,7 +2,7 @@
 // Database connection
 $host = 'localhost';
 $user = 'root';
-$password = '@MentalH2024';
+$password = '';
 $dbname = 'mentalhealthapp';
 
 $conn = new mysqli($host, $user, $password, $dbname);

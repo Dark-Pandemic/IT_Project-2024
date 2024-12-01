@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "@MentalH2024";
+$password = "";
 $dbname = "mentalhealthapp";
 
 try {
