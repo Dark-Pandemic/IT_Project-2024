@@ -4,7 +4,7 @@
 // Database connection
 $servername = "localhost"; // Your database server
 $username = "root"; // Your database username
-$password = ""; // Your database password
+$password = "@MentalH2024"; // Your database password
 $dbname = "mentalhealthapp"; // Your database name
 
 // Create connection

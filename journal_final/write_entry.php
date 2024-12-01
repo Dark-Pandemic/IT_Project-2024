@@ -5,7 +5,7 @@ session_start();
 $host = 'localhost'; 
 $dbname = 'mentalhealthapp'; 
 $user = 'root'; 
-$pass = '';
+$pass = '@MentalH2024';
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);

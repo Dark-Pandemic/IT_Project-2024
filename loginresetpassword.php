@@ -1,5 +1,5 @@
 <?php 
-$conn = new mysqli('localhost', 'root', '', 'mentalhealthapp');
+$conn = new mysqli('localhost', 'root', '@MentalH2024', 'mentalhealthapp');
 
 // Check if the reset token is set in the URL
 if (isset($_GET['token'])) {
