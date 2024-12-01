@@ -253,9 +253,10 @@ h2 {
         </center>
 
         <div class="buttons">
-            <a href="customization.php" class="button">Customise your Journal</a>
+            
             <a href="write_entry.php" class="button">Write a New Entry</a>
             <a href="read_entry.php" class="button">Read Previous Entries</a>
+            <a href="custom.php" class="button">Customise your Journal</a>
         </div>
     </div>
 
