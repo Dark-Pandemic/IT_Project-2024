@@ -453,36 +453,43 @@ button {
 
     // Function to apply saved settings from localStorage
     function applySettings() {
-        const settings = JSON.parse(localStorage.getItem('journalSettings'));
-        const journalTitle = document.getElementById('title');
-        const journalQuote = document.getElementById('quote');
-        const journalContainer = document.getElementById('journal-container');
+    const settings = JSON.parse(localStorage.getItem('journalSettings'));
+    const journalTitle = document.getElementById('title');
+    const journalQuote = document.getElementById('quote');
+    const journalContainer = document.getElementById('journal-container');
 
-        if (settings) {
-            // Apply title and quote
+    // Check if there are saved settings
+    if (settings) {
+        // Apply title and quote
+        if (settings.title) {
             journalTitle.innerText = settings.title;
+        }
+        if (settings.quote) {
             journalQuote.innerText = settings.quote;
+        }
 
-            // Apply styling
+        // Apply font style
+        if (settings.fontType) {
             journalTitle.style.fontFamily = settings.fontType;
             journalQuote.style.fontFamily = settings.fontType;
-            journalTitle.style.fontSize = `${settings.fontSize}px`;
-            journalQuote.style.fontSize = `${settings.fontSize - 2}px`; // Slightly smaller font for the quote
+        }
+        if (settings.fontSize) {
+            journalTitle.style.fontSize = settings.fontSize + 'px';
+            journalQuote.style.fontSize = settings.fontSize + 'px';
+        }
+        if (settings.fontColor) {
             journalTitle.style.color = settings.fontColor;
             journalQuote.style.color = settings.fontColor;
         }
 
-        // Apply image if stored in localStorage
-        const journalImage = localStorage.getItem('journalImage');
-        if (journalImage) {
-            journalContainer.style.backgroundImage = `url(${journalImage})`;
+        // Apply background image if selected
+        const selectedImage = localStorage.getItem('journalImage');
+        if (selectedImage) {
+            journalContainer.style.backgroundImage = `url(${selectedImage})`;
         }
     }
-    
-    // Apply settings on page load (after refresh)
-    window.onload = function() {
-        applySettings();
-    };
+}
+
 
 </script>
 
