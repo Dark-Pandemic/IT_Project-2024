@@ -85,7 +85,7 @@ body {
     font-family: Poppins, sans-serif;
     margin: 0;
     padding: 0;
-    background: #e7e7e7;
+    background-color:rgba(255,200,150,0.8) ;
     background-size: 100% 200%;
     color: #333;
 }
@@ -99,6 +99,7 @@ h1 {
     background-color: white;
     color: #0e5066;
     padding: 15px;
+    width:50%;
     margin: 10px 0;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -312,6 +313,7 @@ footer {
 </div>
 
 <div class="content">
+    <center>
     <section class="contacts">
         <h1 style="text-align: center; color: #0e5066;">Emergency Contact Numbers</h1>
         <div class="contact-card">
@@ -348,7 +350,9 @@ footer {
         <div class="contact-card">
             <h3>Child Abuse</h3>
             <p>Childline: <a href="tel:0800055555">0800 05 55 55</a></p>
+            
         </div>
+        </center>
     </section>
 
     <section class="custom-contact">

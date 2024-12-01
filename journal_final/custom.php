@@ -140,9 +140,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['image_url'])) {
 	<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
 <style>
- body {
+ body { 
 
-   
+   font-family: Poppins;
             background-color: #f0f4f8;
             margin: 0;
             padding: 20px;
