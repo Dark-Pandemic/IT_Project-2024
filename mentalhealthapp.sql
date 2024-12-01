@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 30, 2024 at 02:20 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Generation Time: Dec 01, 2024 at 04:37 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -65,7 +65,8 @@ CREATE TABLE `emergency_contacts` (
 --
 
 INSERT INTO `emergency_contacts` (`contact_id`, `ID`, `contact_name`, `contact_number`) VALUES
-(1, 38, 'Shannon Styles', '0283883729');
+(1, 38, 'Shannon Styles', '0283883729'),
+(2, 39, 'mum', '0765562131');
 
 -- --------------------------------------------------------
 
@@ -78,17 +79,26 @@ CREATE TABLE `journal` (
   `ID` int(11) NOT NULL,
   `file_name` varchar(255) NOT NULL,
   `file_content` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `image_url` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `quote` varchar(255) DEFAULT NULL,
+  `font_type` varchar(100) NOT NULL,
+  `font_color` varchar(7) DEFAULT NULL,
+  `font_size` int(11) NOT NULL DEFAULT 16
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `journal`
 --
 
-INSERT INTO `journal` (`journal_id`, `ID`, `file_name`, `file_content`, `created_at`) VALUES
-(2, 37, 'Friyay', 'hiii', '2024-11-29 20:28:28'),
-(3, 37, 'mood for today', 'cool yooo', '2024-11-29 20:35:31'),
-(4, 38, 'Coffee', 'i hope this works', '2024-11-29 20:59:44');
+INSERT INTO `journal` (`journal_id`, `ID`, `file_name`, `file_content`, `created_at`, `image_url`, `title`, `quote`, `font_type`, `font_color`, `font_size`) VALUES
+(2, 37, 'Friyay', 'hiii', '2024-11-29 20:28:28', '', NULL, NULL, '', '#333333', 16),
+(3, 37, 'mood for today', 'cool yooo', '2024-11-29 20:35:31', '', NULL, NULL, '', '#333333', 16),
+(4, 38, 'Coffee', 'i hope this works', '2024-11-29 20:59:44', '', NULL, NULL, '', '#333333', 16),
+(6, 39, 'hey', 'hi', '2024-12-01 11:01:42', '../journal_final/butterfly.jpg', 'cccccccc', 'ccccccccc', 'Arial', '0', 34),
+(7, 40, 'hi', 'harrrrry', '2024-12-01 11:47:55', '../journal_final/space.jpg', 'hiiiiiii', 'byeeeeeeeeee', 'Arial', '0', 16),
+(8, 40, 'shan', 'dj', '2024-12-01 14:57:55', '../journal_final/space.jpg', 'hiiiiiii', 'byeeeeeeeeee', 'Arial', '0', 16);
 
 -- --------------------------------------------------------
 
@@ -225,7 +235,9 @@ CREATE TABLE `userloginreg` (
 
 INSERT INTO `userloginreg` (`ID`, `username`, `email`, `password`, `timecreated`, `points`, `level`, `name`, `contact`, `reset_token`, `reset_expires`, `profile_pic`) VALUES
 (37, 'hales', 'haleygovender21@gmail.com', '$2y$10$U1s9hHZqLBQe.zbWLCUHfuFNhbukwX1xhGzA735xr65AGVzsgdhN2', '2024-11-29 18:57:40', 0, 0, 'Haley Govender', '+274827489', '', NULL, 0x75706c6f6164732f39393362303532393664636534393264646437313536616266346261633666662e6a7067),
-(38, 'tommy', 'tomj@gmail.com', '$2y$10$AHxrt199X6ybshXbLIbKI.0DKhi5P1PHifj0PpTeWeGijr0hWZ0Hu', '2024-11-29 20:58:36', 0, 0, 'Tom Jery', '+272378379', '', NULL, NULL);
+(38, 'tommy', 'tomj@gmail.com', '$2y$10$AHxrt199X6ybshXbLIbKI.0DKhi5P1PHifj0PpTeWeGijr0hWZ0Hu', '2024-11-29 20:58:36', 0, 0, 'Tom Jery', '+272378379', '', NULL, NULL),
+(39, 'shannonsahdeo', 'shannonlsahdeo@gmail.com', '$2y$10$LXVjqqlQjsnI9K0WwNTer.DhhUxfRWKqjE6FBJYW9iAGP3osKEa0i', '2024-11-30 13:48:25', 0, 0, 'Shannon Leigh Sahdeo', '+276701246', '', NULL, 0x75706c6f6164732f32363266313333323436306234303431373135336336333031636561303930392e6a7067),
+(40, 'harrystyles', 'harry@gmail.com', '$2y$10$iziH.55vd8Vrz.obZujFN.8vvY6i/fE7XAcxO09K8DSOmyMPF5j9m', '2024-11-30 13:54:33', 0, 0, 'Harry Styles', '+447684393', '', NULL, 0x75706c6f6164732f30333165313834636466353538633961316562623038346637383234633236312e6a7067);
 
 -- --------------------------------------------------------
 
@@ -262,7 +274,9 @@ CREATE TABLE `weekly_reflections` (
 --
 
 INSERT INTO `weekly_reflections` (`id`, `username`, `week_start_date`, `question_1`, `question_2`, `question_3`, `created_at`) VALUES
-(1, 'tommy', '2024-11-25', 'our website is coming together', 'alot of coding issues', 'finish my degree', '2024-11-30 13:16:22');
+(1, 'tommy', '2024-11-25', 'our website is coming together', 'alot of coding issues', 'finish my degree', '2024-11-30 13:16:22'),
+(2, 'shannonsahdeo', '2024-11-25', 'we managed to do alot of coding', 'time managemnet', 'ill be done, so nothing', '2024-11-30 13:50:08'),
+(3, 'harrystyles', '2024-11-25', 'hi', 'hi', 'hi', '2024-12-01 11:29:43');
 
 --
 -- Indexes for dumped tables
@@ -344,13 +358,13 @@ ALTER TABLE `weekly_reflections`
 -- AUTO_INCREMENT for table `emergency_contacts`
 --
 ALTER TABLE `emergency_contacts`
-  MODIFY `contact_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `contact_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `journal`
 --
 ALTER TABLE `journal`
-  MODIFY `journal_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `journal_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `messages`
@@ -380,7 +394,7 @@ ALTER TABLE `therapists`
 -- AUTO_INCREMENT for table `userloginreg`
 --
 ALTER TABLE `userloginreg`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `user_tasks`
@@ -392,7 +406,7 @@ ALTER TABLE `user_tasks`
 -- AUTO_INCREMENT for table `weekly_reflections`
 --
 ALTER TABLE `weekly_reflections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
