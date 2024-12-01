@@ -148,11 +148,6 @@ $conn->close();
 
 
 
-<?php if ($success_message || $error_message): ?>
-    <div id="messageBox" class="<?php echo $success_message ? 'success' : 'error'; ?>">
-        <?php echo $success_message ?: $error_message; ?>
-    </div>
-<?php endif; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -163,31 +158,53 @@ $conn->close();
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <style>
 
-        body {
-    font-family: Poppins, sans-serif;
-    background-color: #f4f4f9;
-    padding: 0; /* Remove any body padding */
-    margin: 0; /* Remove any body margin */
-    height: 100vh; /* Set the body to take full viewport height */
-    background: url('beach3.jpg') no-repeat center center fixed;
-    background-size: cover;
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-}
 
-.container {
-    max-width: 500px;
-    width: 100%;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 30px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
+ /* Apply the background and font to the body */
+ body { 
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f9;
+            padding: 0;
+            margin: 0;
+            height: 100vh; /* Full viewport height */
+            background: url('beach3.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+
+        /* Style for the message box */
+        #messageBox {
+            display: block;
+            padding: 15px;
+            font-size: 20px;
+            text-align: center;
+            border-radius: 5px;
+            background-color: #28a745; /* Dark translucent background */
+            color: white;
+            opacity: 1;
+            transition: opacity 1s ease;
+            position: absolute; /* Position it inside the container */
+            top: 50%; /* Center it vertically */
+            left: 50%; /* Center it horizontally */
+            transform: translate(-50%, -50%); /* Adjust for exact center */
+            z-index: 10; /* Ensure it's on top */
+        }
 
 
+        .container {
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative; /* Position it relative to the page */
+        }
+
+
+        /* Profile photo styles and other existing styles */
         .profile-photo-circle {
             width: 100px;
             height: 100px;
@@ -246,15 +263,7 @@ $conn->close();
             color: red;
         }
 
-        #messageBox {
-            display: block;
-            padding: 10px;
-            margin-bottom: 20px;
-            font-size: 16px;
-            text-align: center;
-            border-radius: 5px;
-            transition: opacity 1s ease;
-        }
+        
 
         .success {
             background-color: #4CAF50;
@@ -415,6 +424,19 @@ $conn->close();
 </div>
 
 <script>
+
+// Wait for the page to load
+window.onload = function() {
+  const messageBox = document.getElementById('messageBox');
+
+  // After 4 seconds, fade the message out
+  setTimeout(function() {
+    messageBox.style.opacity = 0; // Fade the message out
+  }, 2000); // 4 seconds
+};
+
+
+
     // Get the button and the side menu
     const menuToggle = document.querySelector('.toggle-btn');
     const sideMenu = document.querySelector('.side-menu');

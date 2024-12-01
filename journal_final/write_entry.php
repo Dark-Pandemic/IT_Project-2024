@@ -34,9 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $user_id) {
     } else {
         echo "<p class='error'>Both file name and content are required.</p>";
     }
-} else {
-    echo "<p class='error'>You must be logged in to save a journal entry.</p>";
-}
+} 
 ?>
 
 
